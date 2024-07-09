@@ -4,14 +4,69 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<style>
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .movie {
+        flex: 1 0 20%;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+    .movie ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .movie li {
+        margin-bottom: 5px;
+    }
+    .movie img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin-bottom: 10px;
+    }
+</style>
 <body>
-    hello
-    topic_park test123
-    topic_yoon test
-    정온올림~
-    1111111
-    topic_kim test~~!!
-    topic_yoon test
-    test!
+    <div id="movieContainer" class="container"></div>
 </body>
+<script>
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmRmZTQ3YTQ0NzU2ZTI5MDAyNTcxNWE2YjQyZDhkNSIsIm5iZiI6MTcyMDU1MTg4Mi44MzAxMDcsInN1YiI6IjY2MDNkNTE3NjA2MjBhMDE3YzMwMjY0OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kW6FWbNBxEum0GSPLqFOf-LQu3BMA-50-IJXe_Hd3w8'
+        }
+    };
+
+    fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KR&page=1&sort_by=popularity.desc', options)
+        .then(response => response.json())
+        .then(response => {
+            const movies = response.results;
+            const movieContainer = document.getElementById('movieContainer');
+            const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+
+            movies.forEach(movie => {
+                const movieDiv = document.createElement('div');
+                movieDiv.classList.add('movie');
+
+                const posterPath = movie.poster_path ? `${imageBaseUrl}${movie.poster_path}` : '';
+
+                const movieDetails = `
+                        <img src="${posterPath}" alt="${movie.title} 포스터">
+                        <ul>
+                            <li><strong>제목:</strong> ${movie.title}</li>
+                            <li><strong>개봉일:</strong> ${movie.release_date}</li>
+                            <li><strong>평균 평점:</strong> ${movie.vote_average}</li>
+                            <li><strong>평점 수:</strong> ${movie.vote_count}</li>
+                            <li><strong>개요:</strong> ${movie.overview}</li>
+                        </ul>
+                    `;
+                movieDiv.innerHTML = movieDetails;
+                movieContainer.appendChild(movieDiv);
+            });
+        })
+        .catch(err => console.error(err));
+</script>
 </html>
