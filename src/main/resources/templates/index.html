@@ -1,38 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영화 목록</title>
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .movie {
+            flex: 1 0 20%;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        .movie ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .movie li {
+            margin-bottom: 5px;
+        }
+        .movie img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .movie iframe {
+            width: 100%;
+            height: 200px;
+        }
+    </style>
 </head>
-<style>
-    .container {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .movie {
-        flex: 1 0 20%;
-        box-sizing: border-box;
-        padding: 10px;
-    }
-    .movie ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    .movie li {
-        margin-bottom: 5px;
-    }
-    .movie img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin-bottom: 10px;
-    }
-</style>
 <body>
-    <div id="movieContainer" class="container"></div>
-</body>
+<div id="movieContainer" class="container"></div>
+
 <script>
-    const options = {
+    const movieDbOptions = {
         method: 'GET',
         headers: {
             accept: 'application/json',
@@ -40,34 +45,76 @@
         }
     };
 
-    fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KR&page=1&sort_by=popularity.desc', options)
-        .then(response => response.json())
-        .then(response => {
-            const movies = response.results;
-            const movieContainer = document.getElementById('movieContainer');
-            const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+    const fetchMovieData = async () => {
+        try {
+            const response = await fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KR&page=1&sort_by=popularity.desc', movieDbOptions);
+            const data = await response.json();
+            return data.results;
+        } catch (error) {
+            console.error('Error fetching movie data:', error);
+        }
+    };
 
-            movies.forEach(movie => {
-                const movieDiv = document.createElement('div');
-                movieDiv.classList.add('movie');
-                console.log(movie)
-                const posterPath = movie.poster_path ? `${imageBaseUrl}${movie.poster_path}` : '';
-                const backdropPath = movie.backdrop_path ? `${imageBaseUrl}${movie.backdrop_path}` : '';
-                const movieDetails = `
-                        <img src="${posterPath}" alt="${movie.title} 포스터">
-                        <ul>
-                            <li><strong>제목:</strong> ${movie.title}</li>
-                            <li><strong>개봉일:</strong> ${movie.release_date}</li>
-                            <li><strong>평균 평점:</strong> ${movie.vote_average}</li>
-                            <li><strong>평점 수:</strong> ${movie.vote_count}</li>
-                            <img src="${backdropPath}" alt="${movie.title} 이미지">
-                            <li><strong>개요:</strong> ${movie.overview}</li>
-                        </ul>
-                    `;
-                movieDiv.innerHTML = movieDetails;
-                movieContainer.appendChild(movieDiv);
-            });
-        })
-        .catch(err => console.error(err));
+    const fetchYouTubeVideo = async (query) => {
+        // const youtubeApiKey = 'AIzaSyBuRQEvltwiNQX0IUSQsTJZkrVO2LVm3W8';
+        const youtubeApiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(query)}&key=${youtubeApiKey}&maxResults=1`;
+
+        try {
+            const response = await fetch(youtubeApiUrl);
+            if (!response.ok) {
+                throw new Error(`YouTube API request failed with status ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (data.items && data.items.length > 0) {
+                return data.items[0];
+            } else {
+                console.warn('No YouTube video found for query:', query);
+                return null;
+            }
+        } catch (error) {
+            console.error('Error fetching YouTube video:', error);
+            return null;
+        }
+    };
+
+    const displayMovies = async () => {
+        const movies = await fetchMovieData();
+        const movieContainer = document.getElementById('movieContainer');
+        const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+
+        for (const movie of movies) {
+            console.log(movie)
+            const movieDiv = document.createElement('div');
+            movieDiv.classList.add('movie');
+
+            const posterPath = movie.poster_path ? `${imageBaseUrl}${movie.poster_path}` : '';
+            const backdropPath = movie.backdrop_path ? `${imageBaseUrl}${movie.backdrop_path}` : '';
+
+            // const youtubeQuery = `${movie.original_title} ${new Date(movie.release_date).getFullYear()} movie trailer`;
+            // const youtubeVideo = await fetchYouTubeVideo(youtubeQuery);
+            // const youtubeEmbedUrl = youtubeVideo ? `https://www.youtube.com/embed/${youtubeVideo.id.videoId}` : '';
+
+            // 밑에서 돌려줘야함
+            //${youtubeEmbedUrl ? `<iframe src="${youtubeEmbedUrl}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>` : ''}
+            const movieDetails = `
+                    <img src="${posterPath}" alt="${movie.title} 포스터">
+                    <ul>
+                        <li><strong>제목:</strong> ${movie.title}</li>
+                        <li><strong>개봉일:</strong> ${movie.release_date}</li>
+                        <li><strong>평균 평점:</strong> ${movie.vote_average}</li>
+                        <li><strong>평점 수:</strong> ${movie.vote_count}</li>
+                        <img src="${backdropPath}" alt="${movie.title} 포스터">
+                        <li><strong>개요:</strong> ${movie.overview}</li>
+                    </ul>
+                    <!-- 여기주석 -->
+                `;
+            movieDiv.innerHTML = movieDetails;
+            movieContainer.appendChild(movieDiv);
+        }
+    };
+
+    displayMovies();
 </script>
+</body>
 </html>
