@@ -50,9 +50,9 @@
             movies.forEach(movie => {
                 const movieDiv = document.createElement('div');
                 movieDiv.classList.add('movie');
-
+                console.log(movie)
                 const posterPath = movie.poster_path ? `${imageBaseUrl}${movie.poster_path}` : '';
-
+                const backdropPath = movie.backdrop_path ? `${imageBaseUrl}${movie.backdrop_path}` : '';
                 const movieDetails = `
                         <img src="${posterPath}" alt="${movie.title} 포스터">
                         <ul>
@@ -60,6 +60,7 @@
                             <li><strong>개봉일:</strong> ${movie.release_date}</li>
                             <li><strong>평균 평점:</strong> ${movie.vote_average}</li>
                             <li><strong>평점 수:</strong> ${movie.vote_count}</li>
+                            <img src="${backdropPath}" alt="${movie.title} 이미지">
                             <li><strong>개요:</strong> ${movie.overview}</li>
                         </ul>
                     `;
