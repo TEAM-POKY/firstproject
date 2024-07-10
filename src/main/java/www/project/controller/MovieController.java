@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @Slf4j
 public class MovieController {
-
+    //디테일 매핑
     @GetMapping("/detail")
     public void goDetail(){
     }

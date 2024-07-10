@@ -4,6 +4,7 @@
     background-color: black;
     color: white;
 }
+
 .detailWrap{
     display: flex;
     flex-direction: column;
