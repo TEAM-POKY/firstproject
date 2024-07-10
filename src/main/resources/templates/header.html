@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="setFragment(content)">
+<head>
+    <meta charset="UTF-8">
+    <title>제목</title>
+    <link rel="stylesheet" th:href="@{/dist/css/reset.css}">
+</head>
+<body>
+<nav class="contain-header">
+<!--  네비바 만들 곳  -->
+    안녕
+</nav>
+<div class="content-fluid">
+    <th:block th:replace="${content}"></th:block>
+</div>
+</body>
+</th:block>
+</html>

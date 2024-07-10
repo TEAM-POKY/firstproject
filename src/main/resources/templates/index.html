@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,7 +34,9 @@
     </style>
 </head>
 <body>
-<div id="movieContainer" class="container"></div>
+<div id="movieContainer" class="container">
+    <a th:href="@{/movie/detail}">디테일페이지 가기</a>
+</div>
 
 <script>
     const movieDbOptions = {
@@ -100,6 +102,7 @@
             const movieDetails = `
                     <img src="${posterPath}" alt="${movie.title} 포스터">
                     <ul>
+                        <li><strong>고유ID:</strong>${movie.id}</li>
                         <li><strong>제목:</strong> ${movie.title}</li>
                         <li><strong>개봉일:</strong> ${movie.release_date}</li>
                         <li><strong>평균 평점:</strong> ${movie.vote_average}</li>
