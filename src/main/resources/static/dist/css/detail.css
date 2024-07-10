@@ -1,0 +1,36 @@
+.wrap{
+    width: 1900px;
+    height: 100vh;
+    background-color: black;
+    color: white;
+}
+.detailWrap{
+    display: flex;
+    flex-direction: column;
+    width: 1300px;
+    height: 100vh;
+    background-color: white;
+    margin: auto;
+}
+
+.detail1,.detail2,.detail3{
+    width: 1300px;
+    height: 500px;
+    border: 1px solid black;
+}
+.detail1{
+    display: flex;
+}
+
+.detail1Top{
+    width: auto;
+    height: auto;
+    color: black;
+}
+.detail1StoryWrap{
+    width: 500px;
+    height: 300px;
+    overflow: hidden;
+}
+
+
