@@ -7,11 +7,9 @@ function loadCalendar(date) {
     const month = date.getMonth();
     monthYear.innerHTML = `${year}년 ${month + 1}월`;
 
-    // 매월 첫날과 마지막 날
     const firstDay = new Date(year, month, 1).getDay();
     const lastDate = new Date(year, month + 1, 0).getDate();
 
-    // 캘린더 초기화
     calendarBody.innerHTML = '';
     let row = document.createElement('tr');
     for (let i = 0; i < firstDay; i++) {
@@ -59,4 +57,37 @@ window.onload = () => {
 
 function changeProfileImage() {
     alert('프로필 이미지 변경 기능');
+}
+var ctx = document.getElementById('donutChart').getContext('2d');
+var donutChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['스릴러', '액션', '판타지', '연애'],
+        datasets: [{
+            data: [50, 20, 10, 20],  // 예시 데이터
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+            hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+    }
+});
+
+
+function scrollLeft(id) {
+    document.getElementById(id).scrollBy({
+        top: 0,
+        left: -100,
+        behavior: 'smooth'
+    });
+}
+
+function scrollRight(id) {
+    document.getElementById(id).scrollBy({
+        top: 0,
+        left: 100,
+        behavior: 'smooth'
+    });
 }
