@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Styled Layout</title>
+    <title>마이페이지</title>
     <link rel="stylesheet" href="/dist/css/myPage.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <div class="container">
@@ -38,7 +39,7 @@
             </tr>
             </thead>
             <tbody id="calendarBody">
-            <!-- 동적으로 채워질 부분 -->
+
             </tbody>
         </table>
     </div>
@@ -47,17 +48,50 @@
             <div>x개</div>
             <div>찜한작품 내용</div>
         </div>
-        <div class="vertical-line"></div>
         <div class="count-section">
             <div>x개</div>
             <div>평가 내용</div>
         </div>
-        <div class="vertical-line"></div>
         <div class="count-section">
             <div>x개</div>
             <div>코멘트 내용</div>
         </div>
     </div>
+    <div class="section"></div>
+    <div class="trend section">
+        <div class="trend-analysis">
+            <h2>닉네임님의 취향분석</h2>
+            <div class="chart-container">
+                <canvas id="donutChart"></canvas>
+            </div>
+            <button class="details-button">자세히보기</button>
+        </div>
+    </div>
+    <div class="section"></div>
+    <div class="followed section">
+        <div class="follow-section">
+            <h3>팔로우한 배우</h3>
+            <div class="profile-circles" id="actorProfiles">
+                <img src="https://via.placeholder.com/60" alt="Actor 1" class="profile-circle">
+                <img src="https://via.placeholder.com/60" alt="Actor 2" class="profile-circle">
+                <img src="https://via.placeholder.com/60" alt="Actor 3" class="profile-circle">
+                <img src="https://via.placeholder.com/60" alt="Actor 4" class="profile-circle">
+                <img src="https://via.placeholder.com/60" alt="Actor 5" class="profile-circle">
+            </div>
+        </div>
+        <div class="follow-section">
+            <h3>팔로우한 감독</h3>
+            <div class="profile-circles" id="directorProfiles">
+                <img src="https://via.placeholder.com/60" alt="Director 1" class="profile-circle">
+                <img src="https://via.placeholder.com/60" alt="Director 2" class="profile-circle">
+                <img src="https://via.placeholder.com/60" alt="Director 3" class="profile-circle">
+                <img src="https://via.placeholder.com/60" alt="Director 4" class="profile-circle">
+                <img src="https://via.placeholder.com/60" alt="Director 5" class="profile-circle">
+            </div>
+
+        </div>
+    </div>
+
 </div>
 <script src="/dist/js/myPage.js"></script>
 </body>
