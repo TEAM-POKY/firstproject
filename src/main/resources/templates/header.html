@@ -2,15 +2,117 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:fragment="setFragment(content)">
+
 <head>
     <meta charset="UTF-8">
     <title>제목</title>
     <link rel="stylesheet" th:href="@{/dist/css/reset.css}">
+    <style>
+        .contain-header{
+            width: 100%;
+            height: 80px;
+            background-color: white;
+            box-shadow: 1px 1px 2px #a09f9f;
+            position: sticky;
+            top: 0;
+        }
+        .outbox{
+            width: 85%;
+            height: 100%;
+            /*background-color: antiquewhite;*/
+            margin: 0 auto;
+            display: flex;
+        }
+        .inbox1{
+            width: 50%;
+            height: 100%;
+            /*background-color: blueviolet;*/
+        }
+        .conList{
+            /*background-color: red;*/
+            line-height: 80px;
+        }
+        .contents{
+            height: 100%;
+            display: inline;
+            font-size: 1.5em;
+            margin-left: 50px;
+
+        }
+        .logoImg{
+            width: 152px;
+            height: 32px;
+            line-height: 80px;
+        }
+        .contents a{
+            cursor: pointer;
+            text-decoration: none;
+            color: #484848;
+        }
+        .inbox2{
+            /*background-color: coral;*/
+            height: 100%;
+            width: 50%;
+        }
+        .searchBox{
+            line-height: 80px;
+            float: left;
+        }
+        .inbox2 input{
+            width: 300px;
+            height: 30px;
+            background-color: #e6e6e6;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            margin-left:250px;
+            padding: 10px;
+        }
+        .mypageBox{
+            line-height: 100px;
+            /* width: 95px; */
+            float: right;
+            margin-right: 90px;
+        }
+        .mypageBox a{
+            color: #484848;
+        }
+</style>
 </head>
 <body>
 <nav class="contain-header">
-<!--  네비바 만들 곳  -->
-    안녕
+ <div class="outbox">
+     <div class="inbox1">
+         <ul class="conList">
+             <li class="contents">
+                 <a th:href="@{/}">
+                     <img src="/image/logoTest.png" alt="logo" class="logoImg">
+                 </a>
+             </li>
+             <li class="contents">
+                 <a href="#">영화</a>
+             </li>
+             <li class="contents">
+                 <a href="#">시리즈</a>
+             </li>
+         </ul>
+     </div>
+
+     <div class="inbox2">
+         <div class="searchBox">
+             <input type="search" placeholder="제목, 인물, 컬렉션으로 검색해보세요.">
+         </div>
+         <div class="mypageBox">
+             <a th:href="@{/user/myPage}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                </svg>
+             </a>
+         </div>
+     </div>
+
+ </div>
 </nav>
 <div class="content-fluid">
     <th:block th:replace="${content}"></th:block>
