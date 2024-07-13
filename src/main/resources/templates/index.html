@@ -13,43 +13,63 @@
             width: 1400px;
             margin: 0 auto;
         }
-        .movie {
-            flex: 1 0 20%;
+        .nowPlayingMovie {
             box-sizing: border-box;
             padding: 10px;
+            width: 320px;
+            height: 350px;
+            display: table-cell;
         }
-        .movie ul {
+        .nowPlayingMovie ul {
             list-style-type: none;
             padding: 0;
+            width: 200px;
+            text-align: center;
         }
-        .movie li {
-            margin-bottom: 5px;
+        .nowPlayingMovie li {
+            font-size: 14px;
+            margin-bottom: -29px;
+            text-align: left;
         }
-        .movie img {
-            max-width: 100%;
-            height: auto;
+        .nowPlayingMovie img {
+            width: 240px;
+            height: 340px;
             display: block;
             margin-bottom: 10px;
+            float: left;
+            margin-right: 20px;
+            border-radius: 10px;
+            box-shadow: 1px 2px 6px gray;
         }
         .movie iframe {
             width: 100%;
             height: 200px;
         }
-        .commentOutBox{
+        .commentOutBox, .nowPlayingOutBox{
             width: 1400px;
             height: 50px;
             /*background-color: antiquewhite;*/
             line-height: 50px;
             font-size: 1.2em;
-            margin: 10px 0 350px;
+            margin: 10px 0 250px;
             padding-left: 10px;
         }
+        .nowPlayingOutBox{
+            position: relative;
+            height: 520px;
+            padding: 0 30px;
+            overflow: hidden;
+        }
+
         .commentOutBox p{
             width: 1400px;
             padding-left: 40px;
         }
+        .nowPlayingOutBox p{
+            width: 1400px;
+            padding-left: 40px;
+        }
         .commentInBox{
-
             width: 1400px;
             height: 180px;
             display: flex;
@@ -62,15 +82,30 @@
             border-radius: 20px;
             border: 1px solid gainsboro;
         }
+        .button-right{
+            width: 50px;
+            height: 50px;
+            outline: none;
+            border: 1px solid gray;
+            border-radius: 50px;
+            z-index: 10;
+            background-color: white;
+            position: absolute;
+            top: 600px;
+            right: 100px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+<div class="container">
 <div id="movieContainer" class="container">
     <a th:href="@{/movie/detail}">디테일페이지 가기</a>
     <a th:href="@{/user/myPage}">마이페이지 가기</a>
     <a th:href="@{/user/join}">회원가입</a>
     <a th:href="@{/user/login}">로그인</a>
 </div>
+
 <!--    <a th:href="@{/movie/detail}">디테일페이지 가기</a>-->
     <div class="commentOutBox">
         <p class="commentTitle">지금 뜨는 코멘트</p>
@@ -86,14 +121,14 @@
             </div>
         </div>
     </div>
+    <div class="nowPlayingOutBox" id="movieContainer">
+        <p class="nowPlayingTitle">현재 상영작</p>
+
+    </div>
+    <button type="button" class="button-right"> > </button>
 </div>
 <script>
-
-    document.querySelector(".movie").addEventListener('click',()=>{
-        console.log("click");
-    })
-
-    const movieDbOptions = {
+    const options = {
         method: 'GET',
         headers: {
             accept: 'application/json',
@@ -103,37 +138,13 @@
 
     const fetchMovieData = async () => {
         try {
-            const response = await fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KR&page=1&sort_by=popularity.desc', movieDbOptions);
+            const response = await fetch('https://api.themoviedb.org/3/movie/now_playing?language=ko-KR&page=1&region=KR', options);
             const data = await response.json();
             return data.results;
         } catch (error) {
             console.error('Error fetching movie data:', error);
         }
     };
-
-    const fetchYouTubeVideo = async (query) => {
-        // const youtubeApiKey = 'AIzaSyBuRQEvltwiNQX0IUSQsTJZkrVO2LVm3W8';
-        const youtubeApiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(query)}&key=${youtubeApiKey}&maxResults=1`;
-
-        try {
-            const response = await fetch(youtubeApiUrl);
-            if (!response.ok) {
-                throw new Error(`YouTube API request failed with status ${response.status}`);
-            }
-
-            const data = await response.json();
-            if (data.items && data.items.length > 0) {
-                return data.items[0];
-            } else {
-                console.warn('No YouTube video found for query:', query);
-                return null;
-            }
-        } catch (error) {
-            console.error('Error fetching YouTube video:', error);
-            return null;
-        }
-    };
-
     const displayMovies = async () => {
         const movies = await fetchMovieData();
         const movieContainer = document.getElementById('movieContainer');
@@ -142,30 +153,20 @@
         for (const movie of movies) {
             console.log(movie)
             const movieDiv = document.createElement('div');
-            movieDiv.classList.add('movie');
-            movieDiv.classList.add(${movie.id});
+            movieDiv.classList.add('nowPlayingMovie');
 
+            const posterPath = movie.poster_path ? `${imageBaseUrl}${movie.poster_path}` : '';
+            const backdropPath = movie.backdrop_path ? `${imageBaseUrl}${movie.backdrop_path}` : '';
 
-
-
-            // const youtubeQuery = `${movie.original_title} ${new Date(movie.release_date).getFullYear()} movie trailer`;
-            // const youtubeVideo = await fetchYouTubeVideo(youtubeQuery);
-            // const youtubeEmbedUrl = youtubeVideo ? `https://www.youtube.com/embed/${youtubeVideo.id.videoId}` : '';
-
-            // 밑에서 돌려줘야함
-            //${youtubeEmbedUrl ? `<iframe src="${youtubeEmbedUrl}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>` : ''}
             const movieDetails = `
+                    <div class="nowPlayingMovie">
                     <img src="${posterPath}" alt="${movie.title} 포스터">
                     <ul>
-                        <li><strong>고유ID:</strong>${movie.id}</li>
-                        <li><strong>제목:</strong> ${movie.title}</li>
-                        <li><strong>개봉일:</strong> ${movie.release_date}</li>
-                        <li><strong>평균 평점:</strong> ${movie.vote_average}</li>
-                        <li><strong>평점 수:</strong> ${movie.vote_count}</li>
-                        <img src="${backdropPath}" alt="${movie.title} 포스터">
-                        <li><strong>개요:</strong> ${movie.overview}</li>
+                        <li>${movie.title}</li>
+                        <li>${movie.release_date}</li>
+                        <li>${movie.vote_average}</li>
                     </ul>
-                    <!-- 여기주석 -->
+                    </div>
                 `;
             movieDiv.innerHTML = movieDetails;
             movieContainer.appendChild(movieDiv);
@@ -173,8 +174,14 @@
     };
 
     displayMovies();
+
+    const buttonRight = document.querySelector('.button-right');
+    buttonRight.addEventListener('click', () => {
+        console.log("버튼 클릭");
+    });
+
 </script>
-</body>
+            </body>
+        </th:block>
     </th:block>
-</th:block>
 </html>
