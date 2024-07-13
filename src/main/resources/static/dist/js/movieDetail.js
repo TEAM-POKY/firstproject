@@ -1,5 +1,7 @@
 console.log("js in!");
-const movieId = '1022789';
+
+const urlParams = new URLSearchParams(window.location.search);
+const movieId = urlParams.get('movieId');
 const thumbnail = document.querySelector(".detail1");
 const mainposter = document.querySelector(".mainposter");
 const voteDiv = document.querySelector(".detailVote");
