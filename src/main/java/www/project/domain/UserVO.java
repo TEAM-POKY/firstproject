@@ -14,4 +14,6 @@ public class UserVO {
     private String nickname;
     private String pw;
     private String profile;
+    private String role;
+    private String isDel;
 }
