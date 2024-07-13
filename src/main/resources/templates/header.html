@@ -39,14 +39,18 @@
             display: inline;
             font-size: 1.5em;
             margin-left: 50px;
-
+        }
+        .contents2{
+            height: 100%;
+            display: inline;
+            margin-left: 15px;
         }
         .logoImg{
             width: 152px;
             height: 32px;
             line-height: 80px;
         }
-        .contents a{
+        .contents a,.contents2 a{
             cursor: pointer;
             text-decoration: none;
             color: #484848;
@@ -74,7 +78,7 @@
             line-height: 100px;
             /* width: 95px; */
             float: right;
-            margin-right: 90px;
+            margin-right: 110px;
         }
         .mypageBox a{
             color: #484848;
@@ -101,20 +105,26 @@
      </div>
 
      <div class="inbox2">
-         <div class="searchBox">
+         <ul class="conList">
+         <li class="searchBox contents2">
              <input type="search" placeholder="제목, 인물, 컬렉션으로 검색해보세요.">
-         </div>
-         <div><a th:href="@{/user/login}">로그인</a></div>
-         <div><a th:href="@{/user/join}">회원가입</a></div>
-         <div class="logoutA"><a th:href="@{/user/logout}">로그아웃</a></div>
-         <div class="mypageBox">
-             <a th:href="@{/user/myPage}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-                </svg>
-             </a>
-         </div>
+         </li>
+         <th:block sec:authorize="isAnonymous()">
+             <li class="contents2"><a th:href="@{/user/login}">로그인</a></li>
+             <li class="contents2"><a th:href="@{/user/join}">회원가입</a></li>
+         </th:block>
+         <th:block sec:authorize="isAuthenticated()">
+             <li class="logoutA contents2"><a th:href="@{/user/logout}">로그아웃</a></li>
+             <li class="mypageBox contents2">
+                 <a th:href="@{/user/myPage}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                     <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                     <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                    </svg>
+                 </a>
+             </li>
+         </th:block>
+         </ul>
      </div>
 
  </div>
