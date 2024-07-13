@@ -49,7 +49,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    UserDetailsService userDetailsService(){return new CustomUserService();}
-
-
+    public UserDetailsService customUserService() {
+        return new CustomUserService();
+    }
 }

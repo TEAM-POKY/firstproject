@@ -18,6 +18,7 @@ public class CustomUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserVO uvo = userMapper.checkEmail(email);
         log.info("login uvo>>>>>>>{}",uvo);
+        uvo.setAuthList(userMapper.selectAuth(email));
         return (UserDetails) new AuthUser(uvo);
     }
 }

@@ -22,4 +22,8 @@
     <select id="checkEmail" resultType="www.project.domain.UserVO">
         select * from user where email=#{email}
     </select>
+
+    <select id="selectAuth" resultType="www.project.domain.AuthVO">
+        select * from auth as a join user as u on u.email=a.email where a.email=#{email}
+    </select>
 </mapper>
