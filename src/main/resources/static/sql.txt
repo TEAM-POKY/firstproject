@@ -3,7 +3,6 @@ CREATE TABLE `user` (
 	`nickname`	varchar(200)	NULL,
 	`pw`	varchar(500)	NULL,
 	`profile`	varchar(500)	NULL,
-	`role`	varchar(100)	NULL	DEFAULT 'ROLE_USER',
 	`isDel`	tinyint	NULL	DEFAULT 0
 );
 
@@ -21,7 +20,7 @@ CREATE TABLE `comment` (
 	`comment_code`	bigint	NOT NULL,
 	`media_id`	bigint	NULL,
 	`content`	varchar(150)	NULL,
-	`spolier`	tinyint	NULL	DEFAULT 0,
+	`spoiler`	tinyint	NULL	DEFAULT 0,
 	`email`	varchar(200)	NOT NULL,
 	`count`	bigint	NULL
 );
@@ -56,6 +55,12 @@ CREATE TABLE `star` (
 	`email`	varchar(200)	NOT NULL,
 	`rate`	int	NULL,
 	`media_id`	bigint	NULL
+);
+
+CREATE TABLE auth (
+    email VARCHAR(200) NOT NULL,
+    role VARCHAR(200) DEFAULT 'ROLE_USER',
+    foreign key (email) references user(email)
 );
 
 ALTER TABLE `user` ADD CONSTRAINT `PK_USER` PRIMARY KEY (
