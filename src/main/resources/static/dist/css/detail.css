@@ -1,7 +1,6 @@
 .wrap{
     width: 1900px;
     height: 100vh;
-    background-color: #ba6565;
     color: white;
 }
 
@@ -12,7 +11,6 @@
     background-color: white;
     margin: auto;
 }
-
 
 .detail1{
     width: 1300px;
@@ -85,26 +83,110 @@
 }
 
 .more-text {
-    /* 글씨 크기,색상 지정 */
     font-size: 16px;
     color:blue;
-
-    /* 마우스 포인트가 올라갔을 때 커서 모양을 포인터로 변경 */
     cursor: pointer;
 
 }
 
 .less-text {
-
-    /* 글씨 크기,색상 지정 */
     font-size: 16px;
     color:blue;
-    /* 마우스 포인트가 올라갔을 때 커서 모양을 포인터로 변경 */
     cursor: pointer;
-    /* 줄이기 버튼 (처음에는 안보이게) */
     display: none;
 
 }
+
+.detail2{
+    display: flex;
+    flex-direction: row;
+}
+
+.voteAverage{
+    width: 400px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.detailComment{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1000px;
+    height: 300px;
+}
+
+.detailComment>form{
+    display: flex;
+    flex-direction: row;
+}
+
+.detailComment>form>textarea{
+    width: 650px;
+    height: 150px;
+    resize: none;
+}
+
+.detailComment>form>input{
+    height: 15px;
+}
+
+.detailComment>form>button{
+    width: 150px;
+    height: 100px;
+
+}
+
+.detail1Review{
+    display: flex;
+    flex-direction: column;
+    padding-left: 15px;
+}
+
+.detailCheck{
+    padding-top: 25px;
+}
+
+.detailCheck>label{
+    color: black;
+}
+
+.detailSubmitBtn{
+    margin-top: 10px;
+}
+
+.detailSubmitBtn>button{
+    width: 100px;
+    height: 100px;
+}
+
+.voteStar{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.voteStar>span{
+    width: 65px;
+    height: 50px;
+    display: flex;
+    color: black;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.voteComment>span{
+    color: black;
+}
+
+
+
+
+
+
 
 
 

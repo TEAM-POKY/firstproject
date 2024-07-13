@@ -30,7 +30,6 @@ getDetail(movieId).then(result => {
 
     detailCatediv.appendChild(cateul);
 
-
     var storyTelling = result.overview;
     thumbnail.style.backgroundImage = "linear-gradient(to right, black,#000000e0, rgba(42,40,40,0.7))," + "url(" + backdropsrc + ")"; // 백그라운드 이미지
     mainposter.src = mainpostersrc; //메인 포스터
@@ -38,21 +37,16 @@ getDetail(movieId).then(result => {
     detailTitlediv.innerText = detailTitle; // 제목
     storyText.innerText = storyTelling; // 줄거리
 })
-// api 받아서 넣을 장소
-
-// 더보기 기능 구현
 const moreText = document.querySelector('.more-text');
 const lessText = document.querySelector('.less-text');
 
 moreText.addEventListener('click', () => {
-
     moreText.style.display = 'none';
     lessText.style.display = 'inline-block';
     storyText.style.display = 'inline-block';
 });
 
 lessText.addEventListener('click', () => {
-
     lessText.style.display = 'none';
     moreText.style.display = 'inline-block';
     storyText.style.display = '-webkit-box';
@@ -69,5 +63,7 @@ async function getDetail(movieId) {
     }
 
 }
+
+
 
 

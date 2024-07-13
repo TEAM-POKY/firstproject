@@ -30,7 +30,35 @@
                     </div>
                     <img class="mainposter">
                 </div>
-                <div class="detail2"></div>
+                <div class="detail2">
+                    <div class="voteAverage">
+                        <div class="voteComment">
+                            <span>해당 작품에 대한 별점을 주세요.</span>
+                        </div>
+                        <div class="voteStar">
+                            <span>별</span>
+                            <span>별</span>
+                            <span>별</span>
+                            <span>별</span>
+                            <span>별</span>
+                        </div>
+                    </div>
+                    <div class="detailComment">
+                        <form action="/movie/comment" method="post">
+                            <textarea type="text" placeholder="이 작품에 대한 평을 남겨보세요."></textarea>
+                            <div class="detail1Review">
+                                <div class="detailCheck">
+                                    <input type="checkbox" id="spoiler">
+                                    <label for="spoiler">스포일러</label>
+                                </div>
+                                <div class="detailSubmitBtn">
+                                    <button type="submit">등록</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
                 <div class="detail3"></div>
             </div>
         </div>
