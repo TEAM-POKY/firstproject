@@ -8,7 +8,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class UserVO {
     private String email;
     private String nickname;

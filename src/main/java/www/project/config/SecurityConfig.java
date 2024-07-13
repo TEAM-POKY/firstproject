@@ -1,4 +1,3 @@
-
 package www.project.config;
 
 import lombok.RequiredArgsConstructor;
@@ -18,23 +17,20 @@ import www.project.security.CustomUserService;
 public class SecurityConfig {
 
     @Bean
-    PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+    PasswordEncoder passwordEncoder() {return PasswordEncoderFactories.createDelegatingPasswordEncoder();}
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf->csrf.disable())
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/**")
                         .permitAll()
-
+                        .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/user/login")
-                        .loginProcessingUrl("/login/form")
+                .formLogin(login -> login
                         .usernameParameter("email")
                         .passwordParameter("pw")
+                        .loginPage("/user/login")
                         .failureUrl("/user/login?false")
                         .defaultSuccessUrl("/", true)
                         .permitAll()
@@ -49,7 +45,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService customUserService() {
-        return new CustomUserService();
-    }
+    UserDetailsService userDetailsService(){return new CustomUserService();}
+
 }

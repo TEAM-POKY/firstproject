@@ -19,7 +19,7 @@
         select * from user where nickname=#{nick}
     </select>
 
-    <select id="checkEmail" resultType="www.project.domain.UserVO">
+    <select id="checkEmail">
         select * from user where email=#{email}
     </select>
 
