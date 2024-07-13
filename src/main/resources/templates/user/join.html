@@ -10,25 +10,25 @@
         <div class="Join">
             <div class="JoinLogo"></div>
             <form action="/user/join" method="POST" class="JoinArea">
-                <div class="JoinEmailArea">
+                <div class="JoinInputArea">
                     <input type="text" name="email" id="JoinEmail" onchange="changeValue()">
                     <label for="JoinEmail" id="JoinEmailLabel" class="JoinLabel">이메일</label>
-                    <span id="JoinSpan0"></span>
+                    <span id="JoinSpan0" class="JoinSpan"></span>
                 </div>
-                <div class="JoinNickArea">
+                <div class="JoinInputArea">
                     <input type="text" name="nickname" id="JoinNick" onchange="changeValue()">
                     <label for="JoinNick" id="JoinNickLabel" class="JoinLabel">닉네임</label>
-                    <span id="JoinSpan1"></span>
+                    <span id="JoinSpan1" class="JoinSpan"></span>
                 </div>
-                <div class="JoinPwArea">
+                <div class="JoinInputArea">
                     <input type="text" name="pw" id="JoinPw" onchange="changeValue()">
                     <label for="JoinPw" id="JoinPwLabel" class="JoinLabel">비밀번호</label>
-                    <span id="JoinSpan2"></span>
+                    <span id="JoinSpan2" class="JoinSpan"></span>
                 </div>
-                <div class="JoinPwCheckArea">
+                <div class="JoinInputArea">
                     <input type="text" id="JoinCheckPw" onchange="changeValue()">
                     <label for="JoinCheckPw" id="JoinCheckPwLabel" class="JoinLabel">비밀번호 확인</label>
-                    <span id="JoinSpan3"></span>
+                    <span id="JoinSpan3" class="JoinSpan"></span>
                 </div>
                 <div class="JoinBtnArea">
                     <button type="button" class="JoinBtn">회원가입</button>
@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="LoginHref">
-                <a th:href="@{/user/login}">로그인 하러 가기</a>
+                <a th:href="@{/user/login}">로그인 하기</a>
             </div>
         </div>
     </div>

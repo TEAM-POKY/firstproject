@@ -2,9 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login</title>
+    <link rel="stylesheet" href="/dist/css/join.css">
 </head>
 <body>
-
+    <div class="container">
+        <div class="Login">
+            <div class="LoginLogo"></div>
+            <form action="/user/login" method="POST" class="LoginArea">
+                <div class="LoginInputArea">
+                    <input type="text" name="email" id="LoginEmail" onchange="changeValue()">
+                    <label for="LoginEmail" id="LoginEmailLabel" class="LoginLabel">이메일</label>
+                </div>
+                <div class="LoginInputArea">
+                    <input type="text" name="pw" id="LoginPw" onchange="changeValue()">
+                    <label for="LoginPw" id="LoginPwLabel" class="LoginLabel">비밀번호</label>
+                </div>
+                <button type="submit" class="LoginBtn">로그인</button>
+            </form>
+            <div class="LoginMidLine"></div>
+            <div class="LoginOr">OR</div>
+            <div class="SocialLogin">
+                <div class="KakaoLogin">
+                    <a><img th:src="@{/dist/image/kakaoLogin.png}"></a>
+                </div>
+                <div class="NaverLogin">
+                    <a><img th:src="@{/dist/image/naverLogin.png}"></a>
+                </div>
+                <div class="GoogleLogin">
+                    <a><img th:src="@{/dist/image/googleLogin.jpg}"></a>
+                </div>
+            </div>
+            <div class="JoinHref">
+                <a th:href="@{/user/join}" class="LoginFind">회원가입</a>
+                <a th:href="@{/user/findUser}" class="LoginFind">아이디 / 비밀번호 찾기</a>
+            </div>
+        </div>
+    </div>
+    <script src="/dist/js/login.js"></script>
 </body>
 </html>

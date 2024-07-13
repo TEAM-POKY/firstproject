@@ -29,14 +29,24 @@ public class myPageController {
         return "/user/login";
     }
 
-    @GetMapping("/login")
-    public void login(){}
-
     @PostMapping(value="/nick",consumes = "text/plain", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> checkNick(@RequestBody String nickName){
         int isOk = usv.checkNick(nickName);
         return isOk==0? new ResponseEntity<String>("0", HttpStatus.OK):
                 new ResponseEntity<String>("1",HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @GetMapping("/login")
+    public void login(){}
+
+    @GetMapping("/findUser")
+    public void findUser(){}
+
+    @PostMapping("/find/{nick}")
+    @ResponseBody
+    public ResponseEntity<UserVO> findUserEmail(@PathVariable("nick") String nick){
+        UserVO uvo = usv.findEmail(nick);
+        return uvo==null? ResponseEntity.ok(null):ResponseEntity.ok(uvo);
     }
 
 }

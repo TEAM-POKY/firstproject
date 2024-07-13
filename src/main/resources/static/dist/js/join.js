@@ -30,16 +30,6 @@ function pwCheckValid(pw, checkPw){
     return pw===checkPw;
 }
 
-function nickCheckValid(str){
-    checkNick(str).then(result=>{
-        if(result==='0'){
-            return true;
-        } else {
-            return false;
-        }
-    })
-}
-
 email.onkeyup = function (){
     const emailValue = email.value;
     if(emailValid(emailValue)){
@@ -49,7 +39,7 @@ email.onkeyup = function (){
     }
 }
 
-nick.onkeyup = function nickValid (nickValue){
+nick.onkeyup = function (){
     checkNick(nick.value).then(result=>{
         if(result==='0'){
             document.getElementById('JoinSpan1').innerHTML='사용가능한 닉네임입니다.';
@@ -78,14 +68,10 @@ pwCheck.onkeyup = function (){
     }
 }
 
-
 joinBtn.addEventListener('click',()=>{
-    //닉네임 keyup시 중복체크 해야함
     const formValid = emailValid(email.value)
-        && nickCheckValid(nick.value)
         && pwValid(pw.value)
         && pwCheckValid(pw.value,pwCheck.value);
-
     if(formValid){
         console.log("활성화")
         document.querySelector('.JoinBtn').type = 'submit';

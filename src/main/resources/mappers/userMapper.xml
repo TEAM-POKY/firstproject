@@ -10,4 +10,8 @@
     <select id="checkNick" resultType="int">
         select count(nickname) from user where nickname=#{nickName}
     </select>
+
+    <select id="findEmail" resultType="www.project.domain.UserVO">
+        select * from user where nickname=#{nick}
+    </select>
 </mapper>

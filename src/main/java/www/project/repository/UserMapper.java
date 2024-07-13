@@ -8,4 +8,6 @@ public interface UserMapper {
     void joinUser(UserVO uvo);
 
     int checkNick(String nickName);
+
+    UserVO findEmail(String nick);
 }

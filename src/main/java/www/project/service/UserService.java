@@ -6,4 +6,6 @@ public interface UserService {
     void joinUser(UserVO uvo);
 
     int checkNick(String nickName);
+
+    UserVO findEmail(String nick);
 }

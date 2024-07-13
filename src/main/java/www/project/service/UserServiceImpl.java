@@ -21,4 +21,9 @@ public class UserServiceImpl implements UserService{
     public int checkNick(String nickName) {
         return usermapper.checkNick(nickName);
     }
+
+    @Override
+    public UserVO findEmail(String nick) {
+        return usermapper.findEmail(nick);
+    }
 }
