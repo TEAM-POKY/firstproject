@@ -1,0 +1,92 @@
+.container {
+    width: 1300px;
+    margin: 20px 300px; /* 좌우 여백 300px */
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.Join, .Login{
+    width: 80%;
+    margin: 0 auto;
+}
+.JoinLogo, .LoginLogo{
+    width: 80%;
+    height: 100px;
+    background-color: #fde5e9;
+    margin: 30px auto 30px;
+}
+.JoinArea, .LoginArea{
+    width: 660px;
+    margin: 0 auto;
+}
+input {
+    width: 650px;
+    height: 50px;
+    margin: 15px auto;
+    border: none;
+    border-radius: 8px;
+    background-color: gainsboro;
+    outline: none;
+    padding: 15px 0 0 10px;
+}
+.JoinInputArea, .LoginInputArea{
+    position: relative;
+}
+label {
+    position: absolute;
+    top: 35px;
+    left: 12px;
+    font-size: 16px;
+}
+.JoinArea input:focus ~ label,
+.LoginArea input:focus ~ label{
+    transform: translate(-5px, -15px);
+    font-size: small;
+    color: gray;
+}
+.JoinBtn, .LoginBtn{
+    width: 660px;
+    height: 50px;
+    margin: 20px auto 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+}
+.JoinMidLine,.LoginMidLine{
+    width: 660px;
+    height: 1px;
+    background-color: gainsboro;
+    margin: 50px auto;
+}
+.JoinOr,.LoginOr{
+    width: 40px;
+    text-align: center;
+    margin: -61px auto 0;
+    background-color: white;
+}
+.SocialLogin {
+    width: 490px;
+    display: flex;
+    margin: 38px auto;
+    justify-content: space-evenly;
+}
+.SocialLogin img{
+    height: 60px;
+    width: 60px;
+}
+.LoginHref,.JoinHref{
+    width: 660px;
+    margin: 0 auto;
+    text-align: center;
+}
+.LoginFind{
+    margin-left: 30px;
+}
+.JoinSpan{
+    display: block;
+    font-size: 14px;
+    margin: -8px 6px 0;
+}
+button, a{
+    cursor: pointer;
+}

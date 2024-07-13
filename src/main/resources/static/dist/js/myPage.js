@@ -62,11 +62,11 @@ var ctx = document.getElementById('donutChart').getContext('2d');
 var donutChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-        labels: ['스릴러', '액션', '판타지', '연애'],
+        labels: ['스릴러', '액션', '판타지', '연애','코미디'],
         datasets: [{
-            data: [50, 20, 10, 20],  // 예시 데이터
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
-            hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+            data: [50, 20, 10, 20, 10],
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#7b19cf'],
+            hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#7b19cf']
         }]
     },
     options: {
@@ -91,3 +91,66 @@ function scrollRight(id) {
         behavior: 'smooth'
     });
 }
+
+const apiKey = 'afdfe47a44756e290025715a6b42d8d5';
+let requestToken = '';
+
+document.getElementById('token').addEventListener('click', async () => {
+    const url = `https://api.themoviedb.org/3/authentication/token/new?api_key=${apiKey}`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('네트워크 응답이 좋지 않습니다');
+        }
+        const data = await response.json();
+        requestToken = data.request_token;
+        console.log('Request Token:', requestToken);
+        localStorage.setItem('requestToken', requestToken);
+        let id = 'ehdwosla13';
+        let pw = `274ehdwo!`
+        const url1 = `https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=${apiKey}&username=${id}&password=${pw}&request_token=`+requestToken;
+        try {
+            const response = await fetch(url1, {
+                method: 'POST'
+            });
+            if (!response.ok) {
+                throw new Error('네트워크 응답이 좋지 않습니다');
+            }
+            const data = await response.json();
+            const sessionId = data.session_id;
+            console.log('Session ID:', sessionId);
+        } catch (error) {
+            console.error('세션 생성에 실패했습니다:', error);
+        }
+    } catch (error) {
+        console.error('토큰 가져오기에 실패했습니다:', error);
+    }
+});
+
+document.getElementById('session').addEventListener('click', async () => {
+    if (!requestToken) {
+        requestToken = localStorage.getItem('requestToken');
+    }
+
+    if (!requestToken) {
+        alert('먼저 토큰을 가져와야 합니다');
+        return;
+    }
+    let id = 'ehdwosla13';
+    let pw = `274ehdwo!`
+    // const url = `https://api.themoviedb.org/3/authentication/session/new?api_key=${apiKey}&request_token=${requestToken}`;
+    const url = `https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=${apiKey}&username=${id}&password=${pw}&request_token=`+requestToken;
+    try {
+        const response = await fetch(url, {
+            method: 'POST'
+        });
+        if (!response.ok) {
+            throw new Error('네트워크 응답이 좋지 않습니다');
+        }
+        const data = await response.json();
+        const sessionId = data.session_id;
+        console.log('Session ID:', sessionId);
+    } catch (error) {
+        console.error('세션 생성에 실패했습니다:', error);
+    }
+});
