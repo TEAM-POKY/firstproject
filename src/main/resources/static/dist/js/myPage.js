@@ -30,6 +30,14 @@ function loadCalendar(date) {
         const dateText = document.createElement('div');
         dateText.textContent = date;
         dateText.classList.add('date-text');
+
+        const dayOfWeek = new Date(year, month, date).getDay();
+        if (dayOfWeek === 5) {
+            cell.classList.add('saturday');
+        } else if (dayOfWeek === 6) {
+            cell.classList.add('sunday');
+        }
+
         cell.appendChild(dateText);
         row.appendChild(cell);
     }
