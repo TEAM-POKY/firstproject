@@ -83,11 +83,12 @@
             border-radius: 20px;
             border: 1px solid gainsboro;
         }
-        .button-right{
+        #rightBtn{
             width: 50px;
             height: 50px;
             outline: none;
-            border: 1px solid gray;
+            border: none;
+            box-shadow: 1px 2px 3px gray;
             border-radius: 50px;
             z-index: 10;
             background-color: white;
@@ -95,6 +96,22 @@
             top: 620px;
             right: 100px;
             cursor: pointer;
+            font-size: 20px;
+        }
+        #leftBtn{
+            width: 50px;
+            height: 50px;
+            outline: none;
+            border: none;
+            box-shadow: 1px 2px 3px gray;
+            border-radius: 50px;
+            z-index: 10;
+            background-color: white;
+            position: absolute;
+            top: 620px;
+            left: 110px;
+            cursor: pointer;
+            font-size: 20px;
         }
     </style>
 </head>
@@ -126,7 +143,8 @@
         <p class="nowPlayingTitle">현재 상영작</p>
 
     </div>
-    <button type="button" class="button-right"> > </button>
+    <button type="button" class="btn" id="rightBtn"> > </button>
+    <button type="button" class="btn" id="leftBtn"> < </button>
 </div>
 <script>
     const options = {
@@ -183,6 +201,7 @@
 
 </script>
 <script th:src="@{/dist/js/goToDetail.js}"></script>
+<script th:src="@{/dist/js/slide.js}"></script>
 </body>
     </th:block>
     </th:block>
