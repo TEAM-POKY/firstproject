@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import www.project.service.UserService;
 import www.project.domain.UserVO;
@@ -19,6 +21,7 @@ public class userController {
 
 
     private final UserService usv;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/myPage")
     public void myPage(){}
@@ -28,6 +31,7 @@ public class userController {
 
     @PostMapping("/join")
     public String joinUser(UserVO uvo){
+        uvo.setPw(passwordEncoder.encode(uvo.getPw()));
         usv.joinUser(uvo);
         return "/user/login";
     }
@@ -40,7 +44,14 @@ public class userController {
     }
 
     @GetMapping("/login")
-    public void login(){}
+    public String login(@RequestParam(name = "error", required = false) String error, Model model) {
+        if(error != null){
+            model.addAttribute("errorMessage", "아이디와 비밀번호를 확인해주세요.");
+            return "/user/login";
+        }else{
+            return "/user/login";
+        }
+    }
 
     @GetMapping("/findUser")
     public void findUser(){}
