@@ -104,6 +104,9 @@
          <div class="searchBox">
              <input type="search" placeholder="제목, 인물, 컬렉션으로 검색해보세요.">
          </div>
+         <div><a th:href="@{/user/login}">로그인</a></div>
+         <div><a th:href="@{/user/join}">회원가입</a></div>
+         <div class="logoutA"><a th:href="@{/user/logout}">로그아웃</a></div>
          <div class="mypageBox">
              <a th:href="@{/user/myPage}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">

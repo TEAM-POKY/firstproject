@@ -10,6 +10,7 @@
     <logger name="org.springframework.jdbc" level="info" appender-ref="STDOUT"></logger>
     <logger name="jdbc.sqlonly" level="info" appender-ref="STDOUT"></logger>
     <logger name="jdbc.resultsettable" level="info" appender-ref="STDOUT"></logger>
+    <logger name="org.springframework.security" level="DEBUG" />
     <root level="info">
         <appender-ref ref="STDOUT" />
     </root>
