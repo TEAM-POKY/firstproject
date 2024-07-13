@@ -59,6 +59,7 @@
             height: 520px;
             padding: 0 30px;
             overflow: hidden;
+            cursor:pointer;
         }
 
         .commentOutBox p{
@@ -91,7 +92,7 @@
             z-index: 10;
             background-color: white;
             position: absolute;
-            top: 600px;
+            top: 620px;
             right: 100px;
             cursor: pointer;
         }
@@ -99,7 +100,7 @@
 </head>
 <body>
 <div class="container">
-<div id="movieContainer" class="container">
+<div class="container">
     <a th:href="@{/movie/detail}">디테일페이지 가기</a>
     <a th:href="@{/user/myPage}">마이페이지 가기</a>
     <a th:href="@{/user/join}">회원가입</a>
@@ -159,7 +160,7 @@
             const backdropPath = movie.backdrop_path ? `${imageBaseUrl}${movie.backdrop_path}` : '';
 
             const movieDetails = `
-                    <div class="nowPlayingMovie">
+                    <div class="nowPlayingMovie" id="${movie.id}">
                     <img src="${posterPath}" alt="${movie.title} 포스터">
                     <ul>
                         <li>${movie.title}</li>
@@ -181,7 +182,8 @@
     });
 
 </script>
-            </body>
-        </th:block>
+<script th:src="@{/dist/js/goToDetail.js}"></script>
+</body>
+    </th:block>
     </th:block>
 </html>
