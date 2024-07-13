@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="/dist/css/join.css">
-</head>
-<body>
+<link rel="stylesheet" th:href="@{/dist/css/join.css}">
+<th:block th:replace="~{header :: setFragment(~{this::content})}">
+    <th:block th:fragment="content">
     <div class="container">
         <div class="Login">
             <div class="LoginLogo"></div>
@@ -51,5 +48,6 @@
         };
     </script>
     <script src="/dist/js/login.js"></script>
-</body>
+    </th:block>
+</th:block>
 </html>
