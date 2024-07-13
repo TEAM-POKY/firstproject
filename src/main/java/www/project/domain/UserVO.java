@@ -1,14 +1,14 @@
 package www.project.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class UserVO {
     private String email;
     private String nickname;
@@ -16,4 +16,5 @@ public class UserVO {
     private String profile;
     private String role;
     private String isDel;
+    private List<AuthVO> authList;//권한 목록
 }
