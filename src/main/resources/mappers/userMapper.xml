@@ -7,11 +7,19 @@
         insert into user(email, nickname, pw) values (#{email},#{nickname},#{pw})
     </insert>
 
+    <insert id="insertAuth">
+        insert into auth values(#{email},'ROLE_USER')
+    </insert>
+
     <select id="checkNick" resultType="int">
         select count(nickname) from user where nickname=#{nickName}
     </select>
 
     <select id="findEmail" resultType="www.project.domain.UserVO">
         select * from user where nickname=#{nick}
+    </select>
+
+    <select id="checkEmail" resultType="www.project.domain.UserVO">
+        select * from user where email=#{email}
     </select>
 </mapper>

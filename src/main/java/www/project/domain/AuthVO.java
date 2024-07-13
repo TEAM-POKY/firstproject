@@ -5,18 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserVO {
+@AllArgsConstructor
+public class AuthVO {
     private String email;
-    private String nickname;
-    private String pw;
-    private String profile;
     private String role;
-    private String isDel;
-    private List<AuthVO> authList;//권한 목록
 }

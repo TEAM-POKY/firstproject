@@ -5,9 +5,13 @@ import www.project.domain.UserVO;
 
 @Mapper
 public interface UserMapper {
-    void joinUser(UserVO uvo);
+    int joinUser(UserVO uvo);
 
     int checkNick(String nickName);
 
     UserVO findEmail(String nick);
+
+    void insertAuth(String email);
+
+    UserVO checkEmail(String email);
 }

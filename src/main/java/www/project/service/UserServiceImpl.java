@@ -14,7 +14,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void joinUser(UserVO uvo) {
-        usermapper.joinUser(uvo);
+        int isOk = usermapper.joinUser(uvo);
+        if(isOk == 1){
+            usermapper.insertAuth(uvo.getEmail());
+        }
     }
 
     @Override
