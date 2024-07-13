@@ -2,6 +2,7 @@ package www.project.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,9 @@ import www.project.domain.UserVO;
 @RequestMapping("/user/*")
 @RequiredArgsConstructor
 @Slf4j
-public class myPageController {
+public class userController {
+
+
     private final UserService usv;
     private final PasswordEncoder passwordEncoder;
 
