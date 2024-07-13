@@ -7,14 +7,14 @@ body {
 }
 .container {
     width: 1300px;
-    margin: 20px 300px; /* 좌우 여백 300px */
+    margin: 20px 300px;
     background-color: #ffffff;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 .section {
-    padding: 20px 0;
-    border-bottom: 1px solid #ddd; /* 구분선을 추가 */
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
 }
 .profile {
     display: flex;
@@ -113,11 +113,84 @@ body {
     text-align: center;
     position: relative;
 }
-.vertical-line {
-    width: 1px;
-    height: 100%;
-    background-color: #ddd;
-}
+
 .count-section div {
     margin: 10px 0;
+}
+.trend {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.trend-analysis {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.chart-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    position: relative;
+    height: 400px;
+}
+
+.details-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.details-button:hover {
+    background-color: #0056b3;
+}
+
+.followed {
+    text-align: left;
+}
+
+.follow-section {
+    margin: 20px 0;
+}
+
+.profile-circles {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.profile-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    flex-shrink: 0;
+}
+
+.scroll-buttons {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.scroll-buttons button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.scroll-buttons button:hover {
+    background-color: #0056b3;
 }
