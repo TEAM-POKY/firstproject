@@ -9,13 +9,13 @@
     <div class="container">
         <div class="Login">
             <div class="LoginLogo"></div>
-            <form action="/user/login" method="POST" class="LoginArea">
+            <form action="/login/form" method="post" class="LoginArea">
                 <div class="LoginInputArea">
                     <input type="text" name="email" id="LoginEmail" onchange="changeValue()">
                     <label for="LoginEmail" id="LoginEmailLabel" class="LoginLabel">이메일</label>
                 </div>
                 <div class="LoginInputArea">
-                    <input type="text" name="pw" id="LoginPw" onchange="changeValue()">
+                    <input type="password" name="pw" id="LoginPw" onchange="changeValue()">
                     <label for="LoginPw" id="LoginPwLabel" class="LoginLabel">비밀번호</label>
                 </div>
                 <button type="submit" class="LoginBtn">로그인</button>
@@ -39,6 +39,17 @@
             </div>
         </div>
     </div>
+
+    <script th:inline="javascript">
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('error')) {
+                alert('로그인 후 이용 가능합니다.');
+            }else if(urlParams.has('false')){
+                alert('아이디와 비밀번호를 확인해주세요.');
+            }
+        };
+    </script>
     <script src="/dist/js/login.js"></script>
 </body>
 </html>
