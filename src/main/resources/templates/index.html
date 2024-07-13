@@ -160,8 +160,7 @@
             const backdropPath = movie.backdrop_path ? `${imageBaseUrl}${movie.backdrop_path}` : '';
 
             const movieDetails = `
-                    <div class="nowPlayingMovie"style="cursor:pointer;">
-                    <a id="movieLink" href="/movie/detail?movieId=${movie.id}"></a>
+                    <div class="nowPlayingMovie"style="cursor:pointer;" id="${movie.id}">
                     <img src="${posterPath}" alt="${movie.title} 포스터">
                     <ul>
                         <li>${movie.title}</li>
