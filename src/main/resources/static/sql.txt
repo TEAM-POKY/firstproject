@@ -1,0 +1,141 @@
+CREATE TABLE `user` (
+	`email`	varchar(200)	NOT NULL,
+	`nickname`	varchar(200)	NULL,
+	`pw`	varchar(500)	NULL,
+	`profile`	varchar(500)	NULL,
+	`role`	varchar(100)	NULL	DEFAULT 'ROLE_USER',
+	`isDel`	tinyint	NULL	DEFAULT 0
+);
+
+CREATE TABLE `user_follow` (
+	`follow_email`	varchar(200)	NULL,
+	`email`	varchar(200)	NOT NULL
+);
+
+CREATE TABLE `calender` (
+	`media_id`	bigint	NULL,
+	`email`	varchar(200)	NOT NULL
+);
+
+CREATE TABLE `comment` (
+	`comment_code`	bigint	NOT NULL,
+	`media_id`	bigint	NULL,
+	`content`	varchar(150)	NULL,
+	`spolier`	tinyint	NULL	DEFAULT 0,
+	`email`	varchar(200)	NOT NULL,
+	`count`	bigint	NULL
+);
+
+CREATE TABLE `comment_like` (
+	`comment_code`	bigint	NOT NULL,
+	`email`	varchar(200)	NOT NULL
+);
+
+CREATE TABLE `actor_follow` (
+	`email`	varchar(200)	NOT NULL,
+	`actor_id`	bigint	NULL
+);
+
+CREATE TABLE `director_follow` (
+	`director_id`	bigint	NULL,
+	`email`	varchar(200)	NOT NULL
+);
+
+CREATE TABLE `wish` (
+	`media_id`	bigint	NULL,
+	`email`	varchar(200)	NOT NULL
+);
+
+CREATE TABLE `collection` (
+	`collection_name`	varchar(500)	NOT NULL,
+	`media_id`	bigint	NULL,
+	`email`	varchar(200)	NOT NULL
+);
+
+CREATE TABLE `star` (
+	`email`	varchar(200)	NOT NULL,
+	`rate`	int	NULL,
+	`media_id`	bigint	NULL
+);
+
+ALTER TABLE `user` ADD CONSTRAINT `PK_USER` PRIMARY KEY (
+	`email`
+);
+
+ALTER TABLE `comment` ADD CONSTRAINT `PK_COMMENT` PRIMARY KEY (
+	`comment_code`
+);
+
+ALTER TABLE `collection` ADD CONSTRAINT `PK_COLLECTION` PRIMARY KEY (
+	`collection_name`
+);
+
+ALTER TABLE `user_follow` ADD CONSTRAINT `FK_user_TO_user_follow_1` FOREIGN KEY (
+	`email`
+)
+REFERENCES `user` (
+	`email`
+);
+
+ALTER TABLE `calender` ADD CONSTRAINT `FK_user_TO_calender_1` FOREIGN KEY (
+	`email`
+)
+REFERENCES `user` (
+	`email`
+);
+
+ALTER TABLE `comment` ADD CONSTRAINT `FK_user_TO_comment_1` FOREIGN KEY (
+	`email`
+)
+REFERENCES `user` (
+	`email`
+);
+
+ALTER TABLE `comment_like` ADD CONSTRAINT `FK_comment_TO_comment_like_1` FOREIGN KEY (
+	`comment_code`
+)
+REFERENCES `comment` (
+	`comment_code`
+);
+
+ALTER TABLE `comment_like` ADD CONSTRAINT `FK_user_TO_comment_like_1` FOREIGN KEY (
+	`email`
+)
+REFERENCES `user` (
+	`email`
+);
+
+ALTER TABLE `actor_follow` ADD CONSTRAINT `FK_user_TO_actor_follow_1` FOREIGN KEY (
+	`email`
+)
+REFERENCES `user` (
+	`email`
+);
+
+ALTER TABLE `director_follow` ADD CONSTRAINT `FK_user_TO_director_follow_1` FOREIGN KEY (
+	`email`
+)
+REFERENCES `user` (
+	`email`
+);
+
+ALTER TABLE `wish` ADD CONSTRAINT `FK_user_TO_wish_1` FOREIGN KEY (
+	`email`
+)
+REFERENCES `user` (
+	`email`
+);
+
+ALTER TABLE `collection` ADD CONSTRAINT `FK_user_TO_collection_1` FOREIGN KEY (
+	`email`
+)
+REFERENCES `user` (
+	`email`
+);
+
+ALTER TABLE `star` ADD CONSTRAINT `FK_user_TO_star_1` FOREIGN KEY (
+	`email`
+)
+REFERENCES `user` (
+	`email`
+);
