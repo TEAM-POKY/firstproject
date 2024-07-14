@@ -13,7 +13,8 @@ CREATE TABLE `user_follow` (
 
 CREATE TABLE `calender` (
 	`media_id`	bigint	NULL,
-	`email`	varchar(200)	NOT NULL
+	`email`	varchar(200)	NOT NULL,
+	`date` datetime default now()
 );
 
 CREATE TABLE `comment` (
@@ -54,7 +55,8 @@ CREATE TABLE `collection` (
 CREATE TABLE `star` (
 	`email`	varchar(200)	NOT NULL,
 	`rate`	int	NULL,
-	`media_id`	bigint	NULL
+	`media_id`	bigint	NULL,
+	`date` datetime default now()
 );
 
 CREATE TABLE auth (
