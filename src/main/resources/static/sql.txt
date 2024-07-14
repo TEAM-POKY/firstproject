@@ -59,8 +59,7 @@ CREATE TABLE `star` (
 
 CREATE TABLE auth (
     email VARCHAR(200) NOT NULL,
-    role VARCHAR(200) DEFAULT 'ROLE_USER',
-    foreign key (email) references user(email)
+    role VARCHAR(200) DEFAULT 'ROLE_USER'
 );
 
 ALTER TABLE `user` ADD CONSTRAINT `PK_USER` PRIMARY KEY (
@@ -139,6 +138,13 @@ REFERENCES `user` (
 );
 
 ALTER TABLE `star` ADD CONSTRAINT `FK_user_TO_star_1` FOREIGN KEY (
+	`email`
+)
+REFERENCES `user` (
+	`email`
+);
+
+ALTER TABLE `auth` ADD CONSTRAINT `FK_user_TO_auth_1` FOREIGN KEY (
 	`email`
 )
 REFERENCES `user` (
