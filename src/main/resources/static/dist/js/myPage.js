@@ -66,13 +66,14 @@ window.onload = () => {
 function changeProfileImage() {
     alert('프로필 이미지 변경 기능');
 }
-var ctx = document.getElementById('donutChart').getContext('2d');
-var donutChart = new Chart(ctx, {
+let ctx = document.getElementById('donutChart').getContext('2d');
+let total = 110;
+let donutChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-        labels: ['스릴러', '액션', '판타지', '연애','코미디'],
+        labels: ['스릴러', '액션', '판타지', '연애', '코미디'],
         datasets: [{
-            data: [50, 20, 10, 20, 10],
+            data: [calc(50, total), calc(20,total), calc(10,total), calc(20,total), calc(10,total)],
             backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#7b19cf'],
             hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#7b19cf']
         }]
@@ -82,20 +83,34 @@ var donutChart = new Chart(ctx, {
         maintainAspectRatio: false,
     }
 });
-
-
-function scrollLeft(id) {
-    document.getElementById(id).scrollBy({
-        top: 0,
-        left: -100,
-        behavior: 'smooth'
-    });
+function calc(number, total){
+    return (number/total * 100).toFixed(1);
+}
+function updateScrollButtons(profileId) {
+    const profileWrapper = document.querySelector(`#${profileId}`).parentElement;
+    const profile = document.getElementById(profileId);
+    const scrollButtons = profileWrapper.querySelectorAll('.scroll-button');
+    if (profile.children.length > 5) {
+        profileWrapper.classList.add('more-than-five');
+        profile.style.justifyContent = 'flex-start'; // 스크롤이 가능할 때는 시작 정렬
+    } else {
+        profileWrapper.classList.remove('more-than-five');
+        profile.style.justifyContent = 'center'; // 스크롤이 필요 없을 때는 가운데 정렬
+    }
 }
 
-function scrollRight(id) {
-    document.getElementById(id).scrollBy({
-        top: 0,
-        left: 100,
-        behavior: 'smooth'
-    });
+function scrollLeft(profileId) {
+    const profile = document.getElementById(profileId);
+    profile.scrollBy({ left: -200, behavior: 'smooth' });
+}
+
+function scrollRight(profileId) {
+    const profile = document.getElementById(profileId);
+    profile.scrollBy({ left: 200, behavior: 'smooth' });
+}
+
+window.onload = () => {
+    loadCalendar(currentDate);
+    updateScrollButtons('actorProfiles');
+    updateScrollButtons('directorProfiles');
 }
