@@ -1,3 +1,11 @@
+const options = {
+    method: 'GET',
+    headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmRmZTQ3YTQ0NzU2ZTI5MDAyNTcxNWE2YjQyZDhkNSIsIm5iZiI6MTcyMTA3OTk3NS4wMjMyMTQsInN1YiI6IjY2MDNkNTE3NjA2MjBhMDE3YzMwMjY0OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Yepq4-FusJE30k6cCnybO96yFv6CgiDyauetmowyE-U'
+    }
+};
+const currentId ="test@test.com"
 const calendarBody = document.getElementById('calendarBody');
 const monthYear = document.getElementById('monthYear');
 let currentDate = new Date();
@@ -23,13 +31,22 @@ function loadCalendar(date) {
             row = document.createElement('tr');
         }
         const cell = document.createElement('td');
-        const poster = document.createElement('img');
-        poster.src = 'https://via.placeholder.com/80x120';
-        poster.classList.add('poster');
-        cell.appendChild(poster);
+
+        // 날짜 정보를 셀에 저장
+        const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+        cell.dataset.date = formattedDate;
+
+        // 기본 크기의 빈 div 추가
+        const posterContainer = document.createElement('div');
+        posterContainer.style.width = '80px';
+        posterContainer.style.height = '120px';
+        posterContainer.classList.add('poster-container');
+        cell.appendChild(posterContainer);
+
         const dateText = document.createElement('div');
         dateText.textContent = date;
         dateText.classList.add('date-text');
+        cell.appendChild(dateText);
 
         const dayOfWeek = new Date(year, month, date).getDay();
         if (dayOfWeek === 5) {
@@ -38,7 +55,6 @@ function loadCalendar(date) {
             cell.classList.add('sunday');
         }
 
-        cell.appendChild(dateText);
         row.appendChild(cell);
     }
 
@@ -47,6 +63,48 @@ function loadCalendar(date) {
         row.appendChild(cell);
     }
     calendarBody.appendChild(row);
+
+    // getStar 함수 호출
+    getStar(currentId).then(result => {
+        console.log('getStar result:', result);
+
+        const mediaInfo = result.map(item => ({
+            mediaId: item.mediaId,
+            date: item.date.split(' ')[0]  // 시간 부분을 제거하고 날짜만 사용
+        }));
+
+        // 각 mediaId에 대해 영화 정보를 가져오고 포스터 경로를 캘린더에 추가
+        Promise.all(mediaInfo.map(info => {
+            return fetch(`https://api.themoviedb.org/3/movie/${info.mediaId}?language=en-US`, options)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Fetched data for mediaId:', info.mediaId, data);
+                    return {
+                        date: info.date,
+                        posterPath: data.poster_path
+                    };
+                });
+        })).then(results => {
+            results.forEach(result => {
+                console.log('Result:', result);
+                const cell = document.querySelector(`[data-date="${result.date}"]`);
+                if (cell) {
+                    const posterContainer = cell.querySelector('.poster-container');
+                    if (posterContainer) {
+                        // 기존 포스터가 있으면 삭제
+                        posterContainer.innerHTML = '';
+                        // 포스터 이미지 추가
+                        const poster = document.createElement('img');
+                        poster.src = `https://image.tmdb.org/t/p/w500${result.posterPath}`;
+                        poster.style.width = '100%';
+                        poster.style.height = '100%';
+                        poster.style.paddingLeft = '40px';
+                        posterContainer.appendChild(poster);
+                    }
+                }
+            });
+        }).catch(err => console.error(err));
+    });
 }
 
 function prevMonth() {
@@ -57,6 +115,19 @@ function prevMonth() {
 function nextMonth() {
     currentDate.setMonth(currentDate.getMonth() + 1);
     loadCalendar(currentDate);
+}
+async function getStar(currentId){
+    try {
+        const url = '/user/star/'+currentId;
+        const config = {
+            method: 'GET'
+        };
+        const resp = await fetch(url, config);
+        const result = await resp.json();
+        return result;
+    }catch(err){
+        console.log(err);
+    }
 }
 
 window.onload = () => {
@@ -86,31 +157,7 @@ let donutChart = new Chart(ctx, {
 function calc(number, total){
     return (number/total * 100).toFixed(1);
 }
-function updateScrollButtons(profileId) {
-    const profileWrapper = document.querySelector(`#${profileId}`).parentElement;
-    const profile = document.getElementById(profileId);
-    const scrollButtons = profileWrapper.querySelectorAll('.scroll-button');
-    if (profile.children.length > 5) {
-        profileWrapper.classList.add('more-than-five');
-        profile.style.justifyContent = 'flex-start'; // 스크롤이 가능할 때는 시작 정렬
-    } else {
-        profileWrapper.classList.remove('more-than-five');
-        profile.style.justifyContent = 'center'; // 스크롤이 필요 없을 때는 가운데 정렬
-    }
-}
-
-function scrollLeft(profileId) {
-    const profile = document.getElementById(profileId);
-    profile.scrollBy({ left: -200, behavior: 'smooth' });
-}
-
-function scrollRight(profileId) {
-    const profile = document.getElementById(profileId);
-    profile.scrollBy({ left: 200, behavior: 'smooth' });
-}
 
 window.onload = () => {
     loadCalendar(currentDate);
-    updateScrollButtons('actorProfiles');
-    updateScrollButtons('directorProfiles');
 }
