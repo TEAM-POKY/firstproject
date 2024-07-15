@@ -1,15 +1,19 @@
 const InputC = document.getElementsByTagName('input');
 const labelC = document.getElementsByTagName('label');
 const joinBtn = document.querySelector('.JoinBtn');
-const email = InputC.item(0);
-const nick = InputC.item(1);
-const pw = InputC.item(2);
-const pwCheck = InputC.item(3);
+const email = InputC.item(1);
+const nick = InputC.item(2);
+const pw = InputC.item(3);
+const pwCheck = InputC.item(4);
 const emailRegExp= /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
 const pwRegExp = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 
 function changeValue(){
-    for(let i=0; i<InputC.length; i++){
+    console.log(InputC.item(1));
+    console.log(InputC.item(2));
+    console.log(InputC.item(3));
+    console.log(InputC.item(4));
+    for(let i=1; i<InputC.length; i++){
         if (InputC.item(i).value == '') {
             labelC.item(i).style.cssText = 'position:absolute; top:35px; left:12px; font-size:16px';
             const Joinspan = document.getElementById('JoinSpan'+i);
@@ -31,6 +35,7 @@ function pwCheckValid(pw, checkPw){
 }
 
 email.onkeyup = function (){
+    console.log("이메일에 올림")
     const emailValue = email.value;
     if(emailValid(emailValue)){
         document.getElementById('JoinSpan0').innerHTML='사용가능한 이메일입니다.';
@@ -40,6 +45,7 @@ email.onkeyup = function (){
 }
 
 nick.onkeyup = function (){
+    console.log("닉네임에 올림")
     checkNick(nick.value).then(result=>{
         if(result==='0'){
             document.getElementById('JoinSpan1').innerHTML='사용가능한 닉네임입니다.';
