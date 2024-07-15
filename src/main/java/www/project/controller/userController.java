@@ -11,9 +11,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import www.project.domain.StarVO;
 import www.project.service.MailService;
+import www.project.service.StarService;
 import www.project.service.UserService;
 import www.project.domain.UserVO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user/*")
@@ -25,6 +30,7 @@ public class userController {
     private final PasswordEncoder passwordEncoder;
     private final UserService usv;
     private final MailService msv;
+    private final StarService svc;
 
     @GetMapping("/myPage")
     public void myPage(){}
@@ -99,6 +105,15 @@ public class userController {
     public String verificationEmail(@PathVariable("number")int number){
         Boolean isCorrect = msv.verificationEmail(number);
         return isCorrect ? "1":"0";
+    }
+
+    @GetMapping("/star/{currentId}")
+    @ResponseBody
+    public List<StarVO> star(@PathVariable String currentId){
+        List<StarVO> starVOList = new ArrayList<>();
+        starVOList.add(svc.getList(currentId));
+        log.info("체크 {}", starVOList);
+        return starVOList;
     }
 
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,9 +67,12 @@
             <button class="details-button">자세히보기</button>
         </div>
     </div>
-
+    <span th:text="${#authentication.name}">User</span>!
 
 </div>
+<script sec:authorize="isAuthenticated()">
+    let currentId = `[[${#authentication.name}]]`;
+</script>
 <script src="/dist/js/user/myPage.js"></script>
 </body>
 </html>
