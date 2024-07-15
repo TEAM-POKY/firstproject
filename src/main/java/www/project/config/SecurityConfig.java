@@ -17,7 +17,7 @@ import www.project.security.CustomUserService;
 public class SecurityConfig {
 
     @Bean
-    PasswordEncoder passwordEncoder() {return PasswordEncoderFactories.createDelegatingPasswordEncoder();}
+    PasswordEncoder passwordEncoder(){return PasswordEncoderFactories.createDelegatingPasswordEncoder();}
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

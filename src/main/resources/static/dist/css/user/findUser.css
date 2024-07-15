@@ -88,6 +88,6 @@ button, a{
     width: 100%;
     margin: 53px 0 10px;
 }
-.findNoNick{
+.findNoNick, .findNoPw{
     font-size: small;
 }

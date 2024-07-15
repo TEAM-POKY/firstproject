@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" th:href="@{/dist/css/findUser.css}">
+<link rel="stylesheet" th:href="@{/dist/css/user/findUser.css}">
 <th:block th:replace="~{header :: setFragment(~{this::content})}">
     <th:block th:fragment="content">
         <div class="findEModalArea">
@@ -18,8 +18,9 @@
                 <div class="findPw findArea">
                     <div class="findPwText">비밀번호 찾기</div>
                     <div>가입하신 이메일로 임시 비밀번호를 보내드립니다!</div>
-                    <input type="text" placeholder="가입하신 닉네임을 입력해주세요." class="findPwInput">
-                    <input type="text" placeholder="가입하신 이메일을 입력해주세요." class="findPwInput">
+                    <span class="findNoPw"></span>
+                    <input type="text" placeholder="가입하신 닉네임을 입력해주세요." class="findPwInputN">
+                    <input type="text" placeholder="가입하신 이메일을 입력해주세요." class="findPwInputE">
                     <button type="button" class="findPwBtn">이메일 보내기</button>
                 </div>
                 <div class="LoginHref">
@@ -27,7 +28,7 @@
                 </div>
             </div>
         </div>
-    <script src="/dist/js/findUser.js"></script>
+    <script src="/dist/js/user/findUser.js"></script>
     </th:block>
 </th:block>
 </html>

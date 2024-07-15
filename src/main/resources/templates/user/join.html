@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" th:href="@{/dist/css/join.css}">
+<link rel="stylesheet" th:href="@{/dist/css/user/join.css}">
 <th:block th:replace="~{header :: setFragment(~{this::content})}">
     <th:block th:fragment="content">
     <div class="container">
@@ -10,6 +10,9 @@
                 <div class="JoinInputArea">
                     <input type="text" name="email" id="JoinEmail" onchange="changeValue()">
                     <label for="JoinEmail" id="JoinEmailLabel" class="JoinLabel">이메일</label>
+                    <button type="button" disabled class="sendEmailBtn">인증번호 받기</button>
+                    <textarea type="text" name="emailVerifi" id="emailVerifi" placeholder="인증문자를 입력해주세요."></textarea>
+                    <button type="button" disabled class="checkEmailBtn">인증하기</button>
                     <span id="JoinSpan0" class="JoinSpan"></span>
                 </div>
                 <div class="JoinInputArea">
@@ -49,7 +52,7 @@
             </div>
         </div>
     </div>
-    <script src="/dist/js/join.js"></script>
+    <script src="/dist/js/user/join.js"></script>
     </th:block>
 </th:block>
 </html>

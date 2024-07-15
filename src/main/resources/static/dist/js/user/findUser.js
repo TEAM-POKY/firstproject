@@ -1,8 +1,9 @@
 const emailModal = document.querySelector('.findEModalArea');
-const modalClose = document.querySelector('.modalClose');
 const findEmail = document.querySelector('.findEmailBtn');
 const findPw = document.querySelector('.findPwBtn');
 const nick = document.querySelector('.findNickInput');
+const pwNick = document.querySelector('.findPwInputN');
+const pwEmail = document.querySelector('.findPwInputE');
 
 window.addEventListener('load',()=>{
     document.querySelector('.findEModal').innerHTML='';
@@ -30,6 +31,21 @@ window.addEventListener('load',()=>{
             document.querySelector('.findNoNick').innerHTML='닉네임을 입력해주세요.';
         }
     })
+
+    findPw.addEventListener('click',()=>{
+        if(!pwNick.value==''&&!pwEmail.value==''){
+            findPwF(pwNick.value,pwEmail.value).then(r=>{
+                if(r==="1"){
+                    alert("이메일 전송이 완료되었습니다.");
+                    window.location.href="/";
+                } else {
+                    alert("존재하지 않는 닉네임 또는 이메일입니다. \n다시 입력해주세요.")
+                }
+            })
+        } else{
+            document.querySelector('.findNoPw').innerHTML='닉네임과 이메일을 모두 입력해주세요';
+        }
+    })
 })
 
 function closeModal(){
@@ -37,6 +53,7 @@ function closeModal(){
     emailModal.style.display='none';
 }
 
+//이메일 찾기
 async function findEmailF(nick){
     try{
         const url = '/user/find/'+nick;
@@ -45,6 +62,19 @@ async function findEmailF(nick){
         const result = await resp.json();
         return result;
     } catch (error){
+        console.log(error);
+    }
+}
+
+//비밀번호 찾기
+async function findPwF(nick,email) {
+    try{
+        const url = "/user/find/"+nick+"/"+email;
+        const config = { method:'POST' };
+        const resp = await fetch(url, config);
+        const result = await resp.text();
+        return result;
+    } catch (error) {
         console.log(error);
     }
 }
