@@ -1,6 +1,7 @@
 package www.project.repository;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import www.project.domain.AuthVO;
 import www.project.domain.UserVO;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface UserMapper {
     int joinUser(UserVO uvo);
 
-    int checkNick(String nickName);
+    int duplicationNick(String nickName);
 
     UserVO findEmail(String nick);
 
@@ -19,4 +20,10 @@ public interface UserMapper {
     UserVO checkEmail(String email);
 
     List<AuthVO> selectAuth(String email);
+
+    int duplicationEmail(String email);
+
+    int findUserPw(@Param("nick") String nick, @Param("email") String email);
+
+    void updatePw(@Param("email")String email, @Param("pw")String newPw);
 }

@@ -21,12 +21,21 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public int checkNick(String nickName) {
-        return usermapper.checkNick(nickName);
+    public int duplicationNick(String nickName) {
+        return usermapper.duplicationNick(nickName);
+    }
+
+    @Override
+    public int duplicationEmail(String email) { return usermapper.duplicationEmail(email); }
+
+    @Override
+    public int findUserPw(String nick, String email) {
+        return usermapper.findUserPw(nick,email);
     }
 
     @Override
     public UserVO findEmail(String nick) {
         return usermapper.findEmail(nick);
     }
+
 }
