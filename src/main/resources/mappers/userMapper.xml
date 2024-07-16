@@ -11,6 +11,11 @@
         insert into auth values(#{email},'ROLE_USER')
     </insert>
 
+    <insert id="insertSocialUser">
+        insert into user(email,pw,nickname, provider,provider_id)
+        values (#{email},#{pw},#{nickname},#{provider},#{providerId})
+    </insert>
+
     <select id="duplicationNick" resultType="int">
         select count(nickname) from user where nickname=#{nickName}
     </select>
@@ -39,5 +44,9 @@
     <update id="updatePw">
         update user set pw=#{pw} where email=#{email}
     </update>
+
+    <select id="searchUser" resultType="www.project.domain.UserVO">
+        select * from user where email=#{email}
+    </select>
 
 </mapper>

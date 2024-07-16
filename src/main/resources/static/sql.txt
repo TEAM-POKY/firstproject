@@ -5,7 +5,7 @@ CREATE TABLE `user` (
 	`profile`	varchar(500)	NULL,
 	`provider`  varchar(200)    NULL,
 	`provider_id`   varchar(200)    NULL,
-	`isDel`	tinyint	NULL	DEFAULT 0
+	`isDel`	tinyint	DEFAULT 0
 );
 
 CREATE TABLE `user_follow` (

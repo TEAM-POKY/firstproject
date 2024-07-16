@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import www.project.config.oauth2.PrincipalDetails;
 import www.project.domain.UserVO;
 import www.project.repository.UserMapper;
 
@@ -17,6 +18,9 @@ public class CustomUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserVO uvo = userMapper.checkEmail(email);
         uvo.setAuthList(userMapper.selectAuth(email));
+        if(uvo!=null){
+            return new PrincipalDetails(uvo);
+        }
         return (UserDetails) new AuthUser(uvo);
     }
 }

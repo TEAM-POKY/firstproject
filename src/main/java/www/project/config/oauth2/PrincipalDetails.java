@@ -6,6 +6,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import www.project.domain.UserVO;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return Collections.emptyList();
     }
 
     @Override

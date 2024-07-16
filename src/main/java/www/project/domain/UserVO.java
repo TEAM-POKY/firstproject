@@ -14,7 +14,7 @@ public class UserVO {
     private String pw;
     private String profile;
     private String provider;
-    private String provider_id;
+    private String providerId;
     private String isDel;
     private List<AuthVO> authList;//권한 목록
 }
