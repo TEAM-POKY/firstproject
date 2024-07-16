@@ -23,4 +23,6 @@ public interface UserService {
     int getFollower(String currentId);
 
     int getFollowing(String currentId);
+
+    boolean isNicknameDuplicate(String nickname);
 }

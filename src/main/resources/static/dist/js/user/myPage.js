@@ -7,7 +7,7 @@ const options = {
     }
 };
 const currentId = "ehdwo13@gmail.com"
-
+let nickName = '';
 //유저정보
 async function getUserInfo(currentId) {
     try {
@@ -24,15 +24,58 @@ async function getUserInfo(currentId) {
 }
 getUserInfo(currentId).then(result => {
     if (result) {
-        let nickName = result.nickname;
-        let str = '';
-        str = `<span>${nickName}</span>`;
-        str += ` <img src="/dist/image/pencil.svg" alt="noPic">`;
-        document.getElementById('nickName').innerHTML = str;
+        nickName = result.nickname;
+        renderNickName();
         document.getElementById('email').innerText = result.email;
         document.getElementById('myProfile').src = result.profile ? result.profile : "/dist/image/person-circle.svg";
     }
 });
+function renderNickName() {
+    let str = '';
+    str = `<span>${nickName}</span>`;
+    str += ` <img src="/dist/image/pencil.svg" alt="noPic" id="changeNickName">`;
+    document.getElementById('nickName').innerHTML = str;
+    document.getElementById('changeNickName').addEventListener('click', changeToInput);
+}
+function changeToInput() {
+    let inputStr = `
+            <input type="text" id="nickNameInput" value="${nickName}">
+            <button id="checkDuplicate">중복체크</button>
+            <button id="cancelChange">취소</button>
+        `;
+    document.getElementById('nickName').innerHTML = inputStr;
+
+    document.getElementById('checkDuplicate').addEventListener('click', checkDuplicateAndUpdate);
+    document.getElementById('cancelChange').addEventListener('click', renderNickName);
+}
+function checkDuplicateAndUpdate() {
+    let newNickName = document.getElementById('nickNameInput').value;
+    checkDuplicateNickName(newNickName).then(isDuplicate => {
+        if (!isDuplicate) {
+            let updateButton = document.getElementById('checkDuplicate');
+            updateButton.textContent = '수정';
+            updateButton.id = 'updateNickName';
+
+            document.getElementById('nickNameInput').addEventListener('input', function () {
+                document.getElementById('updateNickName').textContent = '중복체크';
+                document.getElementById('updateNickName').id = 'checkDuplicate';
+
+                document.getElementById('checkDuplicate').addEventListener('click', checkDuplicateAndUpdate);
+            });
+        }
+    });
+}
+async function checkDuplicateNickName(nickname) {
+    try {
+        let encodedNickname = encodeURIComponent(nickname);
+        let response = await fetch(`/api/checkNickname?nickname=${encodedNickname}`);
+        let isDuplicate = await response.json();
+        return isDuplicate;
+    } catch (error) {
+        console.error('Error checking nickname:', error);
+        return true;
+    }
+}
 //팔로우정보
 async function followInfo(currentId){
     try {
@@ -48,9 +91,11 @@ async function followInfo(currentId){
     }
 }
 followInfo(currentId).then(result =>{
-    console.log(result)
-    document.getElementById('followInfo').innerText = "팔로워 명 | 팔로잉 명";
+    let follower = result.split("/")[0];
+    let following = result.split("/")[1];
+    document.getElementById('followInfo').innerText = `팔로워 ${follower}명 | 팔로잉 ${following}명`;
 })
+
 
 //캘린더
 const calendarBody = document.getElementById('calendarBody');
