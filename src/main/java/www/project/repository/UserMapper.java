@@ -31,4 +31,12 @@ public interface UserMapper {
 
     void insertSocialUser(UserVO newUser);
 
+    UserVO getInfo(String currentId);
+
+    void updateProfile(UserVO user);
+
+    int getFollower(String currentId);
+
+    int getFollowing(String currentId);
+
 }
