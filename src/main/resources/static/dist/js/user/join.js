@@ -69,7 +69,7 @@ nick.onblur = function (){
             duplicateNick=true;
         } else if(result==='1'){
             document.getElementById('JoinSpan1').innerHTML='중복된 닉네임이 존재합니다.';
-            duplicateNick=false;
+            duplicateNick=false;  
         }
     })
 }
