@@ -138,6 +138,13 @@ public class userController {
     public String profile(){
         return "/user/profile";
     }
+    @GetMapping("/follow/{currentId}")
+    @ResponseBody
+    public String followCount(@PathVariable String currentId){
+        int followerCount = usv.getFollower(currentId);
+        int followingCount = usv.getFollowing(currentId);
+        return followerCount+"/"+followingCount;
+    }
 
 
     @PostMapping("/uploadProfilePicture")

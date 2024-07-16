@@ -59,4 +59,14 @@ public class UserServiceImpl implements UserService{
     public void updateProfile(UserVO uvo) {
         usermapper.updateProfile(uvo);
     }
+
+    @Override
+    public int getFollower(String currentId) {
+        return usermapper.getFollower(currentId);
+    }
+
+    @Override
+    public int getFollowing(String currentId) {
+        return usermapper.getFollowing(currentId);
+    }
 }

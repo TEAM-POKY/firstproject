@@ -7,13 +7,13 @@ body {
 }
 .container {
     width: 1300px;
-    margin: 20px 300px;
+    margin: 30px 300px;
     background-color: #ffffff;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 .section {
-    padding: 10px 0;
+    padding: 25px 0;
     border-bottom: 1px solid #ddd;
 }
 .profile {
@@ -23,27 +23,26 @@ body {
 .profile-image-container {
     position: relative;
     display: inline-block;
+    left: 20px;
 }
 .profile-image {
     width: 100px;
     height: 100px;
     border-radius: 50%;
 }
-.profile-image-button {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background-color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 5px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+.changeProfileImage{
+    margin-left: -20px;
+    width: 20px;
+    height: 20px;
 }
 .profile-info {
-    font-size: 20px;
-    margin-left: 20px;
+    margin-left: 50px;
+}
+#nickName{
+    margin-bottom: 20px;
+}
+#email{
+    margin-bottom: 5px;
 }
 .calendar {
     margin-top: 40px;

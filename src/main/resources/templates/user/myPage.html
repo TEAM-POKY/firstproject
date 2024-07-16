@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns="http://www.w3.org/1999/html">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,16 +12,16 @@
 <div class="container">
     <div class="section profile">
         <div class="profile-image-container">
-            <img alt="Profile Picture" class="profile-image" id="myProfile" src="" th:src="@{/upload/default-profile.png}">
-            <button class="profile-image-button" onclick="changeProfileImage()">⚙️</button>
+            <img alt="Profile Picture" class="profile-image" id="myProfile">
+            <span onclick="changeProfileImage()" ><img src="/dist/image/gear.svg" alt="no picture" class="changeProfileImage"></span>
         </div>
         <div class="profile-info">
-            <div style="font-size: 18px" id="nickName"></div>
-            <div style="font-size: 10px; color: gray" id="email">이메일주소</div>
-            <div style="font-size: 12px;">팔로워 명 | 팔로잉 명</div>
+            <div style="font-size: 23px" id="nickName"></div>
+            <div style="font-size: 13px; color: #b1b1b1" id="email">이메일주소</div>
+            <div style="font-size: 15px;" id="followInfo"></div>
         </div>
     </div>
-    <div class="section calendar">
+    <div class="calendar">
         <div class="calendar-header">
             <button class="nav-button" onclick="prevMonth()">&#9664;</button>
             <div id="monthYear" class="month-year"></div>

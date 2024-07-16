@@ -1,3 +1,4 @@
+//api key
 const options = {
     method: 'GET',
     headers: {
@@ -5,10 +6,9 @@ const options = {
         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmRmZTQ3YTQ0NzU2ZTI5MDAyNTcxNWE2YjQyZDhkNSIsIm5iZiI6MTcyMTA3OTk3NS4wMjMyMTQsInN1YiI6IjY2MDNkNTE3NjA2MjBhMDE3YzMwMjY0OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Yepq4-FusJE30k6cCnybO96yFv6CgiDyauetmowyE-U'
     }
 };
-const calendarBody = document.getElementById('calendarBody');
-const monthYear = document.getElementById('monthYear');
-let currentDate = new Date();
+const currentId = "ehdwo13@gmail.com"
 
+//유저정보
 async function getUserInfo(currentId) {
     try {
         const url = '/user/info/' + currentId;
@@ -22,15 +22,40 @@ async function getUserInfo(currentId) {
         console.log(e);
     }
 }
-
 getUserInfo(currentId).then(result => {
     if (result) {
-        document.getElementById('nickName').innerText = result.nickname;
+        let nickName = result.nickname;
+        let str = '';
+        str = `<span>${nickName}</span>`;
+        str += ` <img src="/dist/image/pencil.svg" alt="noPic">`;
+        document.getElementById('nickName').innerHTML = str;
         document.getElementById('email').innerText = result.email;
-        document.getElementById('myProfile').src = result.profile ? result.profile : '/upload/default-profile.png';
+        document.getElementById('myProfile').src = result.profile ? result.profile : "/dist/image/person-circle.svg";
     }
 });
+//팔로우정보
+async function followInfo(currentId){
+    try {
+        const url = "/user/follow/"+currentId;
+        const config = {
+            method: 'GET'
+        };
+        const resp = await fetch(url, config);
+        const result = await resp.text();
+        return result;
+    }catch (error) {
+        console.log(error)
+    }
+}
+followInfo(currentId).then(result =>{
+    console.log(result)
+    document.getElementById('followInfo').innerText = "팔로워 명 | 팔로잉 명";
+})
 
+//캘린더
+const calendarBody = document.getElementById('calendarBody');
+const monthYear = document.getElementById('monthYear');
+let currentDate = new Date();
 function loadCalendar(date) {
     const year = date.getFullYear();
     const month = date.getMonth();
