@@ -1,4 +1,4 @@
-package www.project.security;
+package www.project.config.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

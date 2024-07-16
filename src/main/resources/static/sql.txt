@@ -3,6 +3,8 @@ CREATE TABLE `user` (
 	`nickname`	varchar(200)	NULL,
 	`pw`	varchar(500)	NULL,
 	`profile`	varchar(500)	NULL,
+	`provider`  varchar(200)    NULL,
+	`provider_id`   varchar(200)    NULL,
 	`isDel`	tinyint	NULL	DEFAULT 0
 );
 

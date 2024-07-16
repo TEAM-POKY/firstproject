@@ -13,7 +13,8 @@ public class UserVO {
     private String nickname;
     private String pw;
     private String profile;
-    private String role;
+    private String provider;
+    private String provider_id;
     private String isDel;
     private List<AuthVO> authList;//권한 목록
 }
