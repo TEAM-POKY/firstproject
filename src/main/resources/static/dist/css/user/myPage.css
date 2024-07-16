@@ -7,13 +7,13 @@ body {
 }
 .container {
     width: 1300px;
-    margin: 20px 300px;
+    margin: 30px 300px;
     background-color: #ffffff;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 .section {
-    padding: 10px 0;
+    padding: 25px 0;
     border-bottom: 1px solid #ddd;
 }
 .profile {
@@ -23,27 +23,26 @@ body {
 .profile-image-container {
     position: relative;
     display: inline-block;
+    left: 20px;
 }
 .profile-image {
     width: 100px;
     height: 100px;
     border-radius: 50%;
 }
-.profile-image-button {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background-color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 5px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+.changeProfileImage{
+    margin-left: -20px;
+    width: 20px;
+    height: 20px;
 }
 .profile-info {
-    font-size: 20px;
-    margin-left: 20px;
+    margin-left: 50px;
+}
+#nickName{
+    margin-bottom: 20px;
+}
+#email{
+    margin-bottom: 5px;
 }
 .calendar {
     margin-top: 40px;
@@ -153,65 +152,4 @@ body {
 
 .details-button:hover {
     background-color: #0056b3;
-}
-
-.followed {
-    text-align: left;
-}
-
-.follow-section {
-    margin: 20px 0;
-}
-
-.profile-circles-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 100%;
-}
-
-.profile-circles {
-    display: flex;
-    gap: 20px;
-    overflow: hidden;
-    justify-content: center;
-    transition: transform 0.3s ease;
-}
-
-.profile-circle {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 2px solid #ddd;
-    flex-shrink: 0;
-}
-
-.scroll-button {
-    display: none;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-    position: absolute;
-    opacity: 0.7;
-}
-
-.scroll-button.left {
-    left: 0;
-}
-
-.scroll-button.right {
-    right: 0;
-}
-
-.scroll-button:hover {
-    background-color: #0056b3;
-    opacity: 1;
-}
-
-.profile-circles-wrapper.more-than-five .scroll-button {
-    display: block;
 }

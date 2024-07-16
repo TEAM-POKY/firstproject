@@ -1,3 +1,4 @@
+//api key
 const options = {
     method: 'GET',
     headers: {
@@ -5,11 +6,56 @@ const options = {
         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmRmZTQ3YTQ0NzU2ZTI5MDAyNTcxNWE2YjQyZDhkNSIsIm5iZiI6MTcyMTA3OTk3NS4wMjMyMTQsInN1YiI6IjY2MDNkNTE3NjA2MjBhMDE3YzMwMjY0OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Yepq4-FusJE30k6cCnybO96yFv6CgiDyauetmowyE-U'
     }
 };
-const currentId ="test@test.com"
+const currentId = "ehdwo13@gmail.com"
+
+//유저정보
+async function getUserInfo(currentId) {
+    try {
+        const url = '/user/info/' + currentId;
+        const config = {
+            method: 'GET'
+        };
+        const resp = await fetch(url, config);
+        const result = await resp.json();
+        return result;
+    } catch (e) {
+        console.log(e);
+    }
+}
+getUserInfo(currentId).then(result => {
+    if (result) {
+        let nickName = result.nickname;
+        let str = '';
+        str = `<span>${nickName}</span>`;
+        str += ` <img src="/dist/image/pencil.svg" alt="noPic">`;
+        document.getElementById('nickName').innerHTML = str;
+        document.getElementById('email').innerText = result.email;
+        document.getElementById('myProfile').src = result.profile ? result.profile : "/dist/image/person-circle.svg";
+    }
+});
+//팔로우정보
+async function followInfo(currentId){
+    try {
+        const url = "/user/follow/"+currentId;
+        const config = {
+            method: 'GET'
+        };
+        const resp = await fetch(url, config);
+        const result = await resp.text();
+        return result;
+    }catch (error) {
+        console.log(error)
+    }
+}
+followInfo(currentId).then(result =>{
+    console.log(result)
+    document.getElementById('followInfo').innerText = "팔로워 명 | 팔로잉 명";
+})
+
+//캘린더
 const calendarBody = document.getElementById('calendarBody');
 const monthYear = document.getElementById('monthYear');
 let currentDate = new Date();
-
 function loadCalendar(date) {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -135,7 +181,12 @@ window.onload = () => {
 }
 
 function changeProfileImage() {
-    alert('프로필 이미지 변경 기능');
+    let popupW = 600;
+    let popupH = 800;
+    let left = Math.ceil((window.screen.width - popupW)/2);
+    let top = Math.ceil((window.screen.height - popupH)/2);
+
+    window.open("/user/profile","blank",'width='+popupW+',height='+popupH+',left='+left+',top='+top+',scrollbars=yes,resizable=no,toolbar=no,titlebar=no,menubar=no,location=no');
 }
 let ctx = document.getElementById('donutChart').getContext('2d');
 let total = 110;
