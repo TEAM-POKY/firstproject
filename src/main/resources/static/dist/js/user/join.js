@@ -15,17 +15,18 @@ let duplicateNick = false;
 let duplicatePw = false;
 let duplicatePwCheck = false;
 
+
 function changeValue(){
-    for(let i=0; i<=4; i++){
-        if (InputC.item(i+1).value == '') {
-            labelC.item(i).style.cssText = 'position:absolute; top:35px; left:12px; font-size:16px';
-            const Joinspan = document.getElementById('JoinSpan'+i);
-            Joinspan.innerHTML='';
-            document.querySelector('.sendEmailBtn').disabled=true;
-        } else {
-            labelC.item(i).style.cssText = 'font-size:small; color:gray; transform:translate(-5px, -15px);';
-        }
-    }
+    // for(let i=0; i<=4; i++){
+    //     if (InputC.item(i+1).value == '') {
+    //         labelC.item(i).style.cssText = 'position:absolute; top:35px; left:12px; font-size:16px';
+    //         const Joinspan = document.getElementById('JoinSpan'+i);
+    //         Joinspan.innerHTML='';
+    //         document.querySelector('.sendEmailBtn').disabled=true;
+    //     } else {
+    //         labelC.item(i).style.cssText = 'font-size:small; color:gray; transform:translate(-5px, -15px);';
+    //     }
+    // }
 }
 
 function emailValid(str){
@@ -38,7 +39,7 @@ function pwCheckValid(pw, checkPw){
     return pw===checkPw;
 }
 
-email.onkeyup = function (){
+email.onblur = function (){
     duplicateEmail=false;
     if(emailValid(email.value)){
         checkEmail(email.value).then(r=>{
@@ -61,14 +62,14 @@ email.onkeyup = function (){
     }
 }
 
-nick.onkeyup = function (){
+nick.onblur = function (){
     checkNick(nick.value).then(result=>{
         if(result==='0'){
             document.getElementById('JoinSpan1').innerHTML='사용가능한 닉네임입니다.';
             duplicateNick=true;
         } else if(result==='1'){
             document.getElementById('JoinSpan1').innerHTML='중복된 닉네임이 존재합니다.';
-            duplicateNick=false;
+            duplicateNick=false;  
         }
     })
 }
@@ -82,6 +83,12 @@ pw.onkeyup = function (){
         document.getElementById('JoinSpan2').innerHTML='대소문자,숫자,특수기호를 포함해 8~20자로 작성해주세요.';
         duplicatePw=false;
     }
+    if(pw.onchange){
+        if(!pwCheck.value==''){
+            console.log("비밀번호 바꾸는중")
+            reCheckPw()
+        }
+    }
 }
 
 function reCheckPw(){
@@ -93,18 +100,12 @@ function reCheckPw(){
     } else {
         document.getElementById('JoinSpan3').innerHTML='비밀번호가 일치하지않습니다.';
         duplicatePwCheck=false;
+        return false;
     }
 }
 pwCheck.addEventListener('keyup',()=>{
-    reCheckPw();
+    reCheckPw()
 })
-
-if(pw.onchange){
-    console.log("pw 바뀜")
-}
-if(pw.onkeyup){
-    console.log("pw keyup")
-}
 
 joinBtn.addEventListener('click',()=>{
     console.log(email.value)
