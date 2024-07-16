@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import www.project.handler.MailHandler;
 import www.project.repository.UserMapper;
 
 import java.io.UnsupportedEncodingException;
