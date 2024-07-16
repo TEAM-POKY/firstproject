@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns="http://www.w3.org/1999/html">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,12 +13,12 @@
 <div class="container">
     <div class="section profile">
         <div class="profile-image-container">
-            <img src="https://via.placeholder.com/100" alt="Profile Picture" class="profile-image">
+            <img alt="Profile Picture" class="profile-image" id="myProfile" src="" th:src="@{/upload/default-profile.png}">
             <button class="profile-image-button" onclick="changeProfileImage()">⚙️</button>
         </div>
         <div class="profile-info">
-            <div style="font-size: 18px">닉네임</div>
-            <div style="font-size: 10px; color: gray">이메일주소</div>
+            <div style="font-size: 18px" id="nickName"></div>
+            <div style="font-size: 10px; color: gray" id="email">이메일주소</div>
             <div style="font-size: 12px;">팔로워 명 | 팔로잉 명</div>
         </div>
     </div>
@@ -60,15 +61,13 @@
     </div>
     <div class="trend section">
         <div class="trend-analysis">
-            <h2>닉네임님의 취향분석</h2>
+            <h2 th:text="${#authentication.name} + '님의 취향분석'">닉네임님의 취향분석</h2>
             <div class="chart-container">
                 <canvas id="donutChart"></canvas>
             </div>
             <button class="details-button">자세히보기</button>
         </div>
     </div>
-    <span th:text="${#authentication.name}">User</span>!
-
 </div>
 <script sec:authorize="isAuthenticated()">
     let currentId = `[[${#authentication.name}]]`;

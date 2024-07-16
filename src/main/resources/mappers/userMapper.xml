@@ -40,4 +40,14 @@
         update user set pw=#{pw} where email=#{email}
     </update>
 
+    <select id="getInfo" resultType="www.project.domain.UserVO">
+        select * from user where email = #{currentId}
+    </select>
+
+    <update id="updateProfile">
+        UPDATE user
+        SET profile = #{profile}
+        WHERE email = #{email}
+    </update>
+
 </mapper>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>프로필사진</title>
+</head>
+<style>
+    body {
+        text-align: center;
+    }
+    #myProfile {
+        display: inline-block;
+        margin-top: 20px;
+    }
+    #title {
+        margin-top: 20px;
+    }
+    form {
+        margin-top: 20px;
+    }
+</style>
+<body>
+<h1 id="title"></h1>
+<div id="myProfile">
+    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" fill="gray" class="bi bi-person-circle" viewBox="0 0 16 16">
+        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+    </svg>
+</div>
+<form action="/user/uploadProfilePicture" method="post" enctype="multipart/form-data" onsubmit="closePopupAndReloadParent()">
+    <input type="hidden" name="userId" value="currentId">
+    <input type="file" name="file" required>
+    <input type="submit" value="등록">
+</form>
+</body>
+<script>
+    let currentId = `[[${#authentication.name}]]`;
+
+    async function getUserInfo(currentId) {
+        try {
+            const url = '/user/info/' + currentId;
+            const config = {
+                method: 'GET'
+            };
+            const resp = await fetch(url, config);
+            const result = await resp.json();
+            return result;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    function displayProfileImage(profilePath) {
+        document.getElementById('myProfile').innerHTML = `<img src="${profilePath}" alt="Profile Picture" width="200" height="200">`;
+    }
+
+    function closePopupAndReloadParent() {
+        window.opener.location.reload();
+        window.close();
+    }
+
+    getUserInfo(currentId).then(result => {
+        if (result.profile == null || result.profile == '') {
+            document.getElementById('title').innerText = "프로필 이미지 등록";
+        } else {
+            document.getElementById('title').innerText = "프로필 이미지 수정";
+            displayProfileImage(result.profile);
+        }
+    });
+</script>
+</html>
