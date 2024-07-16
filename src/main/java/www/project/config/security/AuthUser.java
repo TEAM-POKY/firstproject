@@ -1,4 +1,4 @@
-package www.project.security;
+package www.project.config.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

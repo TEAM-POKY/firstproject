@@ -27,6 +27,10 @@ public interface UserMapper {
 
     void updatePw(@Param("email")String email, @Param("pw")String newPw);
 
+    UserVO searchUser(String providerId);
+
+    void insertSocialUser(UserVO newUser);
+
     UserVO getInfo(String currentId);
 
     void updateProfile(UserVO user);
@@ -34,4 +38,5 @@ public interface UserMapper {
     int getFollower(String currentId);
 
     int getFollowing(String currentId);
+
 }

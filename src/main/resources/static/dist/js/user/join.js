@@ -69,7 +69,7 @@ nick.onblur = function (){
             duplicateNick=true;
         } else if(result==='1'){
             document.getElementById('JoinSpan1').innerHTML='중복된 닉네임이 존재합니다.';
-            duplicateNick=false;  
+            duplicateNick=false;
         }
     })
 }
@@ -116,7 +116,7 @@ joinBtn.addEventListener('click',()=>{
     console.log(formValid);
     if(formValid && (!email.value==''&&!nick.value==''&&!pw.value==''&&!pwCheck.value=='')){
         console.log("활성화")
-        // document.querySelector('.JoinBtn').type = 'submit';
+        document.querySelector('.JoinBtn').type = 'submit';
     } else {
         console.log("비활성화")
         console.log(email.value)
@@ -134,7 +134,7 @@ joinBtn.addEventListener('click',()=>{
         } else if(!duplicatePwCheck){
             alert("비밀번호가 일치하지 않습니다. \n다시 입력해주세요.");
         }
-        // document.querySelector('.JoinBtn').type = 'button';
+        document.querySelector('.JoinBtn').type = 'button';
     }
 })
 
