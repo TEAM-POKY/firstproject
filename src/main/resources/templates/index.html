@@ -13,13 +13,6 @@
             width: 1400px;
             margin: 0 auto;
         }
-        .nowPlayingMovie {
-            box-sizing: border-box;
-            padding: 10px;
-            width: 320px;
-            height: 350px;
-            display: table-cell;
-        }
         .nowPlayingMovie ul {
             list-style-type: none;
             padding: 0;
@@ -27,13 +20,13 @@
             text-align: center;
         }
         .nowPlayingMovie li {
-            font-size: 14px;
+            font-size: 12px;
             margin-bottom: -29px;
             text-align: left;
         }
-        .nowPlayingMovie img {
-            width: 240px;
-            height: 340px;
+        .nowPlayingMovieMain img {
+            width: 235px;
+            height: 330px;
             display: block;
             margin-bottom: 10px;
             float: left;
@@ -41,25 +34,58 @@
             border-radius: 10px;
             box-shadow: 1px 2px 6px gray;
         }
+
+        .topMovie ul {
+            list-style-type: none;
+            padding: 0;
+            width: 200px;
+            text-align: center;
+        }
+        .topMovie li {
+            font-size: 12px;
+            margin-bottom: -29px;
+            text-align: left;
+        }
+        .topMovie img {
+            width: 235px;
+            height: 330px;
+            display: block;
+            margin-bottom: 10px;
+            float: left;
+            margin-right: 20px;
+            border-radius: 10px;
+            box-shadow: 1px 2px 6px gray;
+        }
+        .nowPlayingMovieMain, .topMovieMain {
+            margin: 10px;
+            height: 350px;
+            /*background-color: red;*/
+            display: table-cell;
+            justify-content: space-between;
+
+
+        }
         .movie iframe {
             width: 100%;
             height: 200px;
         }
-        .commentOutBox, .nowPlayingOutBox{
+        .commentOutBox, .movieOutBox{
             width: 1400px;
             height: 50px;
             /*background-color: antiquewhite;*/
-            line-height: 50px;
-            font-size: 1.2em;
             margin: 10px 0 250px;
             padding-left: 10px;
         }
-        .nowPlayingOutBox{
+        .movieOutBox{
+            width: 1400px;
             position: relative;
-            height: 520px;
-            padding: 0 30px;
+            height: 400px;
             overflow: hidden;
             cursor:pointer;
+            /*background-color: aqua;*/
+            padding: 0 20px;
+            line-height: 50px;
+            font-size: 1.2em;
         }
 
         .commentOutBox p{
@@ -113,89 +139,42 @@
             cursor: pointer;
             font-size: 20px;
         }
+
+        .innerContainer, .innerContainer2 {
+            display: flex;
+            transition: transform 1s;
+            margin: 0 auto;
+        }
+
     </style>
 </head>
 <body>
 <div class="container">
-
-<!--    <a th:href="@{/movie/detail}">디테일페이지 가기</a>-->
     <div class="commentOutBox">
         <p class="commentTitle">지금 뜨는 코멘트</p>
         <div class="commentInBox">
-            <div class="comment">
-
-            </div>
-            <div class="comment">
-
-            </div>
-            <div class="comment">
-
-            </div>
+            <div class="comment"></div>
+            <div class="comment"></div>
+            <div class="comment"></div>
         </div>
     </div>
-    <div class="nowPlayingOutBox" id="movieContainer">
-        <p class="nowPlayingTitle">현재 상영작</p>
-
+    <div class="movieOutBox" id="movieContainer">
+        <p class="movieInBoxTitle">현재 상영작</p>
+        <div class="innerContainer"></div>
+        <button type="button" class="btn" id="rightBtn"> > </button>
+        <button type="button" class="btn" id="leftBtn"> < </button>
     </div>
-    <button type="button" class="btn" id="rightBtn"> > </button>
-    <button type="button" class="btn" id="leftBtn"> < </button>
-</div>
-<script>
-    // const options = {
-    //     method: 'GET',
-    //     headers: {
-    //         accept: 'application/json',
-    //         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmRmZTQ3YTQ0NzU2ZTI5MDAyNTcxNWE2YjQyZDhkNSIsIm5iZiI6MTcyMDU1MTg4Mi44MzAxMDcsInN1YiI6IjY2MDNkNTE3NjA2MjBhMDE3YzMwMjY0OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kW6FWbNBxEum0GSPLqFOf-LQu3BMA-50-IJXe_Hd3w8'
-    //     }
-    // };
 
-    const fetchMovieData = async () => {
-        try {
-            const response = await fetch('https://api.themoviedb.org/3/movie/now_playing?language=ko-KR&page=1&region=KR', options);
-            const data = await response.json();
-            return data.results;
-        } catch (error) {
-            console.error('Error fetching movie data:', error);
-        }
-    };
-    const displayMovies = async () => {
-        const movies = await fetchMovieData();
-        const movieContainer = document.getElementById('movieContainer');
-        const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
-
-        for (const movie of movies) {
-            console.log(movie)
-            const movieDiv = document.createElement('div');
-            movieDiv.classList.add('nowPlayingMovie');
-
-            const posterPath = movie.poster_path ? `${imageBaseUrl}${movie.poster_path}` : '';
-            const backdropPath = movie.backdrop_path ? `${imageBaseUrl}${movie.backdrop_path}` : '';
-
-            const movieDetails = `
-                    <div class="nowPlayingMovie"style="cursor:pointer;" id="${movie.id}">
-                    <img src="${posterPath}" alt="${movie.title} 포스터">
-                    <ul>
-                        <li>${movie.title}</li>
-                        <li>${movie.release_date}</li>
-                        <li>${movie.vote_average}</li>
-                    </ul>
-                    </div>
-                `;
-            movieDiv.innerHTML = movieDetails;
-            movieContainer.appendChild(movieDiv);
-        }
-    };
-
-    displayMovies();
-
-    const buttonRight = document.querySelector('.button-right');
-    buttonRight.addEventListener('click', () => {
-        console.log("버튼 클릭");
-    });
-
-</script>
+    <div class="movieOutBox"  id="topMovieContainer">
+        <p class="movieInBoxTitle">지금 인기있는 작품</p>
+        <div class="innerContainer2"></div>
+        <button type="button" class="btn" id="rightBtn2"> > </button>
+        <button type="button" class="btn" id="leftBtn2"> < </button>
+    </div>
+    </div>
 <script th:src="@{/dist/js/goToDetail.js}"></script>
-<script th:src="@{/dist/js/slide.js}"></script>
+<script th:src="@{/dist/js/nowPlayingSlide.js}"></script>
+<script th:src="@{/dist/js/topMovieSlide.js}"></script>
 </body>
     </th:block>
     </th:block>

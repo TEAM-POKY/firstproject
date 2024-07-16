@@ -7,6 +7,11 @@ document.addEventListener('click', function (event) {
             console.log(movieId);
             window.location.href = `/movie/detail?movieId=${movieId}`;
             break;
+        }else if(clickedElement.className === 'topMovie'){
+            const movieId = clickedElement.id;
+            console.log(movieId);
+            window.location.href = `/movie/detail?movieId=${movieId}`;
+            break;
         }
         clickedElement = clickedElement.parentElement;
     }
