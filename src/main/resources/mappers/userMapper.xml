@@ -59,6 +59,7 @@
         SET profile = #{profile}
         WHERE email = #{email}
     </update>
+
     <select id="getFollower" resultType="int">
         select count(*) from user_follow where follow_email = #{currentId}
     </select>
