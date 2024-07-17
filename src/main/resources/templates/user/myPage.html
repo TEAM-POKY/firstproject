@@ -12,16 +12,16 @@
 <div class="container">
     <div class="section profile">
         <div class="profile-image-container">
-            <img src="https://via.placeholder.com/100" alt="Profile Picture" class="profile-image">
-            <button class="profile-image-button" onclick="changeProfileImage()">⚙️</button>
+            <img alt="Profile Picture" class="profile-image" id="myProfile">
+            <span onclick="changeProfileImage()" ><img src="/dist/image/gear.svg" alt="no picture" class="changeProfileImage"></span>
         </div>
         <div class="profile-info">
-            <div style="font-size: 18px">닉네임</div>
-            <div style="font-size: 10px; color: gray">이메일주소</div>
-            <div style="font-size: 12px;">팔로워 명 | 팔로잉 명</div>
+            <div style="font-size: 23px" id="nickName"></div>
+            <div style="font-size: 13px; color: #b1b1b1" id="email">이메일주소</div>
+            <div style="font-size: 15px;" id="followInfo"></div>
         </div>
     </div>
-    <div class="section calendar">
+    <div class="calendar">
         <div class="calendar-header">
             <button class="nav-button" onclick="prevMonth()">&#9664;</button>
             <div id="monthYear" class="month-year"></div>
@@ -60,15 +60,13 @@
     </div>
     <div class="trend section">
         <div class="trend-analysis">
-            <h2>닉네임님의 취향분석</h2>
+            <h2 th:text="${#authentication.name} + '님의 취향분석'">닉네임님의 취향분석</h2>
             <div class="chart-container">
                 <canvas id="donutChart"></canvas>
             </div>
             <button class="details-button">자세히보기</button>
         </div>
     </div>
-    <span th:text="${#authentication.name}">User</span>!
-
 </div>
 <script sec:authorize="isAuthenticated()">
     let currentId = `[[${#authentication.name}]]`;

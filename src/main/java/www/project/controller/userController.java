@@ -4,21 +4,30 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import www.project.domain.StarVO;
 import www.project.service.MailService;
 import www.project.service.StarService;
 import www.project.service.UserService;
 import www.project.domain.UserVO;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/user/*")
@@ -31,6 +40,9 @@ public class userController {
     private final UserService usv;
     private final MailService msv;
     private final StarService svc;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     @GetMapping("/myPage")
     public void myPage(){}
@@ -114,6 +126,61 @@ public class userController {
         starVOList.add(svc.getList(currentId));
         log.info("체크 {}", starVOList);
         return starVOList;
+    }
+
+    @GetMapping("/info/{currentId}")
+    @ResponseBody
+    public UserVO info(@PathVariable String currentId){
+        log.info("객체체크{}",usv.getInfo(currentId));
+        return usv.getInfo(currentId);
+    }
+    @GetMapping("/profile")
+    public String profile(){
+        return "/user/profile";
+    }
+
+    @GetMapping("/follow/{currentId}")
+    @ResponseBody
+    public String followCount(@PathVariable String currentId){
+        int followerCount = usv.getFollower(currentId);
+        int followingCount = usv.getFollowing(currentId);
+        return followerCount+"/"+followingCount;
+    }
+    @GetMapping("/checkNickname")
+    public boolean checkNickname(@RequestParam String nickname) {
+        return usv.isNicknameDuplicate(nickname);
+    }
+
+
+    @PostMapping("/uploadProfilePicture")
+    public String uploadProfilePicture(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId, Model model) {
+        String uploadDir = "C:/image/";
+        try {
+            String uuid = UUID.randomUUID().toString();
+            String fileName = uuid + "_" + file.getOriginalFilename();
+            Path path = Paths.get(uploadDir + fileName);
+            Files.write(path, file.getBytes());
+
+            // 저장된 파일 경로를 UserVO 객체에 설정
+            UserVO userVO = usv.getInfo(userId);
+            if (userVO != null) {
+                // 기존 파일 삭제
+                if (userVO.getProfile() != null && !userVO.getProfile().isEmpty()) {
+                    Path oldPath = Paths.get(uploadDir + userVO.getProfile().replace("/upload/", ""));
+                    if (Files.exists(oldPath)) {
+                        Files.delete(oldPath);
+                    }
+                }
+                userVO.setProfile("/upload/" + fileName);
+                usv.updateProfile(userVO);
+            }
+
+            model.addAttribute("message", "파일 업로드 성공!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("message", "파일 업로드 실패!");
+        }
+        return "redirect:/user/profile";
     }
 
 }

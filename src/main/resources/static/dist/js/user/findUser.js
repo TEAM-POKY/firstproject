@@ -7,8 +7,8 @@ const pwEmail = document.querySelector('.findPwInputE');
 
 window.addEventListener('load',()=>{
     document.querySelector('.findEModal').innerHTML='';
+    const nickValue = nick.value;
     findEmail.addEventListener('click',()=>{
-    console.log(nick.value)
         if(!nick.value==''){
             console.log(nick.value)
             document.querySelector('.findNoNick').innerHTML='';

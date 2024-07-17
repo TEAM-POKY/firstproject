@@ -26,4 +26,18 @@ public interface UserMapper {
     int findUserPw(@Param("nick") String nick, @Param("email") String email);
 
     void updatePw(@Param("email")String email, @Param("pw")String newPw);
+
+    UserVO searchUser(String providerId);
+
+    void insertSocialUser(UserVO newUser);
+
+    UserVO getInfo(String currentId);
+
+    void updateProfile(UserVO user);
+
+    int getFollower(String currentId);
+
+    int getFollowing(String currentId);
+
+    int isNicknameDuplicate(String nickname);
 }
