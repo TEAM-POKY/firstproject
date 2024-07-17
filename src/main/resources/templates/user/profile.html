@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>프로필사진</title>
+    <title>프로필</title>
 </head>
 <style>
     body {
@@ -10,23 +10,20 @@
     }
     #myProfile {
         display: inline-block;
+        width: 200px;
+        height: 200px;
         margin-top: 20px;
     }
     #title {
-        margin-top: 20px;
+        margin-top: 100px;
     }
     form {
-        margin-top: 20px;
+        margin-top: 40px;
     }
 </style>
 <body>
-<h1 id="title"></h1>
-<div id="myProfile">
-    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" fill="gray" class="bi bi-person-circle" viewBox="0 0 16 16">
-        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-    </svg>
-</div>
+<h2 id="title"></h2>
+<img id="myProfile" alt="no">
 <form action="/user/uploadProfilePicture" method="post" enctype="multipart/form-data" onsubmit="closePopupAndReloadParent()">
     <input type="hidden" name="userId" value="currentId">
     <input type="file" name="file" required>
@@ -34,8 +31,10 @@
 </form>
 </body>
 <script>
-    let currentId = `[[${#authentication.name}]]`;
+    // let currentId = `[[${#authentication.name}]]`;
+    let currentId = 'ehdwo13@gmail.com';
 
+    //유저정보
     async function getUserInfo(currentId) {
         try {
             const url = '/user/info/' + currentId;
@@ -51,7 +50,7 @@
     }
 
     function displayProfileImage(profilePath) {
-        document.getElementById('myProfile').innerHTML = `<img src="${profilePath}" alt="Profile Picture" width="200" height="200">`;
+        document.getElementById('myProfile').src = profilePath;
     }
 
     function closePopupAndReloadParent() {
@@ -60,6 +59,7 @@
     }
 
     getUserInfo(currentId).then(result => {
+        document.getElementById('myProfile').src = result.profile ? result.profile : "/dist/image/person-circle.svg";
         if (result.profile == null || result.profile == '') {
             document.getElementById('title').innerText = "프로필 이미지 등록";
         } else {
