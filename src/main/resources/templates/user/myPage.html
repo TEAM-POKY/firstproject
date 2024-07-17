@@ -46,21 +46,21 @@
     </div>
     <div class="countPrint">
         <div class="count-section">
-            <div>x개</div>
+            <div id="countWish"></div>
             <div>찜한작품</div>
         </div>
         <div class="count-section">
-            <div>x개</div>
-            <div>평가</div>
+            <div id="countStar"></div>
+            <div>별점</div>
         </div>
         <div class="count-section">
-            <div>x개</div>
+            <div id="countComment"></div>
             <div>코멘트</div>
         </div>
     </div>
     <div class="trend section">
         <div class="trend-analysis">
-            <h2 th:text="${#authentication.name} + '님의 취향분석'">닉네임님의 취향분석</h2>
+            <h2 th:text="${#authentication.name} + '님의 취향분석'"></h2>
             <div class="chart-container">
                 <canvas id="donutChart"></canvas>
             </div>

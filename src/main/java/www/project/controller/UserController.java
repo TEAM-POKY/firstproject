@@ -1,15 +1,12 @@
 package www.project.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,20 +22,16 @@ import www.project.domain.UserVO;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-@Controller
+
 @RequestMapping("/user/*")
 @RequiredArgsConstructor
 @Slf4j
-public class userController {
-
+@Controller
+public class UserController {
 
     private final PasswordEncoder passwordEncoder;
     private final UserService usv;
@@ -188,4 +181,10 @@ public class userController {
         return isUpdate > 0 ? "true": "false";
     }
 
+    @GetMapping("/getCountInfo/{currentId}")
+    @ResponseBody
+    public Map<String, Long> getCountInfo(@PathVariable String currentId){
+        Map<String, Long> counts = usv.getCounts(currentId);
+        return counts;
+    }
 }

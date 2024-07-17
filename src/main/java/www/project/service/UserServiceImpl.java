@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -78,5 +79,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public int updateNickName(String oldNickname, String newNickname) {
         return usermapper.updateNickName(oldNickname, newNickname);
+    }
+
+    @Override
+    public Map<String, Long> getCounts(String currentId) {
+        return usermapper.getCounts(currentId);
     }
 }

@@ -6,6 +6,7 @@ import www.project.domain.AuthVO;
 import www.project.domain.UserVO;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -42,4 +43,6 @@ public interface UserMapper {
     int isNicknameDuplicate(String nickname);
 
     int updateNickName(String oldNickname, String newNickname);
+
+    Map<String, Long> getCounts(String currentId);
 }

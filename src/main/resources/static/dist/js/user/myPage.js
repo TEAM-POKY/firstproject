@@ -7,7 +7,7 @@ const options = {
     }
 };
 //로그인귀찮아서 임시값 나중에삭제
-// const currentId = "ehdwo13@gmail.com"
+const currentId = "ehdwo13@gmail.com"
 let nickName = '';
 
 //유저정보
@@ -18,8 +18,7 @@ async function getUserInfo(currentId) {
             method: 'GET'
         };
         const resp = await fetch(url, config);
-        const result = await resp.json();
-        return result;
+        return await resp.json();
     } catch (e) {
         console.log(e);
     }
@@ -106,8 +105,7 @@ async function updateNickName(oldNickname, newNickname){
             })
         };
         const resp = await fetch(url, config);
-        const result = await resp.text();
-        return result;
+        return await resp.text();
     } catch (error) {
         console.log(error);
     }
@@ -120,8 +118,7 @@ async function followInfo(currentId){
             method: 'GET'
         };
         const resp = await fetch(url, config);
-        const result = await resp.text();
-        return result;
+        return await resp.text();
     }catch (error) {
         console.log(error)
     }
@@ -258,8 +255,7 @@ async function getStar(currentId){
             method: 'GET'
         };
         const resp = await fetch(url, config);
-        const result = await resp.json();
-        return result;
+        return await resp.json();
     }catch(err){
         console.log(err);
     }
@@ -268,8 +264,30 @@ async function getStar(currentId){
 window.onload = () => {
     loadCalendar(currentDate);
 }
+//캘린더 끝
 
+//count section 정보가져오기
+async function getCountSection(currentId){
+    try {
+        const url = "/user/getCountInfo/"+currentId;
+        const config = {
+            method: 'GET'
+        }
+        const resp = await fetch(url, config);
+        const result = await resp.json();
+        return result;
+    }catch (error){
+        console.log(error);
+    }
+}
+//채워주기
+getCountSection(currentId).then(result =>{
+    document.getElementById('countWish').innerText = result.wish_count+"개";
+    document.getElementById('countStar').innerText = result.star_count+"개";
+    document.getElementById('countComment').innerText = result.comment_count+"개";
+})
 
+//도넛차트
 let ctx = document.getElementById('donutChart').getContext('2d');
 let total = 110;
 let donutChart = new Chart(ctx, {
