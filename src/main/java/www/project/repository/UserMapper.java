@@ -33,7 +33,7 @@ public interface UserMapper {
 
     UserVO getInfo(String currentId);
 
-    void updateProfile(UserVO user);
+    int updateProfile(UserVO user);
 
     int getFollower(String currentId);
 

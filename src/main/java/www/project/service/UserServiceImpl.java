@@ -56,8 +56,8 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public void updateProfile(UserVO uvo) {
-        usermapper.updateProfile(uvo);
+    public int updateProfile(UserVO uvo) {
+        return usermapper.updateProfile(uvo);
     }
 
     @Override

@@ -7,7 +7,7 @@ const options = {
     }
 };
 //로그인귀찮아서 임시값 나중에삭제
-const currentId = "ehdwo13@gmail.com"
+// const currentId = "ehdwo13@gmail.com"
 let nickName = '';
 
 //유저정보
@@ -25,11 +25,13 @@ async function getUserInfo(currentId) {
     }
 }
 getUserInfo(currentId).then(result => {
+    const uploadPath = '/upload/';
+    const imgPath = uploadPath+result.profile;
     if (result) {
         nickName = result.nickname;
         renderNickName();
         document.getElementById('email').innerText = result.email;
-        document.getElementById('myProfile').src = result.profile ? result.profile : "/dist/image/person-circle.svg";
+        document.getElementById('myProfile').src = result.profile ? imgPath : "/dist/image/person-circle.svg";
     }
 });
 //닉네임 렌더링함수
@@ -131,7 +133,7 @@ followInfo(currentId).then(result =>{
 })
 //프로필변경
 function changeProfileImage() {
-    let popupW = 400;
+    let popupW = 500;
     let popupH = 600;
     let left = Math.ceil((window.screen.width - popupW)/2);
     let top = Math.ceil((window.screen.height - popupH)/2);

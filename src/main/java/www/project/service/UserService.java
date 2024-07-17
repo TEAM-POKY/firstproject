@@ -18,7 +18,7 @@ public interface UserService {
 
     UserVO getInfo(String currentId);
 
-    void updateProfile(UserVO userVO);
+    int updateProfile(UserVO userVO);
 
     int getFollower(String currentId);
 
