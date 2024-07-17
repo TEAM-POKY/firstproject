@@ -69,4 +69,9 @@ public class UserServiceImpl implements UserService{
     public int getFollowing(String currentId) {
         return usermapper.getFollowing(currentId);
     }
+
+    @Override
+    public boolean isNicknameDuplicate(String nickname) {
+        return usermapper.isNicknameDuplicate(nickname) > 0;
+    }
 }

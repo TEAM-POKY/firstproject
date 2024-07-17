@@ -65,5 +65,8 @@
     <select id="getFollowing" resultType="int">
         select count(*) from user_follow where email = #{currentId}
     </select>
+    <select id="isNicknameDuplicate" resultType="int">
+        select count(*) form user where nickname = #{nickname}
+    </select>
 
 </mapper>
