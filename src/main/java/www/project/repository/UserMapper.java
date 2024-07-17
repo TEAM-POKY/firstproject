@@ -40,4 +40,6 @@ public interface UserMapper {
     int getFollowing(String currentId);
 
     int isNicknameDuplicate(String nickname);
+
+    int updateNickName(String oldNickname, String newNickname);
 }
