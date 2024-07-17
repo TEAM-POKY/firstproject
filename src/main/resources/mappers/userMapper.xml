@@ -74,5 +74,11 @@
         set nickname = #{newNickname}
         where nickname = #{oldNickname}
     </update>
+    <select id="getCounts" resultType="map">
+        SELECT
+        (SELECT COUNT(*) FROM wish WHERE email = #{email}) AS wish_count,
+        (SELECT COUNT(*) FROM star WHERE email = #{email}) AS star_count,
+        (SELECT COUNT(*) FROM comment WHERE email = #{email}) AS comment_count
+    </select>
 
 </mapper>
