@@ -129,7 +129,15 @@ followInfo(currentId).then(result =>{
     let following = result.split("/")[1];
     document.getElementById('followInfo').innerText = `팔로워 ${follower}명 | 팔로잉 ${following}명`;
 })
+//프로필변경
+function changeProfileImage() {
+    let popupW = 400;
+    let popupH = 600;
+    let left = Math.ceil((window.screen.width - popupW)/2);
+    let top = Math.ceil((window.screen.height - popupH)/2);
 
+    window.open("/user/profile","blank",'width='+popupW+',height='+popupH+',left='+left+',top='+top+',scrollbars=yes,resizable=no,toolbar=no,menubar=no,location=no');
+}
 
 //수정작업시작
 //캘린더
@@ -192,8 +200,6 @@ function loadCalendar(date) {
 
     // getStar 함수 호출
     getStar(currentId).then(result => {
-        console.log(result);
-        console.log(result.length)
         if(result != null || result){
             const mediaInfo = result.map(item => ({
                 mediaId: item.mediaId,
@@ -261,14 +267,7 @@ window.onload = () => {
     loadCalendar(currentDate);
 }
 
-function changeProfileImage() {
-    let popupW = 600;
-    let popupH = 800;
-    let left = Math.ceil((window.screen.width - popupW)/2);
-    let top = Math.ceil((window.screen.height - popupH)/2);
 
-    window.open("/user/profile","blank",'width='+popupW+',height='+popupH+',left='+left+',top='+top+',scrollbars=yes,resizable=no,toolbar=no,titlebar=no,menubar=no,location=no');
-}
 let ctx = document.getElementById('donutChart').getContext('2d');
 let total = 110;
 let donutChart = new Chart(ctx, {
@@ -288,8 +287,4 @@ let donutChart = new Chart(ctx, {
 });
 function calc(number, total){
     return (number/total * 100).toFixed(1);
-}
-
-window.onload = () => {
-    loadCalendar(currentDate);
 }
