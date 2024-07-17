@@ -74,4 +74,9 @@ public class UserServiceImpl implements UserService{
     public boolean isNicknameDuplicate(String nickname) {
         return usermapper.isNicknameDuplicate(nickname) > 0;
     }
+
+    @Override
+    public int updateNickName(String oldNickname, String newNickname) {
+        return usermapper.updateNickName(oldNickname, newNickname);
+    }
 }

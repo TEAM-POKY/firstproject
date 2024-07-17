@@ -21,6 +21,8 @@ import www.project.service.UserService;
 import www.project.domain.UserVO;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -147,10 +149,31 @@ public class userController {
         return followerCount+"/"+followingCount;
     }
     @GetMapping("/checkNickname")
+    @ResponseBody
     public boolean checkNickname(@RequestParam String nickname) {
         return usv.isNicknameDuplicate(nickname);
     }
+    @PutMapping("/updateNickname")
+    @ResponseBody
+    public ResponseEntity<String> updateNickname(@RequestBody Map<String, String> request) {
+        try {
+            String encodedOldNickname = request.get("oldNickname");
+            String encodedNewNickname = request.get("newNickname");
 
+            String oldNickname = URLDecoder.decode(encodedOldNickname, StandardCharsets.UTF_8);
+            String newNickname = URLDecoder.decode(encodedNewNickname, StandardCharsets.UTF_8);
+
+            int isUpdate = usv.updateNickName(oldNickname, newNickname);
+            if (isUpdate > 0) {
+                return ResponseEntity.ok("success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
+            }
+        } catch (Exception e) {
+            log.error("Error decoding nicknames", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating nickname.");
+        }
+    }
 
     @PostMapping("/uploadProfilePicture")
     public String uploadProfilePicture(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId, Model model) {

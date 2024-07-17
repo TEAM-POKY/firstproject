@@ -6,8 +6,10 @@ const options = {
         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmRmZTQ3YTQ0NzU2ZTI5MDAyNTcxNWE2YjQyZDhkNSIsIm5iZiI6MTcyMTA3OTk3NS4wMjMyMTQsInN1YiI6IjY2MDNkNTE3NjA2MjBhMDE3YzMwMjY0OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Yepq4-FusJE30k6cCnybO96yFv6CgiDyauetmowyE-U'
     }
 };
+//로그인귀찮아서 임시값 나중에삭제
 const currentId = "ehdwo13@gmail.com"
 let nickName = '';
+
 //유저정보
 async function getUserInfo(currentId) {
     try {
@@ -30,6 +32,7 @@ getUserInfo(currentId).then(result => {
         document.getElementById('myProfile').src = result.profile ? result.profile : "/dist/image/person-circle.svg";
     }
 });
+//닉네임 렌더링함수
 function renderNickName() {
     let str = '';
     str = `<span>${nickName}</span>`;
@@ -37,43 +40,74 @@ function renderNickName() {
     document.getElementById('nickName').innerHTML = str;
     document.getElementById('changeNickName').addEventListener('click', changeToInput);
 }
+//input창 변경함수
 function changeToInput() {
-    let inputStr = `
+    document.getElementById('nickName').innerHTML = `
             <input type="text" id="nickNameInput" value="${nickName}">
             <button id="checkDuplicate">중복체크</button>
             <button id="cancelChange">취소</button>
         `;
-    document.getElementById('nickName').innerHTML = inputStr;
-
     document.getElementById('checkDuplicate').addEventListener('click', checkDuplicateAndUpdate);
     document.getElementById('cancelChange').addEventListener('click', renderNickName);
 }
+//닉네임업데이트로직
 function checkDuplicateAndUpdate() {
     let newNickName = document.getElementById('nickNameInput').value;
     checkDuplicateNickName(newNickName).then(isDuplicate => {
-        if (!isDuplicate) {
+        if (isDuplicate == "false") {
             let updateButton = document.getElementById('checkDuplicate');
             updateButton.textContent = '수정';
             updateButton.id = 'updateNickName';
-
+            document.getElementById('updateNickName').addEventListener('click',()=>{
+                updateNickName(nickName, newNickName).then(result =>{
+                    if(result == "success"){
+                        alert("닉네임 변경이 완료되었습니다. ")
+                        window.location.reload();
+                    }else{
+                        alert("닉네임 변경 오류\n관리자에게 문의해주세요. ")
+                    }
+                })
+            })
+            //input창 감지해서 변동시 중복체크 다시하는 로직
             document.getElementById('nickNameInput').addEventListener('input', function () {
                 document.getElementById('updateNickName').textContent = '중복체크';
                 document.getElementById('updateNickName').id = 'checkDuplicate';
-
                 document.getElementById('checkDuplicate').addEventListener('click', checkDuplicateAndUpdate);
             });
+        }else{
+            alert("중복된 닉네임입니다. 다시 입력해주세요. ")
         }
     });
 }
+//닉네임중복체크함수
 async function checkDuplicateNickName(nickname) {
     try {
         let encodedNickname = encodeURIComponent(nickname);
-        let response = await fetch(`/api/checkNickname?nickname=${encodedNickname}`);
-        let isDuplicate = await response.json();
-        return isDuplicate;
+        let response = await fetch(`/user/checkNickname?nickname=${encodedNickname}`);
+        return await response.text();
     } catch (error) {
-        console.error('Error checking nickname:', error);
-        return true;
+        console.log(error);
+    }
+}
+//닉네임업데이트함수
+async function updateNickName(oldNickname, newNickname){
+    try {
+        const url = "/user/updateNickname";
+        const config = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                oldNickname: encodeURIComponent(oldNickname),
+                newNickname: encodeURIComponent(newNickname)
+            })
+        };
+        const resp = await fetch(url, config);
+        const result = await resp.text();
+        return result;
+    } catch (error) {
+        console.log(error);
     }
 }
 //팔로우정보
@@ -97,6 +131,7 @@ followInfo(currentId).then(result =>{
 })
 
 
+//수정작업시작
 //캘린더
 const calendarBody = document.getElementById('calendarBody');
 const monthYear = document.getElementById('monthYear');
@@ -157,44 +192,45 @@ function loadCalendar(date) {
 
     // getStar 함수 호출
     getStar(currentId).then(result => {
-        console.log('getStar result:', result);
-
-        const mediaInfo = result.map(item => ({
-            mediaId: item.mediaId,
-            date: item.date.split(' ')[0]  // 시간 부분을 제거하고 날짜만 사용
-        }));
-
-        // 각 mediaId에 대해 영화 정보를 가져오고 포스터 경로를 캘린더에 추가
-        Promise.all(mediaInfo.map(info => {
-            return fetch(`https://api.themoviedb.org/3/movie/${info.mediaId}?language=en-US`, options)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Fetched data for mediaId:', info.mediaId, data);
-                    return {
-                        date: info.date,
-                        posterPath: data.poster_path
-                    };
-                });
-        })).then(results => {
-            results.forEach(result => {
-                console.log('Result:', result);
-                const cell = document.querySelector(`[data-date="${result.date}"]`);
-                if (cell) {
-                    const posterContainer = cell.querySelector('.poster-container');
-                    if (posterContainer) {
-                        // 기존 포스터가 있으면 삭제
-                        posterContainer.innerHTML = '';
-                        // 포스터 이미지 추가
-                        const poster = document.createElement('img');
-                        poster.src = `https://image.tmdb.org/t/p/w500${result.posterPath}`;
-                        poster.style.width = '100%';
-                        poster.style.height = '100%';
-                        poster.style.paddingLeft = '40px';
-                        posterContainer.appendChild(poster);
+        console.log(result);
+        console.log(result.length)
+        if(result != null || result){
+            const mediaInfo = result.map(item => ({
+                mediaId: item.mediaId,
+                date: item.date.split(' ')[0]
+            }));
+            // 각 mediaId에 대해 영화 정보를 가져오고 포스터 경로를 캘린더에 추가
+            Promise.all(mediaInfo.map(info => {
+                return fetch(`https://api.themoviedb.org/3/movie/${info.mediaId}?language=en-US`, options)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Fetched data for mediaId:', info.mediaId, data);
+                        return {
+                            date: info.date,
+                            posterPath: data.poster_path
+                        };
+                    });
+            })).then(results => {
+                results.forEach(result => {
+                    console.log('Result:', result);
+                    const cell = document.querySelector(`[data-date="${result.date}"]`);
+                    if (cell) {
+                        const posterContainer = cell.querySelector('.poster-container');
+                        if (posterContainer) {
+                            // 기존 포스터가 있으면 삭제
+                            posterContainer.innerHTML = '';
+                            // 포스터 이미지 추가
+                            const poster = document.createElement('img');
+                            poster.src = `https://image.tmdb.org/t/p/w500${result.posterPath}`;
+                            poster.style.width = '100%';
+                            poster.style.height = '100%';
+                            poster.style.paddingLeft = '40px';
+                            posterContainer.appendChild(poster);
+                        }
                     }
-                }
-            });
-        }).catch(err => console.error(err));
+                });
+            }).catch(err => console.error(err));
+        }
     });
 }
 
