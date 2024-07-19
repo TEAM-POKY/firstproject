@@ -80,5 +80,8 @@
         (SELECT COUNT(*) FROM star WHERE email = #{email}) AS star_count,
         (SELECT COUNT(*) FROM comment WHERE email = #{email}) AS comment_count
     </select>
+    <select id="getAllImagePaths" resultType="string">
+        SELECT profile FROM user
+    </select>
 
 </mapper>
