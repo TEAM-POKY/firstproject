@@ -28,7 +28,7 @@ public class ImageDelete {
     private static final String BASE_DIRECTORY = "C:/image/";
 
 
-    @Scheduled(cron = "0/60 * * * * *")
+    @Scheduled(cron = "0 0 23 * * *")
     public void cleanUpImages() {
         List<String> dbImagePaths = userMapper.getAllImagePaths();
 
