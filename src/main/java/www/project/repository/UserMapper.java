@@ -45,4 +45,6 @@ public interface UserMapper {
     int updateNickName(String oldNickname, String newNickname);
 
     Map<String, Long> getCounts(String currentId);
+
+    List<String> getAllImagePaths();
 }
