@@ -47,7 +47,7 @@
 
 
     <select id="searchUser" resultType="www.project.domain.UserVO">
-        select * from user where email=#{email}
+        select * from user where provider_id=#{providerId}
     </select>
 
     <select id="getInfo" resultType="www.project.domain.UserVO">
