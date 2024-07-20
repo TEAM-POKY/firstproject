@@ -67,6 +67,10 @@
             <button class="details-button">자세히보기</button>
         </div>
     </div>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="modalContent"></div>
+        <button id="modalClose">Close</button>
+    </div>
 </div>
 <script sec:authorize="isAuthenticated()">
     let currentId = `[[${#authentication.name}]]`;
