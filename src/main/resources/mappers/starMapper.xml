@@ -7,7 +7,7 @@
         select * from star where email = #{currentId}
     </select>
 
-    <insert id="insertrate">
-        insert into star values(email,rate,media_id,now())
+    <insert id="insertrate" >
+        insert into star(email,rate,media_id,date) values(#{email},#{rate},#{mediaId},now())
     </insert>
 </mapper>

@@ -4,5 +4,5 @@ import www.project.domain.StarVO;
 
 public interface MovieService {
 
-    String ratingMovie(StarVO svo);
+    int ratingMovie(StarVO svo);
 }

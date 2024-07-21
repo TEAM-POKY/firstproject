@@ -15,8 +15,8 @@ public class MovieServiceImpl implements MovieService{
     private final StarMapper starMapper;
 
     @Override
-    public String ratingMovie(StarVO svo) {
-        starMapper.insertrate(svo);
-        return "";
+    public int ratingMovie(StarVO svo) {
+        int isOk = starMapper.insertrate(svo);
+        return isOk;
     }
 }

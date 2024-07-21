@@ -6,7 +6,7 @@ import www.project.domain.StarVO;
 @Mapper
 public interface StarMapper {
 
-    void insertrate(StarVO svo);
+    int insertrate(StarVO svo);
 
     StarVO getList(String currentId);
 }

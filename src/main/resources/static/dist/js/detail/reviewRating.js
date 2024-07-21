@@ -3,12 +3,13 @@ const rateWrap = document.querySelectorAll('.rating'),
     input = document.querySelectorAll('.rating .rating__input'),
     labelLength = label.length,
     opacityHover = '0.5';
+const user = document.getElementById("userId");
 
 // 이건 클릭하면 값 가지고 가는 용
 document.addEventListener('click', (e) => {
     if (e.target.tagName === 'INPUT') {
         const ratingInfo = {
-            email: "12345",
+            email: '12345',
             rate: e.target.value,
             mediaId: movieId
         }
@@ -113,35 +114,35 @@ async function ratingMovie(ratingInfo) {
     }
 }
 
+// //
+// async function getreview(userinfo){
+//     try{
+//         const url = "/movie/getreview";
+//         const config ={
+//             method: "POST",
+//             headers: {
+//                 'content-type': 'application/json; charset =utf-8'
+//             },
+//             body: JSON.stringify(userinfo)
+//         };
+//         const res = await fetch(url,config);
+//         const result = res.json();
+//         return result;
+//     }catch (err){
+//         console.log("not userinfo"+err);
+//     }
+// }
 //
-async function getreview(userinfo){
-    try{
-        const url = "/movie/getreview";
-        const config ={
-            method: "POST",
-            headers: {
-                'content-type': 'application/json; charset =utf-8'
-            },
-            body: JSON.stringify(userinfo)
-        };
-        const res = await fetch(url,config);
-        const result = res.json();
-        return result;
-    }catch (err){
-        console.log("not userinfo"+err);
-    }
-}
-
-// 리뷰리스트 가져오기
-async function spreadreview(movieId) {
-    try{
-        const res = await fetch("/movie/reviewlist/"+movieId);
-        const result = res.json();
-        return result;
-    }catch (err){
-        console.log("movieId not find"+err);
-    }
-}
+// // 리뷰리스트 가져오기
+// async function spreadreview(movieId) {
+//     try{
+//         const res = await fetch("/movie/reviewlist/"+movieId);
+//         const result = res.json();
+//         return result;
+//     }catch (err){
+//         console.log("movieId not find"+err);
+//     }
+// }
 
 function initStars() { // 별 초기화 함수
     for (let i = 0; i < stars.length; i++) {

@@ -23,10 +23,10 @@ public class MovieController {
 
     @ResponseBody
     @PostMapping("/ratingMovie")
-    public StarVO rating(@RequestBody StarVO svo){
+    public int rating(@RequestBody StarVO svo){
         log.info("svo >>{}",svo);
-//        String isOk = movieService.ratingMovie(svo);
-//        log.info(isOk);
-        return svo;
+        int isOk = movieService.ratingMovie(svo);
+        log.info("isOk >> ",isOk);
+        return 1;
     }
 }
