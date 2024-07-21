@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 import www.project.domain.UserVO;
 
 import java.io.IOException;
+import java.util.Map;
 
 public interface UserService {
     void joinUser(UserVO uvo);
@@ -18,11 +19,15 @@ public interface UserService {
 
     UserVO getInfo(String currentId);
 
-    void updateProfile(UserVO userVO);
+    int updateProfile(UserVO userVO);
 
     int getFollower(String currentId);
 
     int getFollowing(String currentId);
 
     boolean isNicknameDuplicate(String nickname);
+
+    int updateNickName(String oldNickname, String newNickname);
+
+    Map<String, Long> getCounts(String currentId);
 }

@@ -25,6 +25,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        log.info("userRequest: {}", userRequest.getClientRegistration());
         OAuth2User oAuth2User = super.loadUser(userRequest);
         log.info("getAttributes >>> {}",oAuth2User.getAttributes());
         OAuth2UserInfo oAuth2UserInfo = null;
@@ -38,10 +39,14 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         }
 
         provider = oAuth2UserInfo.getProvider();
-        String providerId = oAuth2UserInfo.getPfoviderId();
+        String providerId = oAuth2UserInfo.getProviderId();
         String email = oAuth2UserInfo.getEmail();
         String nickName = oAuth2UserInfo.getName();
         UserVO originUser = userMapper.searchUser(providerId);
+        log.info("originUser >>>>>>{}",originUser);
+        log.info("providerId >>>>>>{}",providerId);
+        log.info("email >>>>>>{}",email);
+        log.info("nickName >>>>>>{}",nickName);
         if(originUser == null) {
             log.info("첫 로그인");
             UserVO newUser = new UserVO();

@@ -6,6 +6,7 @@ import www.project.domain.AuthVO;
 import www.project.domain.UserVO;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -33,11 +34,17 @@ public interface UserMapper {
 
     UserVO getInfo(String currentId);
 
-    void updateProfile(UserVO user);
+    int updateProfile(UserVO user);
 
     int getFollower(String currentId);
 
     int getFollowing(String currentId);
 
     int isNicknameDuplicate(String nickname);
+
+    int updateNickName(String oldNickname, String newNickname);
+
+    Map<String, Long> getCounts(String currentId);
+
+    List<String> getAllImagePaths();
 }

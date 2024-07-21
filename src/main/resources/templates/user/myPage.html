@@ -13,11 +13,11 @@
     <div class="section profile">
         <div class="profile-image-container">
             <img alt="Profile Picture" class="profile-image" id="myProfile">
-            <span onclick="changeProfileImage()" ><img src="/dist/image/gear.svg" alt="no picture" class="changeProfileImage"></span>
+            <span onclick="changeProfileImage()"><img src="/dist/image/gear.svg" alt="no picture" class="changeProfileImage"></span>
         </div>
         <div class="profile-info">
             <div style="font-size: 23px" id="nickName"></div>
-            <div style="font-size: 13px; color: #b1b1b1" id="email">이메일주소</div>
+            <div style="font-size: 13px; color: #b1b1b1" id="email"></div>
             <div style="font-size: 15px;" id="followInfo"></div>
         </div>
     </div>
@@ -46,26 +46,30 @@
     </div>
     <div class="countPrint">
         <div class="count-section">
-            <div>x개</div>
+            <div id="countWish"></div>
             <div>찜한작품</div>
         </div>
         <div class="count-section">
-            <div>x개</div>
-            <div>평가</div>
+            <div id="countStar"></div>
+            <div>별점</div>
         </div>
         <div class="count-section">
-            <div>x개</div>
+            <div id="countComment"></div>
             <div>코멘트</div>
         </div>
     </div>
     <div class="trend section">
         <div class="trend-analysis">
-            <h2 th:text="${#authentication.name} + '님의 취향분석'">닉네임님의 취향분석</h2>
+            <h2 th:text="${#authentication.name} + '님의 취향분석'"></h2>
             <div class="chart-container">
                 <canvas id="donutChart"></canvas>
             </div>
             <button class="details-button">자세히보기</button>
         </div>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="modalContent"></div>
+        <button id="modalClose">Close</button>
     </div>
 </div>
 <script sec:authorize="isAuthenticated()">

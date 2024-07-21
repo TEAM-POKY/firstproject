@@ -1,40 +1,37 @@
 package www.project.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import www.project.domain.StarVO;
+import www.project.handler.FileHandler;
 import www.project.service.MailService;
 import www.project.service.StarService;
 import www.project.service.UserService;
 import www.project.domain.UserVO;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-@Controller
+
 @RequestMapping("/user/*")
 @RequiredArgsConstructor
 @Slf4j
-public class userController {
-
+@Controller
+public class UserController {
 
     private final PasswordEncoder passwordEncoder;
     private final UserService usv;
@@ -124,7 +121,7 @@ public class userController {
     public List<StarVO> star(@PathVariable String currentId){
         List<StarVO> starVOList = new ArrayList<>();
         starVOList.add(svc.getList(currentId));
-        log.info("체크 {}", starVOList);
+        log.info("이거체크 {}", starVOList);
         return starVOList;
     }
 
@@ -147,40 +144,47 @@ public class userController {
         return followerCount+"/"+followingCount;
     }
     @GetMapping("/checkNickname")
+    @ResponseBody
     public boolean checkNickname(@RequestParam String nickname) {
         return usv.isNicknameDuplicate(nickname);
     }
-
-
-    @PostMapping("/uploadProfilePicture")
-    public String uploadProfilePicture(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId, Model model) {
-        String uploadDir = "C:/image/";
+    @PutMapping("/updateNickname")
+    @ResponseBody
+    public ResponseEntity<String> updateNickname(@RequestBody Map<String, String> request) {
         try {
-            String uuid = UUID.randomUUID().toString();
-            String fileName = uuid + "_" + file.getOriginalFilename();
-            Path path = Paths.get(uploadDir + fileName);
-            Files.write(path, file.getBytes());
+            String encodedOldNickname = request.get("oldNickname");
+            String encodedNewNickname = request.get("newNickname");
 
-            // 저장된 파일 경로를 UserVO 객체에 설정
-            UserVO userVO = usv.getInfo(userId);
-            if (userVO != null) {
-                // 기존 파일 삭제
-                if (userVO.getProfile() != null && !userVO.getProfile().isEmpty()) {
-                    Path oldPath = Paths.get(uploadDir + userVO.getProfile().replace("/upload/", ""));
-                    if (Files.exists(oldPath)) {
-                        Files.delete(oldPath);
-                    }
-                }
-                userVO.setProfile("/upload/" + fileName);
-                usv.updateProfile(userVO);
+            String oldNickname = URLDecoder.decode(encodedOldNickname, StandardCharsets.UTF_8);
+            String newNickname = URLDecoder.decode(encodedNewNickname, StandardCharsets.UTF_8);
+
+            int isUpdate = usv.updateNickName(oldNickname, newNickname);
+            if (isUpdate > 0) {
+                return ResponseEntity.ok("success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
             }
-
-            model.addAttribute("message", "파일 업로드 성공!");
-        } catch (IOException e) {
-            e.printStackTrace();
-            model.addAttribute("message", "파일 업로드 실패!");
+        } catch (Exception e) {
+            log.error("Error decoding nicknames", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating nickname.");
         }
-        return "redirect:/user/profile";
     }
 
+    @PostMapping("/uploadProfilePicture")
+    @ResponseBody
+    public String uploadProfilePicture(@RequestParam("file") MultipartFile file, @RequestParam("currentId") String currentId)throws IOException {
+        FileHandler fh = new FileHandler();
+        UserVO uvo = usv.getInfo(currentId);
+        String filePath = fh.uploadFile(file);
+        uvo.setProfile(filePath);
+        int isUpdate = usv.updateProfile(uvo);
+        return isUpdate > 0 ? "true": "false";
+    }
+
+    @GetMapping("/getCountInfo/{currentId}")
+    @ResponseBody
+    public Map<String, Long> getCountInfo(@PathVariable String currentId){
+        Map<String, Long> counts = usv.getCounts(currentId);
+        return counts;
+    }
 }

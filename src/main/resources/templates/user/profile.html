@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>프로필사진</title>
+    <title>프로필</title>
 </head>
 <style>
     body {
@@ -10,32 +10,32 @@
     }
     #myProfile {
         display: inline-block;
+        width: 200px;
+        height: 200px;
         margin-top: 20px;
+        border-radius: 50%;
     }
     #title {
-        margin-top: 20px;
+        margin-top: 100px;
     }
     form {
-        margin-top: 20px;
+        margin-top: 40px;
     }
+
 </style>
 <body>
-<h1 id="title"></h1>
-<div id="myProfile">
-    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" fill="gray" class="bi bi-person-circle" viewBox="0 0 16 16">
-        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-    </svg>
-</div>
-<form action="/user/uploadProfilePicture" method="post" enctype="multipart/form-data" onsubmit="closePopupAndReloadParent()">
-    <input type="hidden" name="userId" value="currentId">
-    <input type="file" name="file" required>
-    <input type="submit" value="등록">
+<h2 id="title"></h2>
+<img id="myProfile" alt="no">
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="currentId" id="idValue">
+    <input type="file" name="file" id="file">
+    <input type="button" value="등록" id="upload">
 </form>
 </body>
 <script>
     let currentId = `[[${#authentication.name}]]`;
 
+    //유저정보
     async function getUserInfo(currentId) {
         try {
             const url = '/user/info/' + currentId;
@@ -49,17 +49,15 @@
             console.log(e);
         }
     }
-
+    //프로필이미지띄우기
     function displayProfileImage(profilePath) {
-        document.getElementById('myProfile').innerHTML = `<img src="${profilePath}" alt="Profile Picture" width="200" height="200">`;
+        const uploadPath = '/upload/';
+        document.getElementById('myProfile').src = uploadPath + profilePath;
     }
-
-    function closePopupAndReloadParent() {
-        window.opener.location.reload();
-        window.close();
-    }
-
+    //팝업창띄울시 기본로직
     getUserInfo(currentId).then(result => {
+        document.getElementById('myProfile').src = result.profile ? "" : "/dist/image/person-circle.svg";
+        document.getElementById('idValue').value = currentId;
         if (result.profile == null || result.profile == '') {
             document.getElementById('title').innerText = "프로필 이미지 등록";
         } else {
@@ -67,5 +65,45 @@
             displayProfileImage(result.profile);
         }
     });
+    //업로드버튼누를시
+    document.getElementById('upload').addEventListener('click', async function() {
+        const result = await updateProfile();
+        if (result === "true") {
+            alert('파일이 성공적으로 업로드되었습니다.');
+            if (window.opener) {
+                window.opener.location.reload();
+            }
+            window.close();
+        } else if (result === "false") {
+            alert('파일 업로드에 실패했습니다.');
+        }
+    });
+    //실제로 upload 시키는 비동기함수
+    async function updateProfile() {
+        const imagePattern = /(\.(jpg|jpeg|png|gif))$/i;
+        try {
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('파일을 선택해주세요.');
+                return;
+            }
+            if (!imagePattern.test(file.name)) {
+                alert("이미지 파일만 업로드 가능합니다.");
+                return;
+            }
+            const formData = new FormData();
+            formData.append('currentId', document.getElementById('idValue').value);
+            formData.append('file', file);
+            const response = await fetch('/user/uploadProfilePicture', {
+                method: 'POST',
+                body: formData
+            });
+            return await response.text();
+        } catch (error) {
+            console.error('요청을 처리하는 동안 오류가 발생했습니다.', error);
+        }
+    }
 </script>
 </html>
