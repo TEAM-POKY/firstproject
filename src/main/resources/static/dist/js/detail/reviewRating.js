@@ -8,9 +8,9 @@ const rateWrap = document.querySelectorAll('.rating'),
 document.addEventListener('click', (e) => {
     if (e.target.tagName === 'INPUT') {
         const ratingInfo = {
-            movieId: movieId,
-            userId: "12345",
-            ratingValue: e.target.value
+            email: "12345",
+            rate: e.target.value,
+            mediaId: movieId
         }
         ratingMovie(ratingInfo).then(result => {
             console.log(result);
@@ -94,6 +94,7 @@ function checkedRate() {
     });
 }
 
+// 별점 넣는 기능
 async function ratingMovie(ratingInfo) {
     try {
         const url = "/movie/ratingMovie";
@@ -109,6 +110,36 @@ async function ratingMovie(ratingInfo) {
         return result;
     } catch (err) {
         console.log(err);
+    }
+}
+
+//
+async function getreview(userinfo){
+    try{
+        const url = "/movie/getreview";
+        const config ={
+            method: "POST",
+            headers: {
+                'content-type': 'application/json; charset =utf-8'
+            },
+            body: JSON.stringify(userinfo)
+        };
+        const res = await fetch(url,config);
+        const result = res.json();
+        return result;
+    }catch (err){
+        console.log("not userinfo"+err);
+    }
+}
+
+// 리뷰리스트 가져오기
+async function spreadreview(movieId) {
+    try{
+        const res = await fetch("/movie/reviewlist/"+movieId);
+        const result = res.json();
+        return result;
+    }catch (err){
+        console.log("movieId not find"+err);
     }
 }
 

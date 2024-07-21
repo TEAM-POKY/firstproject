@@ -6,4 +6,8 @@
     <select id="getList" resultType="www.project.domain.StarVO">
         select * from star where email = #{currentId}
     </select>
+
+    <insert id="insertrate">
+        insert into star values(email,rate,media_id,now())
+    </insert>
 </mapper>
