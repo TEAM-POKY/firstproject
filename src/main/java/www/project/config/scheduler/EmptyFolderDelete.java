@@ -1,5 +1,6 @@
 package www.project.config.scheduler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import java.util.stream.Stream;
 
 @Component
 @EnableScheduling
+@Slf4j
 public class EmptyFolderDelete {
     private static final String BASE_DIRECTORY = "C:/image/";
 
@@ -32,9 +34,9 @@ public class EmptyFolderDelete {
         File[] files = folder.listFiles();
         if (files != null && files.length == 0) {
             if (folder.delete()) {
-                System.out.println(LocalDateTime.now() + " - 삭제된 폴더: " + folder.getAbsolutePath());
+                log.info(LocalDateTime.now() + " - 삭제된 폴더: " + folder.getAbsolutePath());
             } else {
-                System.out.println(LocalDateTime.now() + " - 폴더 삭제 실패: " + folder.getAbsolutePath());
+                log.info(LocalDateTime.now() + " - 폴더 삭제 실패: " + folder.getAbsolutePath());
             }
         }
     }

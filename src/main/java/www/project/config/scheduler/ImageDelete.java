@@ -46,9 +46,9 @@ public class ImageDelete {
                 String fileName = file.getName();
                 if (!dbFileNames.contains(fileName)) {
                     if (file.delete()) {
-                        System.out.println(LocalDateTime.now() + " - 삭제된 파일: " + file.getAbsolutePath());
+                        log.info(LocalDateTime.now() + " - 삭제된 파일: " + file.getAbsolutePath());
                     } else {
-                        System.out.println(LocalDateTime.now() + " - 파일 삭제 실패: " + file.getAbsolutePath());
+                        log.info(LocalDateTime.now() + " - 파일 삭제 실패: " + file.getAbsolutePath());
                     }
                 }
             }

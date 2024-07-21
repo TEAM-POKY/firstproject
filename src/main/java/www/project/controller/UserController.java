@@ -121,7 +121,7 @@ public class UserController {
     public List<StarVO> star(@PathVariable String currentId){
         List<StarVO> starVOList = new ArrayList<>();
         starVOList.add(svc.getList(currentId));
-        log.info("체크 {}", starVOList);
+        log.info("이거체크 {}", starVOList);
         return starVOList;
     }
 
