@@ -144,7 +144,7 @@ const calendarBody = document.getElementById('calendarBody');
 const monthYear = document.getElementById('monthYear');
 let currentDate = new Date();
 
-function loadCalendar(date) {
+async function loadCalendar(date) {
     const year = date.getFullYear();
     const month = date.getMonth();
     monthYear.innerHTML = `${year}년 ${month + 1}월`;
@@ -199,67 +199,66 @@ function loadCalendar(date) {
     }
     calendarBody.appendChild(row);
 
-    // getStar 함수 호출
-    getStar(currentId).then(result => {
-        if (result != null || result) {
+    try {
+        const result = await getStar(currentId);
+        if (Array.isArray(result) && result.length > 0) {
             const mediaInfo = result.map(item => ({
                 mediaId: item.mediaId,
                 date: item.date.split(' ')[0]
             }));
             // 각 mediaId에 대해 영화 정보를 가져오고 포스터 경로를 캘린더에 추가
-            Promise.all(mediaInfo.map(info => {
+            const results = await Promise.all(mediaInfo.map(info => {
                 return fetch(`https://api.themoviedb.org/3/movie/${info.mediaId}?language=en-US`, options)
                     .then(response => response.json())
-                    .then(data => {
-                        return {
-                            date: info.date,
-                            mediaId: info.mediaId,
-                            posterPath: data.poster_path
-                        };
-                    });
-            })).then(results => {
-                const postersByDate = results.reduce((acc, result) => {
-                    if (!acc[result.date]) acc[result.date] = [];
-                    acc[result.date].push(result);
-                    return acc;
-                }, {});
+                    .then(data => ({
+                        date: info.date,
+                        mediaId: info.mediaId,
+                        posterPath: data.poster_path
+                    }));
+            }));
+            const postersByDate = results.reduce((acc, result) => {
+                if (!acc[result.date]) acc[result.date] = [];
+                acc[result.date].push(result);
+                return acc;
+            }, {});
 
-                Object.keys(postersByDate).forEach(date => {
-                    const cell = document.querySelector(`[data-date="${date}"]`);
-                    if (cell) {
-                        const posterContainer = cell.querySelector('.poster-container');
-                        if (posterContainer) {
-                            posterContainer.innerHTML = '';
-                            const posters = postersByDate[date];
-                            posters.forEach((poster, index) => {
-                                const posterImg = document.createElement('img');
-                                posterImg.src = `https://image.tmdb.org/t/p/w500${poster.posterPath}`;
-                                posterImg.style.width = '100%';
-                                posterImg.style.height = '100%';
-                                posterImg.style.position = 'absolute';
-                                posterImg.style.left = `${index * 10}px`; // 포스터가 겹치도록 설정
-                                posterImg.dataset.mediaId = poster.mediaId;
-                                posterContainer.appendChild(posterImg);
-                                posterImg.addEventListener('click', () => {
-                                    // 링크로 이동하는 로직 추가
-                                    window.location.href = `https://www.themoviedb.org/movie/${poster.mediaId}`;
-                                });
+            Object.keys(postersByDate).forEach(date => {
+                const cell = document.querySelector(`[data-date="${date}"]`);
+                if (cell) {
+                    const posterContainer = cell.querySelector('.poster-container');
+                    if (posterContainer) {
+                        posterContainer.innerHTML = '';
+                        const posters = postersByDate[date];
+                        posters.forEach((poster, index) => {
+                            const posterImg = document.createElement('img');
+                            posterImg.src = `https://image.tmdb.org/t/p/w500${poster.posterPath}`;
+                            posterImg.style.width = '100%';
+                            posterImg.style.height = '100%';
+                            posterImg.style.position = 'absolute';
+                            posterImg.style.left = `${index * 10}px`; // 포스터가 겹치도록 설정
+                            posterImg.dataset.mediaId = poster.mediaId;
+                            posterContainer.appendChild(posterImg);
+                            posterImg.addEventListener('click', () => {
+                                // 링크로 이동하는 로직 추가
+                                window.location.href = `https://www.themoviedb.org/movie/${poster.mediaId}`;
                             });
-                            if (posters.length > 1) {
-                                const badge = document.createElement('div');
-                                badge.classList.add('badge');
-                                badge.textContent = posters.length;
-                                badge.addEventListener('click', () => {
-                                    showModal(posters);
-                                });
-                                posterContainer.appendChild(badge);
-                            }
+                        });
+                        if (posters.length > 1) {
+                            const badge = document.createElement('div');
+                            badge.classList.add('badge');
+                            badge.textContent = posters.length;
+                            badge.addEventListener('click', () => {
+                                showModal(posters);
+                            });
+                            posterContainer.appendChild(badge);
                         }
                     }
-                });
-            }).catch(err => console.error(err));
+                }
+            });
         }
-    });
+    } catch (err) {
+        console.error('Error fetching star data:', err);
+    }
 }
 
 function showModal(posters) {
@@ -286,15 +285,16 @@ document.getElementById('modalClose').addEventListener('click', () => {
     modal.style.display = 'none';
 });
 
-function prevMonth() {
+async function prevMonth() {
     currentDate.setMonth(currentDate.getMonth() - 1);
-    loadCalendar(currentDate);
+    await loadCalendar(currentDate);
 }
 
-function nextMonth() {
+async function nextMonth() {
     currentDate.setMonth(currentDate.getMonth() + 1);
-    loadCalendar(currentDate);
+    await loadCalendar(currentDate);
 }
+
 async function getStar(currentId){
     try {
         const url = '/user/star/'+currentId;
@@ -308,8 +308,8 @@ async function getStar(currentId){
     }
 }
 
-window.onload = () => {
-    loadCalendar(currentDate);
+window.onload = async () => {
+    await loadCalendar(currentDate);
 }
 
 //count section 정보가져오기
