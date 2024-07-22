@@ -20,7 +20,6 @@ import www.project.repository.UserMapper;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 @Service
 @RequiredArgsConstructor
@@ -49,18 +48,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String providerId = oAuth2UserInfo.getProviderId();
         String email = oAuth2UserInfo.getEmail();
         String nickName = oAuth2UserInfo.getName();
-
         //프로필 이미지 저장
-//        File profile = new File(oAuth2UserInfo.getProfile());
-//        log.info("file 이름>>>>>>{}",profile);
-//        try {
-//            profile.createNewFile();
-//            FileOutputStream convertFile = new FileOutputStream(profile);
-////            convertFile.write();
-//            fileHandler.uploadFile((MultipartFile) profile);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        String profile = oAuth2UserInfo.getProfile();
 
         UserVO originUser = userMapper.searchUser(providerId);
         if(originUser == null) {
@@ -70,6 +59,13 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             newUser.setNickname(nickName);
             newUser.setProvider(provider);
             newUser.setProviderId(providerId);
+            try {
+                String filePath = fileHandler.saveFile(profile);
+                log.info("filePath----{}",filePath);
+                newUser.setProfile(filePath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             userMapper.insertSocialUser(newUser);
             userMapper.insertAuth(newUser.getEmail());
             return new PrincipalDetails(newUser, oAuth2User.getAttributes());
