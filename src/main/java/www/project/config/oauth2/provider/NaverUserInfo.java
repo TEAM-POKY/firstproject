@@ -22,4 +22,9 @@ public class NaverUserInfo implements OAuth2UserInfo{
 
     @Override
     public String getName() {return (String)((Map) attributes.get("response")).get("name");}
+
+    @Override
+    public String getProfile() {
+        return "";
+    }
 }

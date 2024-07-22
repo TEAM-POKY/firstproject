@@ -7,8 +7,8 @@ const options = {
     }
 };
 //로그인귀찮아서 임시값 나중에삭제
-const currentId = "ehdwo13@gmail.com"
-let nickName = '';
+// const currentId = "ehdwo13@gmail.com"
+// let nickName = '';
 
 //유저정보
 async function getUserInfo(currentId) {
