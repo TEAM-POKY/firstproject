@@ -8,12 +8,18 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import www.project.config.oauth2.provider.GoogleUserInfo;
 import www.project.config.oauth2.provider.KakaoUserInfo;
 import www.project.config.oauth2.provider.NaverUserInfo;
 import www.project.config.oauth2.provider.OAuth2UserInfo;
 import www.project.domain.UserVO;
+import www.project.handler.FileHandler;
 import www.project.repository.UserMapper;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +27,7 @@ import www.project.repository.UserMapper;
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     private final UserMapper userMapper;
-
+    private final FileHandler fileHandler;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -42,11 +48,10 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String providerId = oAuth2UserInfo.getProviderId();
         String email = oAuth2UserInfo.getEmail();
         String nickName = oAuth2UserInfo.getName();
+        //프로필 이미지 저장용
+        String profile = oAuth2UserInfo.getProfile();
+
         UserVO originUser = userMapper.searchUser(providerId);
-        log.info("originUser >>>>>>{}",originUser);
-        log.info("providerId >>>>>>{}",providerId);
-        log.info("email >>>>>>{}",email);
-        log.info("nickName >>>>>>{}",nickName);
         if(originUser == null) {
             log.info("첫 로그인");
             UserVO newUser = new UserVO();
@@ -54,6 +59,13 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             newUser.setNickname(nickName);
             newUser.setProvider(provider);
             newUser.setProviderId(providerId);
+            try {
+                String filePath = fileHandler.saveFile(profile);
+                log.info("filePath----{}",filePath);
+                newUser.setProfile(filePath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             userMapper.insertSocialUser(newUser);
             userMapper.insertAuth(newUser.getEmail());
             return new PrincipalDetails(newUser, oAuth2User.getAttributes());
