@@ -3,14 +3,15 @@ const rateWrap = document.querySelectorAll('.rating'),
     input = document.querySelectorAll('.rating .rating__input'),
     labelLength = label.length,
     opacityHover = '0.5';
+const user = document.getElementById("userId");
 
 // 이건 클릭하면 값 가지고 가는 용
 document.addEventListener('click', (e) => {
     if (e.target.tagName === 'INPUT') {
         const ratingInfo = {
-            movieId: movieId,
-            userId: "12345",
-            ratingValue: e.target.value
+            email: user.innerText,
+            rate: e.target.value,
+            mediaId: movieId
         }
         ratingMovie(ratingInfo).then(result => {
             console.log(result);
@@ -94,6 +95,7 @@ function checkedRate() {
     });
 }
 
+// 별점 넣는 기능
 async function ratingMovie(ratingInfo) {
     try {
         const url = "/movie/ratingMovie";
@@ -111,6 +113,36 @@ async function ratingMovie(ratingInfo) {
         console.log(err);
     }
 }
+
+// //
+// async function getreview(userinfo){
+//     try{
+//         const url = "/movie/getreview";
+//         const config ={
+//             method: "POST",
+//             headers: {
+//                 'content-type': 'application/json; charset =utf-8'
+//             },
+//             body: JSON.stringify(userinfo)
+//         };
+//         const res = await fetch(url,config);
+//         const result = res.json();
+//         return result;
+//     }catch (err){
+//         console.log("not userinfo"+err);
+//     }
+// }
+//
+// // 리뷰리스트 가져오기
+// async function spreadreview(movieId) {
+//     try{
+//         const res = await fetch("/movie/reviewlist/"+movieId);
+//         const result = res.json();
+//         return result;
+//     }catch (err){
+//         console.log("movieId not find"+err);
+//     }
+// }
 
 function initStars() { // 별 초기화 함수
     for (let i = 0; i < stars.length; i++) {

@@ -1,8 +1,8 @@
 package www.project.service;
 
-import www.project.domain.ReviewVO;
+import www.project.domain.StarVO;
 
 public interface MovieService {
 
-    String ratingMovie(ReviewVO rvo);
+    int ratingMovie(StarVO svo);
 }
