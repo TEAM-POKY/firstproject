@@ -48,7 +48,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String providerId = oAuth2UserInfo.getProviderId();
         String email = oAuth2UserInfo.getEmail();
         String nickName = oAuth2UserInfo.getName();
-        //프로필 이미지 저장
+        //프로필 이미지 저장용
         String profile = oAuth2UserInfo.getProfile();
 
         UserVO originUser = userMapper.searchUser(providerId);
