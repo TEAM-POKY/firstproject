@@ -9,7 +9,7 @@ const user = document.getElementById("userId");
 document.addEventListener('click', (e) => {
     if (e.target.tagName === 'INPUT') {
         const ratingInfo = {
-            email: '12345',
+            email: user.innerText,
             rate: e.target.value,
             mediaId: movieId
         }

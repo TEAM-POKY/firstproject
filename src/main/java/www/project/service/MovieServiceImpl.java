@@ -10,13 +10,20 @@ import www.project.repository.StarMapper;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class MovieServiceImpl implements MovieService{
+public class MovieServiceImpl implements MovieService {
 
     private final StarMapper starMapper;
 
     @Override
     public int ratingMovie(StarVO svo) {
-        int isOk = starMapper.insertrate(svo);
+        StarVO alreadystar = starMapper.getalreadystar(svo);
+        log.info("alreadystar >>{}", alreadystar);
+        int isOk = 0;
+        if(alreadystar==null){
+            isOk = starMapper.insertrate(svo);
+        }else{
+            isOk = starMapper.updaterate(svo);
+        }
         return isOk;
     }
 }
