@@ -83,5 +83,10 @@
     <select id="getAllImagePaths" resultType="string">
         SELECT profile FROM user
     </select>
+    <update id="setDefaultImage">
+        UPDATE user
+        SET profile = NULL
+        WHERE email = #{currentId}
+    </update>
 
 </mapper>

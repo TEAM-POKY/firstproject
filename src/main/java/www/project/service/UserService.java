@@ -30,4 +30,6 @@ public interface UserService {
     int updateNickName(String oldNickname, String newNickname);
 
     Map<String, Long> getCounts(String currentId);
+
+    int setDefaultImage(String currentId);
 }
