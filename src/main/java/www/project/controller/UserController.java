@@ -119,16 +119,14 @@ public class UserController {
     @GetMapping("/star/{currentId}")
     @ResponseBody
     public List<StarVO> star(@PathVariable String currentId){
-        List<StarVO> starVOList = new ArrayList<>();
-        starVOList.add(svc.getList(currentId));
-        log.info("이거체크 {}", starVOList);
+        List<StarVO> starVOList = svc.getList(currentId);
+        log.info("이거어케나감{}",starVOList);
         return starVOList;
     }
 
     @GetMapping("/info/{currentId}")
     @ResponseBody
     public UserVO info(@PathVariable String currentId){
-        log.info("객체체크{}",usv.getInfo(currentId));
         return usv.getInfo(currentId);
     }
     @GetMapping("/profile")
@@ -192,7 +190,6 @@ public class UserController {
     public ResponseEntity<String> setDefaultImage(@RequestParam String currentId) {
         try {
             int result = usv.setDefaultImage(currentId);
-            log.info("result 값{}",result);
             if(result > 0){
                 return ResponseEntity.ok("1");
             }else{
