@@ -82,10 +82,11 @@ public class FileHandler {
                 HttpUrl =profile.replace("http://k.kakaocdn.net/dn/","");
                 HttpUrl = HttpUrl.replace("/","_");
             } else if(provider.equalsIgnoreCase("google")){
-                HttpUrl="https://lh3.googleusercontent.com/a/";
+                HttpUrl = profile.replace("https://lh3.googleusercontent.com/a/","");
+                HttpUrl = HttpUrl.replace("/","_");
             } else if(provider.equalsIgnoreCase("naver")){
-                HttpUrl=profile.replace("https://phinf.pstatic.net/contact/","");
-                HttpUrl=HttpUrl.replace("/","_");
+                HttpUrl = profile.replace("https://phinf.pstatic.net/contact/","");
+                HttpUrl = HttpUrl.replace("/","_");
             }
             log.info(HttpUrl);
             fileOutputStream = new FileOutputStream(new File(directoryPath,HttpUrl));
