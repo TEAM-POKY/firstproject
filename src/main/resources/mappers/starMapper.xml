@@ -8,16 +8,20 @@
         select * from star where email = #{currentId}
     </select>
 
-    <insert id="insertrate" >
+    <insert id="insertRate" >
         insert into star(email,rate,media_id,date) values(#{email},#{rate},#{mediaId},now())
     </insert>
 
-    <select id="getalreadystar" resultType="www.project.domain.StarVO">
+    <select id="getAlreadyStar" resultType="www.project.domain.StarVO">
         select * from star where email=#{email} and media_id=#{mediaId}
     </select>
 
-    <update id="updaterate">
+    <update id="updateRate">
         update star set rate=#{rate} where email=#{email} and media_id=#{mediaId}
     </update>
+
+    <insert id="insertComment">
+        insert into comment(media_id,content,spoiler,email,reg_date) values(#{mediaId},#{content},#{spoiler},#{email},now())
+    </insert>
 
 </mapper>

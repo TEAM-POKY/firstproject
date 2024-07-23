@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class StarVO {
+    private long starNo; // 별을 봅는 숫자
     private String email; // 유저아이디
     private float rate; // 별점
     private long mediaId; // 무비아이디
