@@ -50,14 +50,14 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String nickName = oAuth2UserInfo.getName();
         //프로필 이미지 저장용
         String profile = oAuth2UserInfo.getProfile();
-        String newProfileUrl = "";
-        if(provider.equalsIgnoreCase("kakao")) {
-            newProfileUrl = profile.replace("http://t1.kakaocdn.net/account_images/","");
-        } else if(provider.equalsIgnoreCase("google")) {
-            newProfileUrl = profile.replace("https://lh3.googleusercontent.com/a/","");
-        } else if(provider.equalsIgnoreCase("naver")){
-            newProfileUrl = profile.replace("https://ssl.pstatic.net/static/pwe/address/","");
-        }
+//        String newProfileUrl = "";
+//        if(provider.equalsIgnoreCase("kakao")) {
+//            newProfileUrl = profile.replace("http://t1.kakaocdn.net/account_images/","");
+//        } else if(provider.equalsIgnoreCase("google")) {
+//            newProfileUrl = profile.replace("https://lh3.googleusercontent.com/a/","");
+//        } else if(provider.equalsIgnoreCase("naver")){
+//            newProfileUrl = profile.replace("https://ssl.pstatic.net/static/pwe/address/","");
+//        }
         UserVO originUser = userMapper.searchUser(providerId);
         if(originUser == null) {
             log.info("첫 로그인");
@@ -70,7 +70,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                 if(profile.contains("img_profile")||profile.contains("default_profile")){
                     log.info("기본프로필 - 네이버 카카오");
                 } else {
-                    String filePath = fileHandler.dowonloadImg(newProfileUrl, provider);
+                    String filePath = fileHandler.downloadImg(profile, provider);
                     newUser.setProfile(filePath);
                 }
             } catch (IOException e) {

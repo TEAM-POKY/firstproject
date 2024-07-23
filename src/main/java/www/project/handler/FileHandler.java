@@ -55,7 +55,8 @@ public class FileHandler {
     }
 
 
-    public String dowonloadImg(String imageUrl, String provider) throws IOException {
+    public String downloadImg(String profile, String provider) throws IOException {
+        log.info("downloadImg profile 주소{}", profile);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         String today = dateFormat.format(new Date());
         String[] dateParts = today.split("/");
@@ -66,15 +67,16 @@ public class FileHandler {
 
         String HttpUrl = "";
         if(provider.equalsIgnoreCase("kakao")){
+            if()
             HttpUrl = "http://t1.kakaocdn.net/account_images/";
         } else if(provider.equalsIgnoreCase("google")){
             HttpUrl="https://lh3.googleusercontent.com/a/";
         } else if(provider.equalsIgnoreCase("naver")){
             HttpUrl="https://ssl.pstatic.net/static/pwe/address/";
         }
-        String totalUrl = HttpUrl+imageUrl;
+        String totalUrl = HttpUrl+profile;
 
-        URL url = new URL(totalUrl);
+        URL url = new URL(profile);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         int responseCode = connection.getResponseCode();
@@ -84,7 +86,7 @@ public class FileHandler {
             FileOutputStream fileOutputStream = null;
             inputStream = connection.getInputStream();
 
-            fileOutputStream = new FileOutputStream(new File(directoryPath,imageUrl+".jpg"));
+            fileOutputStream = new FileOutputStream(new File(directoryPath,profile));
 
             final int BRUFFER_SIZE = 4096;
             int bytesRead;
