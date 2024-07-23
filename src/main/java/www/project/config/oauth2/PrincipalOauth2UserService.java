@@ -55,9 +55,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             log.info("첫 로그인");
             UserVO newUser = new UserVO();
             newUser.setEmail("("+provider+")"+email);
-            newUser.setNickname(nickName);
             newUser.setProvider(provider);
             newUser.setProviderId(providerId);
+            newUser.setNickname(nickName);
+            //카카오랑 네이버는 실명이라서 닉네임 안받음
+            if(provider.equals("naver")||provider.equals("kakao")){newUser.setNickname(nickName+"_user");}
             try {
                 if(profile.contains("img_profile")||profile.contains("default_profile")){
                     log.info("기본프로필 - 네이버 카카오");

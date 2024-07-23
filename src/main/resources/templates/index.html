@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:replace="~{header :: setFragment(~{this::content})}">
     <th:block th:fragment="content">
 <head>
@@ -172,6 +173,8 @@
         <button type="button" class="btn" id="leftBtn2"> < </button>
     </div>
     </div>
+
+
 <script th:src="@{/dist/js/goToDetail.js}"></script>
 <script th:src="@{/dist/js/nowPlayingSlide.js}"></script>
 <script th:src="@{/dist/js/topMovieSlide.js}"></script>
