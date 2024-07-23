@@ -47,4 +47,6 @@ public interface UserMapper {
     Map<String, Long> getCounts(String currentId);
 
     List<String> getAllImagePaths();
+
+    int setDefaultImage(String currentId);
 }

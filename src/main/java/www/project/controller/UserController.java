@@ -187,4 +187,19 @@ public class UserController {
         Map<String, Long> counts = usv.getCounts(currentId);
         return counts;
     }
+
+    @PostMapping("/setDefaultImage")
+    public ResponseEntity<String> setDefaultImage(@RequestParam String currentId) {
+        try {
+            int result = usv.setDefaultImage(currentId);
+            log.info("result 값{}",result);
+            if(result > 0){
+                return ResponseEntity.ok("1");
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("0");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error resetting profile image");
+        }
+    }
 }
