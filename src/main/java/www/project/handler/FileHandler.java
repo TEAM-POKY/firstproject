@@ -65,28 +65,30 @@ public class FileHandler {
         String day = dateParts[2];
         String directoryPath = UP_DIR + year + "/" + month + "/" + day + "/";
 
-        String HttpUrl = "";
-        if(provider.equalsIgnoreCase("kakao")){
-            if()
-            HttpUrl = "http://t1.kakaocdn.net/account_images/";
-        } else if(provider.equalsIgnoreCase("google")){
-            HttpUrl="https://lh3.googleusercontent.com/a/";
-        } else if(provider.equalsIgnoreCase("naver")){
-            HttpUrl="https://ssl.pstatic.net/static/pwe/address/";
-        }
-        String totalUrl = HttpUrl+profile;
+
 
         URL url = new URL(profile);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         int responseCode = connection.getResponseCode();
 
+        String HttpUrl = "";
         if(responseCode == HttpURLConnection.HTTP_OK) {
             InputStream inputStream = null;
             FileOutputStream fileOutputStream = null;
             inputStream = connection.getInputStream();
 
-            fileOutputStream = new FileOutputStream(new File(directoryPath,profile));
+            if(provider.equalsIgnoreCase("kakao")){
+                HttpUrl =profile.replace("http://k.kakaocdn.net/dn/","");
+                HttpUrl = HttpUrl.replace("/","_");
+            } else if(provider.equalsIgnoreCase("google")){
+                HttpUrl="https://lh3.googleusercontent.com/a/";
+            } else if(provider.equalsIgnoreCase("naver")){
+                HttpUrl=profile.replace("https://phinf.pstatic.net/contact/","");
+                HttpUrl=HttpUrl.replace("/","_");
+            }
+            log.info(HttpUrl);
+            fileOutputStream = new FileOutputStream(new File(directoryPath,HttpUrl));
 
             final int BRUFFER_SIZE = 4096;
             int bytesRead;
@@ -101,7 +103,7 @@ public class FileHandler {
         } else {
             log.info("fail to connect to server");
         }
-        return year + "/" + month + "/" + day + "/"+imageUrl+".jpg";
+        return year + "/" + month + "/" + day + "/"+HttpUrl;
     }
 }
 
