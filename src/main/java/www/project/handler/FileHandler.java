@@ -84,6 +84,7 @@ public class FileHandler {
             } else if(provider.equalsIgnoreCase("google")){
                 HttpUrl = profile.replace("https://lh3.googleusercontent.com/a/","");
                 HttpUrl = HttpUrl.replace("/","_");
+                HttpUrl = HttpUrl.concat(".jpg");
             } else if(provider.equalsIgnoreCase("naver")){
                 HttpUrl = profile.replace("https://phinf.pstatic.net/contact/","");
                 HttpUrl = HttpUrl.replace("/","_");
