@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import www.project.domain.ReviewVO;
+import www.project.domain.StarVO;
 import www.project.service.MovieService;
 
 @Controller
@@ -23,8 +23,10 @@ public class MovieController {
 
     @ResponseBody
     @PostMapping("/ratingMovie")
-    public ReviewVO rating(@RequestBody ReviewVO rvo){
-        String isOk = movieService.ratingMovie(rvo);
-        return rvo;
+    public int rating(@RequestBody StarVO svo){
+        log.info("svo >>{}",svo);
+        int isOk = movieService.ratingMovie(svo);
+        log.info("isOk >> ",isOk);
+        return 1;
     }
 }

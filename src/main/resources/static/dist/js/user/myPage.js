@@ -7,8 +7,9 @@ const options = {
     }
 };
 //로그인귀찮아서 임시값 나중에삭제
-// const currentId = "ehdwo13@gmail.com"
-// let nickName = '';
+const currentId = "(google)ehdwo13@gmail.com"
+let nickName = '';
+
 
 //유저정보
 async function getUserInfo(currentId) {
@@ -201,6 +202,7 @@ async function loadCalendar(date) {
 
     try {
         const result = await getStar(currentId);
+        console.log(result);
         if (Array.isArray(result) && result.length > 0) {
             const mediaInfo = result.map(item => ({
                 mediaId: item.mediaId,

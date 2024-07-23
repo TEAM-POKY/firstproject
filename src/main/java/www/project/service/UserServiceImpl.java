@@ -85,4 +85,9 @@ public class UserServiceImpl implements UserService{
     public Map<String, Long> getCounts(String currentId) {
         return usermapper.getCounts(currentId);
     }
+
+    @Override
+    public int setDefaultImage(String currentId) {
+        return usermapper.setDefaultImage(currentId);
+    }
 }

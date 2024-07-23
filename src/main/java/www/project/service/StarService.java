@@ -2,6 +2,8 @@ package www.project.service;
 
 import www.project.domain.StarVO;
 
+import java.util.List;
+
 public interface StarService {
-    StarVO getList(String currentId);
+    List<StarVO> getList(String currentId);
 }
