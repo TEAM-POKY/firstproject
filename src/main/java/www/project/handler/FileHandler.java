@@ -65,8 +65,6 @@ public class FileHandler {
         String day = dateParts[2];
         String directoryPath = UP_DIR + year + "/" + month + "/" + day + "/";
 
-
-
         URL url = new URL(profile);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
