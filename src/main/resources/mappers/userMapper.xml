@@ -12,8 +12,8 @@
     </insert>
 
     <insert id="insertSocialUser">
-        insert into user(email,pw,nickname, provider,provider_id)
-        values (#{email},#{pw},#{nickname},#{provider},#{providerId})
+        insert into user(email,pw,nickname, profile, provider,provider_id)
+        values (#{email},#{pw},#{nickname},#{profile}, #{provider},#{providerId})
     </insert>
 
     <select id="duplicationNick" resultType="int">
