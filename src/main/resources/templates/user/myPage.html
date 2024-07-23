@@ -72,6 +72,9 @@
         <button id="modalClose">Close</button>
     </div>
 </div>
+
+<span th:text="${#authentication.getPrincipal().userVO.getNickname()}"></span>
+
 <script sec:authorize="isAuthenticated()">
     let currentId = `[[${#authentication.name}]]`;
 </script>

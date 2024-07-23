@@ -143,8 +143,17 @@
 <div class="content-fluid">
     <th:block th:replace="${content}"></th:block>
 </div>
+<!--<th:block sec:authorize="isAuthenticated()">-->
+<!--    <span th:text="${#authentication.getPrincipal().userVO.getNickname()}"></span>-->
+<!--</th:block>-->
 <script sec:authorize="isAuthenticated()">
     let currentId = `[[${#authentication.name}]]`;
+    let test = `[[${#authentication.getPrincipal().userVO.getNickname()}]]`;
+    console.log(test)
+    if(test.includes("_user")){
+        alert("닉네임을 변경해주세요.");
+        window.location.href="/user/myPage";
+    }
 </script>
 <script th:src="@{/dist/js/header.js}"></script>
 </body>
