@@ -1,5 +1,6 @@
 package www.project.config.oauth2;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -10,22 +11,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@Getter
 public class PrincipalDetails implements UserDetails, OAuth2User {
-    private UserVO uvo;
+    public UserVO userVO;
     private Map<String, Object> attributes;
 
     //일반로그인
-    public PrincipalDetails(UserVO userVO) { this.uvo = userVO;}
+    public PrincipalDetails(UserVO userVO) { this.userVO = userVO;}
 
     //소셜로그인
-    public PrincipalDetails(UserVO uvo, Map<String, Object> attributes) {
-        this.uvo=uvo;
+    public PrincipalDetails(UserVO userVO, Map<String, Object> attributes) {
+        this.userVO=userVO;
         this.attributes=attributes;
     }
 
     @Override
     public String getName() {
-        return uvo.getNickname();
+        return userVO.getNickname();
     }
 
     @Override
@@ -40,11 +42,11 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getPassword() {
-        return uvo.getPw();
+        return userVO.getPw();
     }
 
     @Override
     public String getUsername() {
-        return uvo.getEmail();
+        return userVO.getEmail();
     }
 }

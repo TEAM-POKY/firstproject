@@ -119,16 +119,14 @@ public class UserController {
     @GetMapping("/star/{currentId}")
     @ResponseBody
     public List<StarVO> star(@PathVariable String currentId){
-        List<StarVO> starVOList = new ArrayList<>();
-        starVOList.add(svc.getList(currentId));
-        log.info("이거체크 {}", starVOList);
+        List<StarVO> starVOList = svc.getList(currentId);
+        log.info("이거어케나감{}",starVOList);
         return starVOList;
     }
 
     @GetMapping("/info/{currentId}")
     @ResponseBody
     public UserVO info(@PathVariable String currentId){
-        log.info("객체체크{}",usv.getInfo(currentId));
         return usv.getInfo(currentId);
     }
     @GetMapping("/profile")
@@ -186,5 +184,19 @@ public class UserController {
     public Map<String, Long> getCountInfo(@PathVariable String currentId){
         Map<String, Long> counts = usv.getCounts(currentId);
         return counts;
+    }
+
+    @PostMapping("/setDefaultImage")
+    public ResponseEntity<String> setDefaultImage(@RequestParam String currentId) {
+        try {
+            int result = usv.setDefaultImage(currentId);
+            if(result > 0){
+                return ResponseEntity.ok("1");
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("0");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error resetting profile image");
+        }
     }
 }

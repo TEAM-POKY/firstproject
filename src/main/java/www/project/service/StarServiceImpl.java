@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import www.project.domain.StarVO;
 import www.project.repository.StarMapper;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -14,7 +16,7 @@ public class StarServiceImpl implements StarService{
     private final StarMapper starMapper;
 
     @Override
-    public StarVO getList(String currentId) {
+    public List<StarVO> getList(String currentId) {
         return starMapper.getList(currentId);
     }
 }

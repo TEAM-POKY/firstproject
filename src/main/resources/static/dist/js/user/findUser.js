@@ -6,14 +6,29 @@ const pwNick = document.querySelector('.findPwInputN');
 const pwEmail = document.querySelector('.findPwInputE');
 
 window.addEventListener('load',()=>{
-    document.querySelector('.findEModal').innerHTML='';
-    const nickValue = nick.value;
+    // document.querySelector('.findEModal').innerHTML='';
+    // const nickValue = nick.value;
     findEmail.addEventListener('click',()=>{
         if(!nick.value==''){
             console.log(nick.value)
             document.querySelector('.findNoNick').innerHTML='';
             findEmailF(nick.value).then(result=>{
-                if(result){
+                console.log(result.provider)
+                if(result.provider){
+                    document.querySelector('.findEModal').innerHTML+=`
+                    <button class="modalClose" onclick="closeModal()">X</button>`
+                        if(result.provider=="google"){
+                            document.querySelector('.findEModal').innerHTML+=`<div class="showEmail">${result.nickname}님은 구글로 회원가입 되었습니다.</div>`;
+                        } else if(result.provider=="naver"){
+                            document.querySelector('.findEModal').innerHTML+=`<div class="showEmail">${result.nickname}님은 네이버로 회원가입 되었습니다.</div>`;
+                        } else {
+                            document.querySelector('.findEModal').innerHTML+=`<div class="showEmail">${result.nickname}님은 카카오로 회원가입 되었습니다.</div>`;
+                        }
+                    document.querySelector('.findEModal').innerHTML+=`
+                    <a href="/user/login" class="findUserLogin">로그인 하기</a>
+                    <a href="/user/findUser">비밀번호 찾기</a>`;
+                    emailModal.style.display='block';
+                } else if(!result.provider){
                     document.querySelector('.findEModal').innerHTML=`
                     <button class="modalClose" onclick="closeModal()">X</button>
                     <div class="showEmail">${result.nickname}님의 이메일은 ${result.email} 입니다.</div>
@@ -51,6 +66,8 @@ window.addEventListener('load',()=>{
 function closeModal(){
     console.log("닫힘버튼누름")
     emailModal.style.display='none';
+    document.querySelector('.findEModal').innerHTML='';
+
 }
 
 //이메일 찾기

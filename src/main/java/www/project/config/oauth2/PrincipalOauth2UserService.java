@@ -50,19 +50,23 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String nickName = oAuth2UserInfo.getName();
         //프로필 이미지 저장용
         String profile = oAuth2UserInfo.getProfile();
-
         UserVO originUser = userMapper.searchUser(providerId);
         if(originUser == null) {
             log.info("첫 로그인");
             UserVO newUser = new UserVO();
             newUser.setEmail("("+provider+")"+email);
-            newUser.setNickname(nickName);
             newUser.setProvider(provider);
             newUser.setProviderId(providerId);
+            newUser.setNickname(nickName);
+            //카카오랑 네이버는 실명이라서 닉네임 안받음
+            if(provider.equals("naver")||provider.equals("kakao")){newUser.setNickname(nickName+"_user");}
             try {
-                String filePath = fileHandler.saveFile(profile);
-                log.info("filePath----{}",filePath);
-                newUser.setProfile(filePath);
+                if(profile.contains("img_profile")||profile.contains("default_profile")){
+                    log.info("기본프로필 - 네이버 카카오");
+                } else {
+                    String filePath = fileHandler.downloadImg(profile, provider);
+                    newUser.setProfile(filePath);
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

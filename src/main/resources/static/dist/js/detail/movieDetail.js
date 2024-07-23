@@ -1,5 +1,3 @@
-console.log("js in!");
-
 const urlParams = new URLSearchParams(window.location.search);
 const movieId = urlParams.get('movieId');
 const thumbnail = document.querySelector(".detail1");
@@ -10,10 +8,7 @@ const detailCatediv = document.querySelector(".detailcate");
 const storyText = document.querySelector(".detailText");
 const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
-console.log(movieId);
-
 getDetail(movieId).then(result => {
-    console.log(result);
     const posterPath = result.poster_path ? `${imageBaseUrl}${result.poster_path}` : '';
     const backdropPath = result.backdrop_path ? `${imageBaseUrl}${result.backdrop_path}` : '';
     var backdropsrc = backdropPath;

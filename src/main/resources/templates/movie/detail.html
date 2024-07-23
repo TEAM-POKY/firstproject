@@ -79,28 +79,28 @@
                         </div>
                     </div>
                     <div class="detailComment">
-                        <form action="/movie/comment" method="post">
-                            <textarea type="text" placeholder="이 작품에 대한 평을 남겨보세요."></textarea>
+                        <form action="" method="post">
+                            <textarea id="commentText" type="text" placeholder="이 작품에 대한 평을 남겨보세요."></textarea>
                             <div class="detail1Review">
                                 <div class="detailCheck">
-                                    <input type="checkbox" id="spoiler">
-                                    <label for="spoiler">스포일러</label>
+                                    <label>
+                                        <input type="checkbox" id="spoiler" value="1">스포일러
+                                    </label> <!--밸류값은 생략하면 on 으로 -->
                                 </div>
                                 <div class="detailSubmitBtn">
-                                    <button type="submit">등록</button>
+                                    <button type="button" id="commentBtn">등록</button>
                                 </div>
                             </div>
-
                         </form>
                     </div>
                 </div>
-                <div class="detail3"></div>
+                <div class="detail3">
+                    <div id="userId" th:text="${#authentication.name}"></div>
+                </div>
             </div>
         </div>
         <script th:src="@{/dist/js/detail/movieDetail.js}"></script>
         <script th:src="@{/dist/js/detail/reviewRating.js}"></script>
-
     </th:block>
-
 </th:block>
 </html>

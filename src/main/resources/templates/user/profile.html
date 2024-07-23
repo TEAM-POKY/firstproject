@@ -21,19 +21,27 @@
     form {
         margin-top: 40px;
     }
+    #upload, #defaultImage{
+        margin-top: 50px;
+    }
+    #upload{
+        margin-right: 50px;
+    }
 
 </style>
 <body>
 <h2 id="title"></h2>
 <img id="myProfile" alt="no">
 <form method="post" enctype="multipart/form-data">
+    <input type="file" name="file" id="file"><br>
     <input type="hidden" name="currentId" id="idValue">
-    <input type="file" name="file" id="file">
     <input type="button" value="등록" id="upload">
+    <input type="button" value="기본이미지로 변경" id="defaultImage">
 </form>
 </body>
 <script>
-    let currentId = `[[${#authentication.name}]]`;
+    // let currentId = `[[${#authentication.name}]]`;
+    let currentId = 'ehdwo13@gmail.com';
 
     //유저정보
     async function getUserInfo(currentId) {
@@ -105,5 +113,33 @@
             console.error('요청을 처리하는 동안 오류가 발생했습니다.', error);
         }
     }
+    //이미지삭제후 기본이미지로 변경처리
+    document.getElementById('defaultImage').addEventListener('click', async () => {
+        const result = await setDefaultImage(currentId);
+        if(result == "1"){
+            alert("기본 프로필로 변경되었습니다. ")
+            window.opener.location.reload();
+            window.close();
+        }else{
+            alert("기본 프로필 변경 실패\n관리자에게 문의해주세요. ")
+        }
+
+    });
+    async function setDefaultImage(currentId){
+        try {
+            const response = await fetch(`/user/setDefaultImage?currentId=${encodeURIComponent(currentId)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const result = await response.text();
+            return result;
+        } catch (error) {
+            console.error('Error:', error);
+            return 'Error resetting profile image';
+        }
+    }
+
 </script>
 </html>
