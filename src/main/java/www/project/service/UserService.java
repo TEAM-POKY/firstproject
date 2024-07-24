@@ -32,6 +32,4 @@ public interface UserService {
     Map<String, Long> getCounts(String currentId);
 
     int setDefaultImage(String currentId);
-
-    String getUserNickType(String email);
 }
