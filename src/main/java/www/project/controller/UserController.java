@@ -199,11 +199,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error resetting profile image");
         }
     }
-
-    @PostMapping("/userType/{email}")
-    @ResponseBody
-    public String checkUserType(@PathVariable("email")String email){
-        String nickname = usv.getUserNickType(email);
-        return nickname;
-    }
 }
