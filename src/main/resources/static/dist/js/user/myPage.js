@@ -7,7 +7,7 @@ const options = {
     }
 };
 //로그인귀찮아서 임시값 나중에삭제
-// const currentId = "(google)ehdwo13@gmail.com"
+const currentId = "(kakao)ehdwo13@kakao.com"
 // let nickName = '';
 
 
@@ -55,31 +55,38 @@ function changeToInput() {
 //닉네임업데이트로직
 function checkDuplicateAndUpdate() {
     let newNickName = document.getElementById('nickNameInput').value;
-    checkDuplicateNickName(newNickName).then(isDuplicate => {
-        if (isDuplicate == "false") {
-            let updateButton = document.getElementById('checkDuplicate');
-            updateButton.textContent = '수정';
-            updateButton.id = 'updateNickName';
-            document.getElementById('updateNickName').addEventListener('click',()=>{
-                updateNickName(nickName, newNickName).then(result =>{
-                    if(result == "success"){
-                        alert("닉네임 변경이 완료되었습니다. ")
-                        window.location.reload();
-                    }else{
-                        alert("닉네임 변경 오류\n관리자에게 문의해주세요. ")
-                    }
+    let updateButton = document.getElementById('checkDuplicate');
+    if(!newNickName.includes("_user")) {
+        checkDuplicateNickName(newNickName).then(isDuplicate => {
+            if (isDuplicate == "false") {
+                alert("사용가능한 닉네임입니다. ")
+                updateButton.removeEventListener('click', checkDuplicateAndUpdate);
+                updateButton.textContent = '수정';
+                updateButton.id = 'updateNickName';
+                document.getElementById('updateNickName').addEventListener('click',()=>{
+                    updateNickName(nickName, newNickName).then(result =>{
+                        if(result == "success"){
+                            alert("닉네임 변경이 완료되었습니다. ")
+                            window.location.reload();
+                        }else{
+                            alert("닉네임 변경 오류\n관리자에게 문의해주세요. ")
+                        }
+                    })
                 })
-            })
-            //input창 감지해서 변동시 중복체크 다시하는 로직
-            document.getElementById('nickNameInput').addEventListener('input', function () {
-                document.getElementById('updateNickName').textContent = '중복체크';
-                document.getElementById('updateNickName').id = 'checkDuplicate';
-                document.getElementById('checkDuplicate').addEventListener('click', checkDuplicateAndUpdate);
-            });
-        }else{
-            alert("중복된 닉네임입니다. 다시 입력해주세요. ")
-        }
-    });
+                //input창 감지해서 변동시 중복체크 다시하는 로직
+                document.getElementById('nickNameInput').addEventListener('input', function () {
+                    document.getElementById('updateNickName').textContent = '중복체크';
+                    document.getElementById('updateNickName').id = 'checkDuplicate';
+                    document.getElementById('checkDuplicate').addEventListener('click', checkDuplicateAndUpdate);
+                });
+            }else{
+                alert("중복된 닉네임입니다. 다시 입력해주세요. ")
+            }
+        });
+    }else{
+        alert("_user는 포함될 수 없습니다. 다시 입력해주세요. ")
+        document.getElementById('nickNameInput').value = '';
+    }
 }
 //닉네임중복체크함수
 async function checkDuplicateNickName(nickname) {
