@@ -145,10 +145,19 @@
 </div>
 <script sec:authorize="isAuthenticated()">
     let currentId = `[[${#authentication.name}]]`;
-    let userNickname = `[[${#authentication.getPrincipal().userVO.getNickname()}]]`;
-    let userNickname2 = `[[${#authentication.getPrincipal().getUser().getNickname()}]]`;
+    let userNickname = `[[${#authentication.getPrincipal().getUser().getNickname()}]]`;
     console.log(userNickname);
-    console.log(userNickname2);
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        if (message) {
+            alert("허용되지 않은 닉네임입니다.\n닉네임을 변경해주세요. ");
+            window.location.href = "/user/myPage";
+        }else if(userNickname.includes("_user")) {
+            alert("허용되지 않은 닉네임입니다.\n닉네임을 변경해주세요. ");
+            window.location.href = "/user/myPage";
+        }
+    });
 </script>
 <script th:src="@{/dist/js/header.js}"></script>
 </body>

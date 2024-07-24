@@ -7,11 +7,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import www.project.config.oauth2.PrincipalDetails;
 import www.project.domain.StarVO;
 import www.project.handler.FileHandler;
 import www.project.service.MailService;
@@ -149,6 +153,9 @@ public class UserController {
     @PutMapping("/updateNickname")
     @ResponseBody
     public ResponseEntity<String> updateNickname(@RequestBody Map<String, String> request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        UserVO user = principalDetails.getUser();
         try {
             String encodedOldNickname = request.get("oldNickname");
             String encodedNewNickname = request.get("newNickname");
@@ -158,6 +165,12 @@ public class UserController {
 
             int isUpdate = usv.updateNickName(oldNickname, newNickname);
             if (isUpdate > 0) {
+                UserVO updatedUser = usv.getInfo(user.getEmail());
+                PrincipalDetails updatedPrincipalDetails = new PrincipalDetails(updatedUser, principalDetails.getAttributes());
+
+                Authentication newAuth = new UsernamePasswordAuthenticationToken(updatedPrincipalDetails, null, updatedPrincipalDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(newAuth);
+
                 return ResponseEntity.ok("success");
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
