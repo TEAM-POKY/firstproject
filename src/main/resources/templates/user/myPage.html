@@ -20,6 +20,9 @@
             <div style="font-size: 13px; color: #b1b1b1" id="email"></div>
             <div style="font-size: 15px;" id="followInfo"></div>
         </div>
+        <div>
+            <button>팔로우</button>
+        </div>
     </div>
     <div class="calendar">
         <div class="calendar-header">
@@ -72,9 +75,6 @@
         <button id="modalClose">Close</button>
     </div>
 </div>
-
-<span th:text="${#authentication.getPrincipal().userVO.getNickname()}"></span>
-
 <script sec:authorize="isAuthenticated()">
     let currentId = `[[${#authentication.name}]]`;
 </script>
