@@ -49,6 +49,4 @@ public interface UserMapper {
     List<String> getAllImagePaths();
 
     int setDefaultImage(String currentId);
-
-    String getUserNickType(String email);
 }

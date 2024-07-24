@@ -90,9 +90,4 @@ public class UserServiceImpl implements UserService{
     public int setDefaultImage(String currentId) {
         return usermapper.setDefaultImage(currentId);
     }
-
-    @Override
-    public String getUserNickType(String email) {
-        return usermapper.getUserNickType(email);
-    }
 }

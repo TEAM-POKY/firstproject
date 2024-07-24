@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import www.project.domain.UserVO;
 
 import java.io.IOException;
 
@@ -15,7 +16,15 @@ public class OAuth2AuthenticationSuccessHandler  extends SimpleUrlAuthentication
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException, IOException, ServletException {
+                                        Authentication authentication) throws IOException, ServletException {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        UserVO user = principalDetails.getUser();
+
+        if (user.getNickname().contains("_user")) {
+            response.sendRedirect("/?message=notAllowedNickName");
+        } else {
+            response.sendRedirect("/");
+        }
         Cookie[] cookies = request.getCookies();
         String returnUrl = null;
         if (cookies != null) {
@@ -30,6 +39,7 @@ public class OAuth2AuthenticationSuccessHandler  extends SimpleUrlAuthentication
             getRedirectStrategy().sendRedirect(request,response,returnUrl);
             return;
         }
+
 
         super.onAuthenticationSuccess(request,response,authentication);
     }
