@@ -145,7 +145,10 @@
 </div>
 <script sec:authorize="isAuthenticated()">
     let currentId = `[[${#authentication.name}]]`;
-    let userNickname = `[[${#authentication.getPrincipal().userVO.getEmail()}]]`;
+    let userNickname = `[[${#authentication.getPrincipal().userVO.getNickname()}]]`;
+    let userNickname2 = `[[${#authentication.getPrincipal().getUser().getNickname()}]]`;
+    console.log(userNickname);
+    console.log(userNickname2);
 </script>
 <script th:src="@{/dist/js/header.js}"></script>
 </body>
