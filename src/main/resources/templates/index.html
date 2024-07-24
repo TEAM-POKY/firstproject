@@ -179,14 +179,7 @@
 <script th:src="@{/dist/js/nowPlayingSlide.js}"></script>
 <script th:src="@{/dist/js/topMovieSlide.js}"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const message = urlParams.get('message');
-        if (message) {
-            alert("허용되지 않은 닉네임입니다.\n닉네임을 변경해주세요. ");
-            window.location.href = "/user/myPage";
-        }
-    });
+
 </script>
 </body>
     </th:block>
