@@ -4,6 +4,7 @@ package www.project.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import www.project.domain.CommentListDTO;
 import www.project.domain.CommentVO;
 import www.project.domain.StarVO;
 import www.project.repository.StarMapper;
@@ -29,12 +30,23 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public int commentMovie(CommentVO cvo) {
-        int isOk = starMapper.insertComment(cvo);
+        CommentVO alreadyComment = starMapper.getAlreadyComment(cvo);
+        int isOk = 0;
+        if(alreadyComment==null){
+            isOk = starMapper.insertComment(cvo);
+        }else{
+            isOk = starMapper.updateComment(cvo);
+        }
         return isOk;
     }
 
     @Override
     public StarVO getIsRating(StarVO svo) {
         return starMapper.getAlreadyStar(svo);
+    }
+
+    @Override
+    public CommentListDTO getCommentList(long mediaId) {
+        return starMapper.getCommentList(mediaId);
     }
 }

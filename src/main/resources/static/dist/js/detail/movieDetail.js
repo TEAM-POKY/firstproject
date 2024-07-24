@@ -32,6 +32,10 @@ getDetail(movieId).then(result => {
     detailTitlediv.innerText = detailTitle; // 제목
     storyText.innerText = storyTelling; // 줄거리
 })
+
+getCommentList(movieId).then(result =>{
+    console.log(result);
+})
 const moreText = document.querySelector('.more-text');
 const lessText = document.querySelector('.less-text');
 
@@ -48,7 +52,6 @@ lessText.addEventListener('click', () => {
 });
 
 async function getDetail(movieId) {
-
     try {
         const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=ko-KR`, options);
         const result = await response.json();
@@ -57,6 +60,16 @@ async function getDetail(movieId) {
         console.log("movie not find :" + err);
     }
 
+}
+
+async function getCommentList(movieId){
+    try{
+        const response = await fetch(`/movie/getCommentList/${movieId}`);
+        const result = await response.json();
+        return result;
+    }catch (err){
+        console.log(err);
+    }
 }
 
 
