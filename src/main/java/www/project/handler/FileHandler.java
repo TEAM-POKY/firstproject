@@ -88,6 +88,11 @@ public class FileHandler {
                 HttpUrl = HttpUrl.replace("/","_");
             }
             log.info(HttpUrl);
+
+            File directory = new File(directoryPath);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
             fileOutputStream = new FileOutputStream(new File(directoryPath,HttpUrl));
 
             final int BRUFFER_SIZE = 4096;
