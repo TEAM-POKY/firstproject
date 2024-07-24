@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import www.project.domain.CommentListDTO;
 import www.project.domain.CommentVO;
 import www.project.domain.StarVO;
 import www.project.service.MovieService;
@@ -38,9 +39,17 @@ public class MovieController {
     @ResponseBody
     @PostMapping("/isRating")
     public StarVO isRating(@RequestBody StarVO svo){
-        log.info("여기로 들어옴");
         StarVO user = movieService.getIsRating(svo);
         log.info("user >> {}",user);
         return user;
+    }
+
+    @ResponseBody
+    @GetMapping ("/getCommentList/{mediaId}")
+    public CommentListDTO getCommentList(@PathVariable("mediaId")long mediaId){
+        log.info("여기로 들어옴 >> {}",mediaId);
+        CommentListDTO comment = movieService.getCommentList(mediaId);
+        log.info("comment>> {}",comment);
+        return comment;
     }
 }
