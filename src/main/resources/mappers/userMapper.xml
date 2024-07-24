@@ -89,4 +89,8 @@
         WHERE email = #{currentId}
     </update>
 
+    <select id="getUserNickType" resultType="string">
+        select nickname from user where email=#{email}
+    </select>
+
 </mapper>
