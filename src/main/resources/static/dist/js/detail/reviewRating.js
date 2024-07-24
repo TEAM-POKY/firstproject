@@ -46,6 +46,7 @@ document.addEventListener('click', (e) => {
         ratingMovie(ratingInfo).then(result => {
             if (result == 1) {
                 alert("별점을 등록 하였습니다.");
+                location.reload(true);
             }
         })
     }
@@ -56,6 +57,8 @@ comment.addEventListener('click', () => {
         console.log(result);
         if (result == null) {
             alert("별점 등록 후 리뷰 등록이 가능합니다.");
+            document.getElementById("commentText").value = "";
+
         } else {
             const config = {
                 mediaId: movieId,
@@ -98,6 +101,17 @@ rateWrap.forEach(wrap => {
             });
             wrap.addEventListener('mouseout', () => {
                 starIcon.style.opacity = '1';
+                initStars();
+                if (rate >= 0) {
+                    console.log("if문 탐");
+                    const inputs = document.querySelectorAll(".rating__input");
+                    inputs.forEach(input => {
+                        const value = parseFloat(input.getAttribute('value'));
+                        if (value <= rate) {
+                            input.nextElementSibling.classList.add('filled');
+                        }
+                    });
+                }
             });
         });
     });
