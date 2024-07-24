@@ -7,7 +7,7 @@ const options = {
     }
 };
 //로그인귀찮아서 임시값 나중에삭제
-const currentId = "(kakao)ehdwo13@kakao.com"
+// const currentId = "(kakao)ehdwo13@kakao.com"
 // let nickName = '';
 
 

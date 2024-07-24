@@ -148,12 +148,26 @@
 <!--</th:block>-->
 <script sec:authorize="isAuthenticated()">
     let currentId = `[[${#authentication.name}]]`;
-    let test = `[[${#authentication.getPrincipal().userVO.getNickname()}]]`;
-    console.log(test)
-    if(test.includes("_user")){
-        alert("닉네임을 변경해주세요.");
-        window.location.href="/user/myPage";
+    let userNickname = `[[${#authentication.getPrincipal().userVO.getEmail()}]]`;
+
+    async function checkUserType(email){
+        const url="/user/userType/"+email;
+        const config = {
+            method: 'POST'
+        }
+        const resp = await fetch(url,config);
+        const result = await resp.text();
+        return result;
     }
+    window.addEventListener('load',()=>{
+        checkUserType(userNickname).then(r=>{
+            console.log(r);
+            if(r.includes("_user")){
+                alert("닉네임을 변경해주세요.");
+                window.location.href="/user/myPage";
+            }
+        })
+    })
 </script>
 <script th:src="@{/dist/js/header.js}"></script>
 </body>
