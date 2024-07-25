@@ -58,7 +58,6 @@ comment.addEventListener('click', () => {
         if (result == null) {
             alert("별점 등록 후 리뷰 등록이 가능합니다.");
             document.getElementById("commentText").value = "";
-
         } else {
             const config = {
                 mediaId: movieId,
@@ -70,6 +69,7 @@ comment.addEventListener('click', () => {
                 console.log(result);
                 if (result == 1) {
                     alert("댓글을 등록하였습니다.");
+                    location.reload(true);
                 }
             })
         }
@@ -79,8 +79,6 @@ comment.addEventListener('click', () => {
 
 
 let stars = document.querySelectorAll('.rating .star-icon');
-
-// checkedRate();
 
 rateWrap.forEach(wrap => {
     wrap.addEventListener('mouseover', () => {
