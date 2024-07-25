@@ -143,17 +143,21 @@
 <div class="content-fluid">
     <th:block th:replace="${content}"></th:block>
 </div>
-<!--<th:block sec:authorize="isAuthenticated()">-->
-<!--    <span th:text="${#authentication.getPrincipal().userVO.getNickname()}"></span>-->
-<!--</th:block>-->
 <script sec:authorize="isAuthenticated()">
     let currentId = `[[${#authentication.name}]]`;
-    let test = `[[${#authentication.getPrincipal().userVO.getNickname()}]]`;
-    console.log(test)
-    if(test.includes("_user")){
-        alert("닉네임을 변경해주세요.");
-        window.location.href="/user/myPage";
-    }
+    let userNickname = `[[${#authentication.getPrincipal().getUser().getNickname()}]]`;
+    console.log(userNickname);
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        if (message) {
+            alert("허용되지 않은 닉네임입니다.\n닉네임을 변경해주세요. ");
+            window.location.href = "/user/myPage";
+        }else if(userNickname.includes("_user")) {
+            alert("허용되지 않은 닉네임입니다.\n닉네임을 변경해주세요. ");
+            window.location.href = "/user/myPage";
+        }
+    });
 </script>
 <script th:src="@{/dist/js/header.js}"></script>
 </body>

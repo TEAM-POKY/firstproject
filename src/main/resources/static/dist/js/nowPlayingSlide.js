@@ -46,9 +46,9 @@ const updateButtonVisibility = () => {
     const leftBtn = document.getElementById('leftBtn');
     const rightBtn = document.getElementById('rightBtn');
 
-    console.log("max 슬라이드 개수 > > >", maxSlide);
-    console.log("보여줄 영화 개수 > > > ", movieItems);
-    console.log("슬라이드 개수 > > > ", currentSlide);
+    // console.log("max 슬라이드 개수 > > >", maxSlide);
+    // console.log("보여줄 영화 개수 > > > ", movieItems);
+    // console.log("슬라이드 개수 > > > ", currentSlide);
 
     leftBtn.style.display = (currentSlide > 0) ? 'block' : 'none';
     rightBtn.style.display = (currentSlide+1 < maxSlide) ? 'block' : 'none';
@@ -130,9 +130,9 @@ const displayMovies = async () => {
             const leftBtn = document.getElementById('leftBtn');
             const rightBtn = document.getElementById('rightBtn');
 
-            console.log("max 슬라이드 개수 > > >", maxSlide);
-            console.log("보여줄 영화 개수 > > > ", movieItems);
-            console.log("슬라이드 개수 > > > ", currentSlide);
+            // console.log("max 슬라이드 개수 > > >", maxSlide);
+            // console.log("보여줄 영화 개수 > > > ", movieItems);
+            // console.log("슬라이드 개수 > > > ", currentSlide);
 
             leftBtn.style.display = (currentSlide > 0) ? 'block' : 'none';
             rightBtn.style.display = (currentSlide+1 < maxSlide) ? 'block' : 'none';

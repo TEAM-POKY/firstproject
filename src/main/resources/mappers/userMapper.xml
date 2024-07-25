@@ -88,5 +88,4 @@
         SET profile = NULL
         WHERE email = #{currentId}
     </update>
-
 </mapper>
