@@ -56,20 +56,25 @@ getCommentList(movieId)
             });
         } else if (typeof result === 'object' && result !== null) {
             const li = document.createElement('li');
-            li.innerHTML = `
-                <div class="detailUserName">${result.email}</div>
-                <div class="detailRegDate">${elapsedTime(result.regDate)}</div>
-                if(result.spoiler == 0){
-                <div class="detailContent">${result.content}</div>
-                }else{
-                <div class="detailspoiler">
-                    <span>스포일러입니다.</span>
-                    <button type="button">보기</button>
-                </div>
-                }
-                
-            `;
+            let contentHtml = `
+    <div class="detailUserName">${result.email}</div>
+    <div class="detailRegDate">${elapsedTime(result.regDate)}</div>
+`;
+            if (result.spoiler === 0) {
+                contentHtml += `
+        <div class="detailContent">${result.content}</div>
+    `;
+            } else {
+                contentHtml += `
+        <div class="detailspoiler">
+            <div class="detailContent" style="display: none">${result.content}</div>
+            <span>스포일러입니다.</span>
+            <button type="button" onclick="toggleSpoiler(this)">보기</button>
+        </div>`;
+            }
+            li.innerHTML = contentHtml;
             ul.appendChild(li);
+
         } else {
             throw new Error('Comment data is not in expected format');
         }
@@ -81,8 +86,9 @@ getCommentList(movieId)
 
 
 // 더보기/간략히 보기 버튼 처리
-document.querySelector('.detailText').addEventListener('click', (event) => {
+document.querySelector('.detailStory').addEventListener('click', (event) => {
     const target = event.target;
+
     if (target.classList.contains('more-text')) {
         target.style.display = 'none';
         document.querySelector('.less-text').style.display = 'inline-block';
@@ -94,9 +100,16 @@ document.querySelector('.detailText').addEventListener('click', (event) => {
     }
 });
 
+function toggleSpoiler(button) {
+    const detailContent = button.parentElement.querySelector('.detailContent');
+    const spoilerElements = button.parentElement.querySelectorAll('span, button');
+    detailContent.style.display = 'block';
+    spoilerElements.forEach(el => el.style.display = 'none');
+}
+
 async function getDetail(movieId) {
     try {
-        const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=ko-KR`);
+        const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=ko-KR`,options);
         if (!response.ok) {
             throw new Error('Movie details not found');
         }
@@ -125,9 +138,7 @@ async function getCommentList(movieId) {
 function elapsedTime(date) {
     const start = new Date(date);
     const end = new Date();
-
     const diff = (end - start) / 1000;
-
     const times = [
         {name: '년', milliSeconds: 60 * 60 * 24 * 365},
         {name: '개월', milliSeconds: 60 * 60 * 24 * 30},
