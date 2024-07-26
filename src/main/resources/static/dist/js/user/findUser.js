@@ -13,8 +13,13 @@ window.addEventListener('load',()=>{
             console.log(nick.value)
             document.querySelector('.findNoNick').innerHTML='';
             findEmailF(nick.value).then(result=>{
-                console.log(result.provider)
-                if(result.provider){
+                console.log(result)
+                if(result==null){
+                    document.querySelector('.findEModal').innerHTML=`
+                    <button class="modalClose" onclick="closeModal()">X</button>
+                    <div class="showNoEmail">존재하지 않는 닉네임입니다.<br>다시 입력 해주세요.</div>`;
+                    emailModal.style.display='block';
+                } else if(result.provider){
                     document.querySelector('.findEModal').innerHTML+=`
                     <button class="modalClose" onclick="closeModal()">X</button>`
                         if(result.provider=="google"){
@@ -34,11 +39,6 @@ window.addEventListener('load',()=>{
                     <div class="showEmail">${result.nickname}님의 이메일은 ${result.email} 입니다.</div>
                     <a href="/user/login" class="findUserLogin">로그인 하기</a>
                     <a href="/user/findUser">비밀번호 찾기</a>`;
-                    emailModal.style.display='block';
-                } else {
-                    document.querySelector('.findEModal').innerHTML=`
-                    <button class="modalClose" onclick="closeModal()">X</button>
-                    <div class="showNoEmail">존재하지 않는 닉네임입니다.<br>다시 입력 해주세요.</div>`;
                     emailModal.style.display='block';
                 }
             })
