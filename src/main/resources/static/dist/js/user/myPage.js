@@ -8,7 +8,8 @@ const options = {
 };
 //로그인귀찮아서 임시값 나중에삭제
 // const currentId = "(kakao)ehdwo13@kakao.com"
-// let nickName = '';
+// let loginId = "ehdwo13@gmail.com"//나중에
+let nickName = '';
 
 
 //유저정보
@@ -29,6 +30,7 @@ getUserInfo(currentId).then(result => {
     const imgPath = uploadPath+result.profile;
     if (result) {
         nickName = result.nickname;
+        document.getElementById('userAnalysis').innerText = nickName+"님의 취향분석";
         renderNickName();
         document.getElementById('email').innerText = result.email;
         document.getElementById('myProfile').src = result.profile ? imgPath : "/dist/image/person-circle.svg";
@@ -40,8 +42,14 @@ function renderNickName() {
     str = `<span>${nickName}</span>`;
     str += ` <img src="/dist/image/pencil.svg" alt="noPic" id="changeNickName">`;
     document.getElementById('nickName').innerHTML = str;
+    if(loginId != currentId){
+        document.getElementById('changeNickName').style.display = 'none';
+        document.getElementById('changeProfileImage').style.display = 'none';
+    }
     document.getElementById('changeNickName').addEventListener('click', changeToInput);
 }
+//다른사람페이지는 수정못하게
+
 //input창 변경함수
 function changeToInput() {
     document.getElementById('nickName').innerHTML = `
@@ -343,6 +351,8 @@ getCountSection(currentId).then(result =>{
 })
 
 //도넛차트
+
+
 let ctx = document.getElementById('donutChart').getContext('2d');
 let total = 110;
 let donutChart = new Chart(ctx, {

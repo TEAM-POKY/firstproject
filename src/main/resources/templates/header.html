@@ -146,7 +146,7 @@
          <th:block sec:authorize="isAuthenticated()">
              <li class="logoutA contents2"><a th:href="@{/user/logout}">로그아웃</a></li>
              <li class="mypageBox contents2">
-                 <a th:href="@{/user/myPage}">
+                 <a onclick="goToMyPage(currentId)">
                      <img id="myProfile">
                  </a>
              </li>
@@ -162,7 +162,6 @@
 <script sec:authorize="isAuthenticated()">
     let currentId = `[[${#authentication.name}]]`;
     let userNickname = `[[${#authentication.getPrincipal().getUser().getNickname()}]]`;
-    console.log(userNickname);
     document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
         const message = urlParams.get('message');
@@ -174,6 +173,20 @@
             window.location.href = "/user/myPage";
         }
     });
+    function goToMyPage(currentId) {
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = '/user/mypage';
+
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = 'email';
+        hiddenField.value = currentId;
+
+        form.appendChild(hiddenField);
+        document.body.appendChild(form);
+        form.submit();
+    }
 </script>
 <script th:src="@{/dist/js/header.js}"></script>
 <script th:src="@{/dist/js/goToSearch.js}"></script>
