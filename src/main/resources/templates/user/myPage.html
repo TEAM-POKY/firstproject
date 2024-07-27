@@ -9,11 +9,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+<div th:text="${userEmail}" style="display: none" id="userEmail"></div>
 <div class="container">
     <div class="section profile">
         <div class="profile-image-container">
             <img alt="Profile Picture" class="profile-image" id="myProfile">
-            <span onclick="changeProfileImage()"><img src="/dist/image/gear.svg" alt="no picture" class="changeProfileImage"></span>
+            <span onclick="changeProfileImage()" id="changeProfileImage"><img src="/dist/image/gear.svg" alt="no picture" class="changeProfileImage"></span>
         </div>
         <div class="profile-info">
             <div style="font-size: 23px" id="nickName"></div>
@@ -63,7 +64,7 @@
     </div>
     <div class="trend section">
         <div class="trend-analysis">
-            <h2 th:text="${#authentication.name} + '님의 취향분석'"></h2>
+            <h2 id="userAnalysis"></h2>
             <div class="chart-container">
                 <canvas id="donutChart"></canvas>
             </div>
@@ -76,7 +77,8 @@
     </div>
 </div>
 <script sec:authorize="isAuthenticated()">
-    let currentId = `[[${#authentication.name}]]`;
+    let currentId = document.getElementById('userEmail').innerText;
+    let loginId = `[[${#authentication.name}]]`;
 </script>
 <script src="/dist/js/user/myPage.js"></script>
 </body>

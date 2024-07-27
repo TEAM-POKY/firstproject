@@ -45,8 +45,11 @@ public class UserController {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    @GetMapping("/myPage")
-    public void myPage(){}
+    @PostMapping("/mypage")
+    public String myPage(@RequestParam String email, Model model){
+       model.addAttribute("userEmail", email);
+       return "/user/mypage";
+    }
 
     @GetMapping("/join")
     public void join(){}
