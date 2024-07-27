@@ -217,6 +217,22 @@
     color: black;
 }
 
+.detailCommentLi{
+    background-color: gray;
+}
+
+.detailUserName{
+    background-color: pink;
+}
+
+.detailRegDate{
+    background-color: green;
+}
+
+.detailContent{
+    background-color: purple;
+}
+
 
 
 
