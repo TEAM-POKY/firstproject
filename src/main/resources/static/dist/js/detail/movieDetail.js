@@ -44,9 +44,11 @@ getCommentList(movieId)
     .then(result => {
         console.log(result); // 데이터 확인용
         const ul = document.createElement("ul");
+        ul.classList.add("detailCommentUl");
         if (Array.isArray(result)) {
             result.forEach(comment => {
                 const li = document.createElement('li');
+                li.classList.add("detailCommentLi");
                 li.innerHTML = `
                     <div class="detailUserName">${comment.email}</div>
                     <div class="detailRegDate">${comment.regDate}</div>
