@@ -5,6 +5,10 @@ const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
     searchMovieList(keyword).then(result => {
         console.log(result);
+        //검색결과없을때
+        if(result.results.length<1){
+            console.log("검색결과 없음");
+        }
         for (let rr of result.results) {
             const posterPath = rr.poster_path ? `${imageBaseUrl}${rr.poster_path}` : '';
             const profilePath = rr.profile_path ? `${imageBaseUrl}${rr.profile_path}` : '';
@@ -12,13 +16,22 @@ const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
                 document.querySelector('.personSpan').style.display='block';
                 const personDiv = document.createElement('div');
                 personDiv.classList.add('personResultDiv');
-                const personDetails =`
-                    <div class="personOne">
-                        <img src="${profilePath}">
-                        <div class="nameDiv">${rr.name}</div>
-                    </div>`;
+                let personDetails =`<div class="personOne">
+                                    <a href="/movie/person?personId=${rr.id}"><div class="personImg" style="background: url('${profilePath}') no-repeat center -16px /100%">`;
+                if(profilePath==''){
+                    if(rr.gender===1){
+                        personDetails+=`<img src="/dist/image/default_profile_w.jpg">`;
+                    } else {
+                        personDetails+=`<img src="/dist/image/default_profile_m.jpg">`;
+                    }
+                        personDetails+=`</a><div class="nameDiv">${rr.name}</div></div>`;
+                }
+                else if(profilePath!==''){
+                    personDetails+=`</div></a><div class="nameDiv2">${rr.name}</div>`;
+                }
                 personDiv.innerHTML=personDetails;
                 document.querySelector('.personResult').appendChild(personDiv);
+                // document.querySelector('.personImg').style.background+=`url('${profilePath}') no-repeat center -16px /100%`;
             }
             if (rr.media_type === "movie") {
                 document.querySelector('.movieSpan').style.display='block';
@@ -26,7 +39,8 @@ const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
                 movieDiv.classList.add('movieResultDiv');
                 const movieDetails =`
                     <div class="movieOne">
-                        <img src="${posterPath}">
+                        <a href="/movie/detail?movieId=${rr.id}">
+                        <img src="${posterPath}"></a>
                         <div class="nameDiv">${rr.title}</div>
                     </div>`;
                 movieDiv.innerHTML=movieDetails;
