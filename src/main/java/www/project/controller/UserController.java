@@ -91,6 +91,7 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<UserVO> findUserEmail(@PathVariable("nick") String nick){
         UserVO uvo = usv.findEmail(nick);
+        log.info("search User>>>>>{}",uvo);
         return uvo==null? ResponseEntity.ok(null):ResponseEntity.ok(uvo);
     }
 

@@ -97,6 +97,21 @@
             height: 30px;
             border-radius: 50%;
         }
+        .searchBtn{
+            width: 33px;
+            height: 23px;
+            background: rgba(0,0,0,0);
+            border: none;
+            outline: none;
+            margin-left: -32px;
+        }
+        .searchBtn img{
+            width: 100%;
+            height: 100%;
+        }
+        button{
+            cursor: pointer;
+        }
 </style>
 </head>
 <body>
@@ -121,7 +136,8 @@
      <div class="inbox2">
          <ul class="conList">
          <li class="searchBox contents2">
-             <input type="search" placeholder="제목, 인물, 컬렉션으로 검색해보세요.">
+             <input type="search" class="searchInput" placeholder="제목, 인물, 컬렉션으로 검색해보세요.">
+             <button type="submit" class="searchBtn"><img th:src="@{/dist/image/search_icon.png}"></button>
          </li>
          <th:block sec:authorize="isAnonymous()">
              <li class="contents2"><a th:href="@{/user/login}">로그인</a></li>
@@ -160,6 +176,7 @@
     });
 </script>
 <script th:src="@{/dist/js/header.js}"></script>
+<script th:src="@{/dist/js/goToSearch.js}"></script>
 </body>
 </th:block>
 </html>

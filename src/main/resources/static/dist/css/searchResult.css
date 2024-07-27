@@ -1,0 +1,38 @@
+.searchResult{
+    width: 1300px;
+    margin: 0 auto;
+}
+.titleSpan{
+    display: none;
+    width: 100%;
+    font-size: 25px;
+    margin: 58px 0 35px 28px;
+}
+.personResult, .tvResult, .movieResult{
+    display:flex;
+    flex-wrap:wrap;
+    margin: 0 30px;
+    float: left;
+}
+.personResultDiv{
+    width: 148px;
+    text-align: center;
+    margin: 0 29px 30px;
+}
+.personOne img{
+    width: 100%;
+    border-radius: 100px;
+}
+.movieResultDiv,.tvResultDiv{
+    width: 235px;
+    height: 385px;
+    text-align: center;
+    margin: 0px 37px 0;
+}
+.movieOne img, .tvOne img{
+    width: 100%;
+    height: 330px;
+}
+.nameDiv{
+    margin-top: 10px;
+}
