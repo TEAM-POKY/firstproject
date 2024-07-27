@@ -20,8 +20,10 @@ public class MovieController {
 
     //디테일 매핑
     @GetMapping("/detail")
-    public void goDetail(){
-    }
+    public void goDetail(){}
+
+    @GetMapping("/person")
+    public void personDetail(){}
 
     @ResponseBody
     @PostMapping("/ratingMovie")
