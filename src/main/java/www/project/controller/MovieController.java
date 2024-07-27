@@ -3,6 +3,7 @@ package www.project.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import www.project.domain.CommentListDTO;
 import www.project.domain.CommentVO;
@@ -51,5 +52,10 @@ public class MovieController {
         CommentListDTO comment = movieService.getCommentList(mediaId);
         log.info("comment>> {}",comment);
         return comment;
+    }
+
+    @GetMapping("/searchResult")
+    public void searchResultPage(){
+
     }
 }
