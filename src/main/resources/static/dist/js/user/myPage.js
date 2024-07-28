@@ -6,11 +6,7 @@ const options = {
         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmRmZTQ3YTQ0NzU2ZTI5MDAyNTcxNWE2YjQyZDhkNSIsIm5iZiI6MTcyMTA3OTk3NS4wMjMyMTQsInN1YiI6IjY2MDNkNTE3NjA2MjBhMDE3YzMwMjY0OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Yepq4-FusJE30k6cCnybO96yFv6CgiDyauetmowyE-U'
     }
 };
-//로그인귀찮아서 임시값 나중에삭제
-const currentId = "(kakao)ehdwo13@kakao.com"
-let loginId = "ehdwo13@gmail.com"
-let nickName = '';
-
+let nickName = '';//
 
 //유저정보
 async function getUserInfo(currentId) {
@@ -41,7 +37,13 @@ function renderNickName() {
     let str = '';
     str = `<span id="nickNameSpan">${nickName}</span>`;
     if(loginId != currentId){
-        str += `<button id="follow">팔로우</button>`
+        let isFollow = document.getElementById('isFollow').innerText;
+        console.log(isFollow);
+        if(isFollow == "true"){
+            str += `<button id="followInfo">팔로우</button>`
+        }else{
+            str += `<button id="followInfo">언팔로우</button>`
+        }
         document.getElementById('changeProfileImage').style.display = 'none';
         document.getElementById('nickName').innerHTML = str;
     }else{
@@ -50,6 +52,12 @@ function renderNickName() {
         document.getElementById('changeNickName').addEventListener('click', changeToInput);
     }
 }
+//팔로우 언팔로우 로직
+async function followStatus(){
+    console.log()
+}
+
+
 //input창 변경함수
 function changeToInput() {
     document.getElementById('nickName').innerHTML = `
