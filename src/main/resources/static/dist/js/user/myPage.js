@@ -7,8 +7,8 @@ const options = {
     }
 };
 //로그인귀찮아서 임시값 나중에삭제
-// const currentId = "(kakao)ehdwo13@kakao.com"
-// let loginId = "ehdwo13@gmail.com"//나중에
+const currentId = "(kakao)ehdwo13@kakao.com"
+let loginId = "ehdwo13@gmail.com"
 let nickName = '';
 
 
@@ -39,17 +39,17 @@ getUserInfo(currentId).then(result => {
 //닉네임 렌더링함수
 function renderNickName() {
     let str = '';
-    str = `<span>${nickName}</span>`;
-    str += ` <img src="/dist/image/pencil.svg" alt="noPic" id="changeNickName">`;
-    document.getElementById('nickName').innerHTML = str;
+    str = `<span id="nickNameSpan">${nickName}</span>`;
     if(loginId != currentId){
-        document.getElementById('changeNickName').style.display = 'none';
+        str += `<button id="follow">팔로우</button>`
         document.getElementById('changeProfileImage').style.display = 'none';
+        document.getElementById('nickName').innerHTML = str;
+    }else{
+        str += ` <img src="/dist/image/pencil.svg" alt="noPic" id="changeNickName">`;
+        document.getElementById('nickName').innerHTML = str;
+        document.getElementById('changeNickName').addEventListener('click', changeToInput);
     }
-    document.getElementById('changeNickName').addEventListener('click', changeToInput);
 }
-//다른사람페이지는 수정못하게
-
 //input창 변경함수
 function changeToInput() {
     document.getElementById('nickName').innerHTML = `
