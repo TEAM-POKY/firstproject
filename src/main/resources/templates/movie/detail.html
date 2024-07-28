@@ -5,6 +5,7 @@
 <th:block th:replace="~{header :: setFragment(~{this::content})}">
     <th:block th:fragment="content">
         <div class="wrap">
+            <div id="userId" th:text="${#authentication.name}" style="display: none"></div>
             <div class="detailWrap">
                 <div class="detail1">
                     <div class="detailInfo">
@@ -95,7 +96,7 @@
                     </div>
                 </div>
                 <div class="detail3">
-                    <div id="userId" th:text="${#authentication.name}" style="display: none"></div>
+
 
 
                 </div>
