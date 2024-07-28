@@ -4,6 +4,8 @@ import www.project.domain.CommentListDTO;
 import www.project.domain.CommentVO;
 import www.project.domain.StarVO;
 
+import java.util.List;
+
 public interface MovieService {
 
     int ratingMovie(StarVO svo);
@@ -12,5 +14,5 @@ public interface MovieService {
 
     StarVO getIsRating(StarVO svo);
 
-    CommentListDTO getCommentList(long mediaId);
+    List<CommentListDTO> getCommentList(long mediaId);
 }

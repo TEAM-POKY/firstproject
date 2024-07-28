@@ -22,7 +22,7 @@ public interface StarMapper {
 
     
     // 코멘트 전용
-    CommentListDTO getCommentList(long mediaId);
+    List<CommentListDTO> getCommentList(long mediaId);
 
     CommentVO getAlreadyComment(CommentVO cvo);
     

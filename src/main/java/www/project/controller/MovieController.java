@@ -3,12 +3,13 @@ package www.project.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import www.project.domain.CommentListDTO;
 import www.project.domain.CommentVO;
 import www.project.domain.StarVO;
 import www.project.service.MovieService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/movie/*")
@@ -48,12 +49,12 @@ public class MovieController {
     }
 
     @ResponseBody
-    @GetMapping ("/getCommentList/{mediaId}")
-    public CommentListDTO getCommentList(@PathVariable("mediaId")long mediaId){
-        log.info("여기로 들어옴 >> {}",mediaId);
-        CommentListDTO comment = movieService.getCommentList(mediaId);
-        log.info("comment>> {}",comment);
-        return comment;
+    @GetMapping("/getCommentList/{mediaId}")
+    public List<CommentListDTO> getCommentList(@PathVariable("mediaId") long mediaId) {
+        log.info("mediaId: {}", mediaId);
+        List<CommentListDTO> comments = movieService.getCommentList(mediaId);
+        log.info("comments >> {}",comments);
+        return comments;
     }
 
     @GetMapping("/searchResult")
