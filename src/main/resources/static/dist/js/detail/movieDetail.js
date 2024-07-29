@@ -40,52 +40,35 @@ getDetail(movieId).then(result => {
     console.error('Error fetching movie details:', err);
 });
 
-getCommentList(movieId)
-    .then(result => {
-        console.log(result); // 데이터 확인용
-        const ul = document.createElement("ul");
-        ul.classList.add("detailCommentUl");
-        if (Array.isArray(result)) {
-            result.forEach(comment => {
-                const li = document.createElement('li');
-                li.classList.add("detailCommentLi");
-                li.innerHTML = `
+getCommentList(movieId).then(result => {
+    const detailContainer = document.querySelector(".detail3");
+    console.log(result); // 데이터 확인용
+    const ul = document.createElement("ul");
+    ul.classList.add("detailCommentUl");
+    if(result.length == 0){
+        detailContainer.innerHTML = `<div class="detailNoComment"><span>아직 댓글이 없습니다.</span></div>`;
+        return;
+    }
+    result.forEach(comment => {
+        const li = document.createElement('li');
+        li.innerHTML = `
                     <div class="detailUserName">${comment.email}</div>
-                    <div class="detailRegDate">${comment.regDate}</div>
-                    <div class="detailContent">${comment.content}</div>
-                `;
-                ul.appendChild(li);
-            });
-        } else if (typeof result === 'object' && result !== null) {
-            const li = document.createElement('li');
-            let contentHtml = `
-    <div class="detailUserName">${result.email}</div>
-    <div class="detailRegDate">${elapsedTime(result.regDate)}</div>
-`;
-            if (result.spoiler === 0) {
-                contentHtml += `
-        <div class="detailContent">${result.content}</div>
-    `;
-            } else {
-                contentHtml += `
-        <div class="detailspoiler">
-            <div class="detailContent" style="display: none">${result.content}</div>
-            <span>스포일러입니다.</span>
-            <button type="button" onclick="toggleSpoiler(this)">보기</button>
-        </div>`;
-            }
-            li.innerHTML = contentHtml;
-            ul.appendChild(li);
-
+                    <div class="detailRegDate">${elapsedTime(comment.regDate)}</div>`;
+        if (comment.spoiler === 0) {
+            li.innerHTML+= `<div class="detailContent">${comment.content}</div>`;
         } else {
-            throw new Error('Comment data is not in expected format');
+            li.innerHTML += `
+                    <div class="detailspoiler">
+                        <div class="detailContent" style="display: none">${comment.content}</div>
+                        <span>스포일러입니다.</span>
+                        <button type="button" onclick="toggleSpoiler(this)">보기</button>
+                    </div>`;
         }
-        document.querySelector(".detail3").appendChild(ul);
-    })
-    .catch(err => {
-        console.error('Error fetching comment:', err); // 에러 출력
+        ul.appendChild(li);
     });
+    detailContainer.appendChild(ul);
 
+});
 
 // 더보기/간략히 보기 버튼 처리
 document.querySelector('.detailStory').addEventListener('click', (event) => {
@@ -102,6 +85,7 @@ document.querySelector('.detailStory').addEventListener('click', (event) => {
     }
 });
 
+// 스포일러 버튼
 function toggleSpoiler(button) {
     const detailContent = button.parentElement.querySelector('.detailContent');
     const spoilerElements = button.parentElement.querySelectorAll('span, button');
@@ -111,7 +95,7 @@ function toggleSpoiler(button) {
 
 async function getDetail(movieId) {
     try {
-        const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=ko-KR`,options);
+        const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=ko-KR`, options);
         if (!response.ok) {
             throw new Error('Movie details not found');
         }
@@ -137,6 +121,7 @@ async function getCommentList(movieId) {
     }
 }
 
+// 글쓴 시간 나타내는 메서드
 function elapsedTime(date) {
     const start = new Date(date);
     const end = new Date();
@@ -158,3 +143,4 @@ function elapsedTime(date) {
     }
     return '방금 전';
 }
+

@@ -9,6 +9,8 @@ import www.project.domain.CommentVO;
 import www.project.domain.StarVO;
 import www.project.repository.StarMapper;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -46,7 +48,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public CommentListDTO getCommentList(long mediaId) {
+    public List<CommentListDTO> getCommentList(long mediaId) {
         return starMapper.getCommentList(mediaId);
     }
 }

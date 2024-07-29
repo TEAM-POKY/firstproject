@@ -88,4 +88,9 @@
         SET profile = NULL
         WHERE email = #{currentId}
     </update>
+    <update id="withdrawUser">
+        update user
+        set isDel = 1
+        where email = #{loginId}
+    </update>
 </mapper>

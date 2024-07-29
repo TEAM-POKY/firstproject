@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import www.project.config.oauth2.PrincipalDetails;
 import www.project.domain.StarVO;
 import www.project.handler.FileHandler;
+import www.project.service.FollowService;
 import www.project.service.MailService;
 import www.project.service.StarService;
 import www.project.service.UserService;
@@ -41,12 +42,21 @@ public class UserController {
     private final UserService usv;
     private final MailService msv;
     private final StarService svc;
+    private final FollowService fsv;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    @GetMapping("/myPage")
-    public void myPage(){}
+    @PostMapping("/mypage")
+    public String myPage(@RequestParam String email, Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        UserVO user = principalDetails.getUser();
+        Boolean isFollow = fsv.getFollowInfo(user.getEmail(), email);
+        model.addAttribute("userEmail", email);
+        model.addAttribute("isFollow",isFollow);
+        return "/user/mypage";
+    }
 
     @GetMapping("/join")
     public void join(){}
@@ -213,4 +223,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error resetting profile image");
         }
     }
+    @PatchMapping("/withdraw/{loginId}")
+    public ResponseEntity<?> withdrawUser(@PathVariable String loginId) {
+        log.info("아이디들어오는거 체크{}", loginId);
+        try {
+            int isDel = usv.withdrawUser(loginId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Internal Server Error");
+        }
+    }
+
 }

@@ -6,10 +6,7 @@ const options = {
         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmRmZTQ3YTQ0NzU2ZTI5MDAyNTcxNWE2YjQyZDhkNSIsIm5iZiI6MTcyMTA3OTk3NS4wMjMyMTQsInN1YiI6IjY2MDNkNTE3NjA2MjBhMDE3YzMwMjY0OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Yepq4-FusJE30k6cCnybO96yFv6CgiDyauetmowyE-U'
     }
 };
-//로그인귀찮아서 임시값 나중에삭제
-// const currentId = "(kakao)ehdwo13@kakao.com"
-// let nickName = '';
-
+let nickName = '';//
 
 //유저정보
 async function getUserInfo(currentId) {
@@ -29,6 +26,7 @@ getUserInfo(currentId).then(result => {
     const imgPath = uploadPath+result.profile;
     if (result) {
         nickName = result.nickname;
+        document.getElementById('userAnalysis').innerText = nickName+"님의 취향분석";
         renderNickName();
         document.getElementById('email').innerText = result.email;
         document.getElementById('myProfile').src = result.profile ? imgPath : "/dist/image/person-circle.svg";
@@ -37,11 +35,55 @@ getUserInfo(currentId).then(result => {
 //닉네임 렌더링함수
 function renderNickName() {
     let str = '';
-    str = `<span>${nickName}</span>`;
-    str += ` <img src="/dist/image/pencil.svg" alt="noPic" id="changeNickName">`;
-    document.getElementById('nickName').innerHTML = str;
-    document.getElementById('changeNickName').addEventListener('click', changeToInput);
+    str = `<span id="nickNameSpan">${nickName}</span>`;
+    if(loginId != currentId){
+        let isFollow = document.getElementById('isFollow').innerText;
+        console.log(isFollow);
+        if(isFollow == "true"){
+            str += `<button id="followInfo">팔로우</button>`
+        }else{
+            str += `<button id="followInfo">언팔로우</button>`
+        }
+        document.getElementById('changeProfileImage').style.display = 'none';
+        document.getElementById('nickName').innerHTML = str;
+    }else{
+        str += ` <img src="/dist/image/pencil.svg" alt="noPic" id="changeNickName">`
+        str += `<button id="withdrawalBtn">회원탈퇴</button>`;
+        document.getElementById('nickName').innerHTML = str;
+        document.getElementById('changeNickName').addEventListener('click', changeToInput);
+        document.getElementById('withdrawalBtn').addEventListener('click', async () => {
+            if (confirm("작성한 댓글과 별점은 삭제되지않습니다. \n정말 회원탈퇴하시겠습니까?")) {
+                await withdrawalAccount(loginId);
+            }
+        });
+    }
 }
+//팔로우 언팔로우 로직
+async function followStatus(){
+    console.log()
+}
+async function withdrawalAccount(loginId){
+    try {
+        const response = await fetch(`/user/withdraw/${loginId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.ok) {
+            alert('회원 탈퇴가 완료되었습니다.');
+            window.location.href = "/user/logout"
+        } else {
+            const errorData = await response.json();
+            alert(`회원 탈퇴 실패: ${errorData.message}`);
+        }
+    } catch (error) {
+        console.error('회원 탈퇴 요청 중 오류 발생:', error);
+        alert('회원 탈퇴 요청 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+}
+
+
 //input창 변경함수
 function changeToInput() {
     document.getElementById('nickName').innerHTML = `
@@ -343,6 +385,8 @@ getCountSection(currentId).then(result =>{
 })
 
 //도넛차트
+
+
 let ctx = document.getElementById('donutChart').getContext('2d');
 let total = 110;
 let donutChart = new Chart(ctx, {
