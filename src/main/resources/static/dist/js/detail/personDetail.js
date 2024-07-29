@@ -20,9 +20,16 @@ personDetail(personId).then(result=>{
     structure += `
     <ul class="personUl"><li class="personName">${result.name}</li>
     <li class="personBirth">${result.birthday}</li>`;
-    if(result.place_of_birth!=null){
-        `<li class="personPlace">${result.place_of_birth}</li>`;
-    } `</ul>`;
+    //출신지역 - 표시할 데이터가 별로 없어서 넣었음..근데 지역이 영어로만 나와서 출력할지말지 고민중
+    // if(result.place_of_birth!=null){
+    //     structure+=`<li class="personPlace">${result.place_of_birth}</li>`
+    // }
+    if(result.known_for_department==="Directing"){
+        structure+=`<li><button type="button" class="directorFollowBtn">팔로우 +</button></li>`;
+    } else {
+        structure+=`<li><button type="button" class="actorFollowBtn">팔로우 +</button></li>`;
+    }
+    structure+=`</ul>`;
     personInfo.innerHTML=structure;
     personSNS(personId).then(sns=>{
         console.log(sns);
