@@ -47,14 +47,40 @@ function renderNickName() {
         document.getElementById('changeProfileImage').style.display = 'none';
         document.getElementById('nickName').innerHTML = str;
     }else{
-        str += ` <img src="/dist/image/pencil.svg" alt="noPic" id="changeNickName">`;
+        str += ` <img src="/dist/image/pencil.svg" alt="noPic" id="changeNickName">`
+        str += `<button id="withdrawalBtn">회원탈퇴</button>`;
         document.getElementById('nickName').innerHTML = str;
         document.getElementById('changeNickName').addEventListener('click', changeToInput);
+        document.getElementById('withdrawalBtn').addEventListener('click', async () => {
+            if (confirm("작성한 댓글과 별점은 삭제되지않습니다. \n정말 회원탈퇴하시겠습니까?")) {
+                await withdrawalAccount(loginId);
+            }
+        });
     }
 }
 //팔로우 언팔로우 로직
 async function followStatus(){
     console.log()
+}
+async function withdrawalAccount(loginId){
+    try {
+        const response = await fetch(`/user/withdraw/${loginId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.ok) {
+            alert('회원 탈퇴가 완료되었습니다.');
+            window.location.href = "/user/logout"
+        } else {
+            const errorData = await response.json();
+            alert(`회원 탈퇴 실패: ${errorData.message}`);
+        }
+    } catch (error) {
+        console.error('회원 탈퇴 요청 중 오류 발생:', error);
+        alert('회원 탈퇴 요청 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
 }
 
 

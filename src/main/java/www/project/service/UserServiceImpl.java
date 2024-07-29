@@ -90,4 +90,9 @@ public class UserServiceImpl implements UserService{
     public int setDefaultImage(String currentId) {
         return usermapper.setDefaultImage(currentId);
     }
+
+    @Override
+    public int withdrawUser(String loginId) {
+        return usermapper.withdrawUser(loginId);
+    }
 }
