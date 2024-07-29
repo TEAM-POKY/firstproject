@@ -10,6 +10,7 @@
     width: 235px;
     height: 330px;
     border-radius: 10px;
+    box-shadow: 1px 2px 6px gray;
 }
 .personName{
     width:101px;

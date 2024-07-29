@@ -7,11 +7,22 @@ personDetail(personId).then(result=>{
     const profilePath = result.profile_path ? `${imageBaseUrl}${result.profile_path}` : '';
     const personInfo = document.createElement('div');
     personInfo.classList.add('personDiv');
-    const structure = `
-    <img src="${profilePath}">
+    let structure='';
+    if(profilePath!==''){
+        structure += `<img src=${profilePath}>`;
+    } else {
+        if(result.gender===1){
+            structure+=`<img src="/dist/image/default_profile_w.jpg">`;
+        } else {
+            structure+=`<img src="/dist/image/default_profile_m.jpg">`;
+        }
+    }
+    structure += `
     <ul class="personUl"><li class="personName">${result.name}</li>
-    <li class="personBirth">${result.birthday}</li>
-    <li class="personPlace">${result.place_of_birth}</li></ul>`;
+    <li class="personBirth">${result.birthday}</li>`;
+    if(result.place_of_birth!=null){
+        `<li class="personPlace">${result.place_of_birth}</li>`;
+    } `</ul>`;
     personInfo.innerHTML=structure;
     personSNS(personId).then(sns=>{
         console.log(sns);
@@ -33,10 +44,14 @@ partiMovie(personId).then(result=>{
         const posterPath = movie.poster_path ? `${imageBaseUrl}${movie.poster_path}` : '';
         const personInfoDiv = document.createElement('div');
         personInfoDiv.classList.add('personMovieOne');
-        const structure = `
-        <a href='/movie/detail?movieId=${movie.id}'>
-        <img src="${posterPath}"></a>
-        <div>${movie.original_title}</div>`;
+        let structure='';
+        structure += `<a href='/movie/detail?movieId=${movie.id}'>`;
+        if(posterPath==''){
+            structure+=`<img src="/dist/image/no_image.png"></a>`;
+        } else {
+            structure+=`<img src="${posterPath}"></a>`;
+        }
+        structure+=`<div>${movie.original_title}</div>`;
         personInfoDiv.innerHTML=structure;
         document.querySelector('.personMovieInfo').appendChild(personInfoDiv);
     }
@@ -50,9 +65,13 @@ partiTv(personId).then(result=>{
         const posterPath = tv.poster_path ? `${imageBaseUrl}${tv.poster_path}` : '';
         const personInfoDiv = document.createElement('div');
         personInfoDiv.classList.add('personTvOne');
-        const structure = `
-        <img src="${posterPath}">
-        <div>${tv.original_name}</div>`;
+        let structure='';
+        structure += `<a href=#>`;
+        if(posterPath==''){
+            structure+=`<img src="/dist/image/no_image.png"></a>`;
+        } else {
+            structure+=`<img src="${posterPath}"></a>`;
+        }
         personInfoDiv.innerHTML=structure;
         document.querySelector('.personTvInfo').appendChild(personInfoDiv);
     }
