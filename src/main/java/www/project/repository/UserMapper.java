@@ -49,4 +49,6 @@ public interface UserMapper {
     List<String> getAllImagePaths();
 
     int setDefaultImage(String currentId);
+
+    int withdrawUser(String loginId);
 }

@@ -223,4 +223,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error resetting profile image");
         }
     }
+    @PatchMapping("/withdraw/{loginId}")
+    public ResponseEntity<?> withdrawUser(@PathVariable String loginId) {
+        log.info("아이디들어오는거 체크{}", loginId);
+        try {
+            int isDel = usv.withdrawUser(loginId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Internal Server Error");
+        }
+    }
+
 }
