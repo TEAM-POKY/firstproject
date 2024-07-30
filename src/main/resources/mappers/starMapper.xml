@@ -33,11 +33,10 @@
     </update>
 
     <select id="getCommentList" resultType="www.project.domain.CommentListDTO">
-        SELECT c.*,cl.*,s.*
-        FROM comment c
-        LEFT JOIN comment_like cl ON c.comment_code = cl.comment_code
-        JOIN star s ON c.email = s.email AND c.media_id = s.media_id
-        WHERE c.media_id = #{mediaId};
+        SELECT c.*,u.isDel,nickname
+        FROM comment  c
+        JOIN user u ON u.email = c.email
+        WHERE c.media_id = #{media_id};
     </select>
 
 

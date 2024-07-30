@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import www.project.config.oauth2.PrincipalDetails;
 import www.project.domain.StarVO;
+import www.project.domain.UserFollowVO;
 import www.project.handler.FileHandler;
 import www.project.service.FollowService;
 import www.project.service.MailService;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -229,9 +231,40 @@ public class UserController {
         log.info("아이디들어오는거 체크{}", loginId);
         try {
             int isDel = usv.withdrawUser(loginId);
-            return ResponseEntity.ok().build();
+            if(isDel>0){
+                return ResponseEntity.ok().build();
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("0");
+            }
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Internal Server Error");
+        }
+    }
+
+    @PatchMapping("/following")
+    public ResponseEntity<Map<String, String>> followUser(@RequestBody UserFollowVO request) {
+        boolean success = fsv.followUser(request.getEmail(), request.getFollowEmail());
+        Map<String, String> response = new HashMap<>();
+        if (success) {
+            response.put("message", "Successfully followed user");
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("message", "Failed to follow user");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    @DeleteMapping("/following")
+    public ResponseEntity<Map<String, String>> unfollowUser(@RequestBody UserFollowVO request) {
+        log.info("들어오는언팔로우객체체크{}", request);
+        boolean success = fsv.unfollowUser(request.getEmail(), request.getFollowEmail());
+        Map<String, String> response = new HashMap<>();
+        if (success) {
+            response.put("message", "Successfully unfollowed user");
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("message", "Failed to unfollow user");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 

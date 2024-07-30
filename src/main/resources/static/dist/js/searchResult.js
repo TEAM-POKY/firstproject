@@ -52,7 +52,7 @@ const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
                     tvDiv.classList.add('tvResultDiv');
                     let tvDetails = '';
                     tvDetails+=`<div class="movieOne">
-                        <a href="/movie/detail?movieId=${rr.id}">`;
+                        <a href="/movie/detail?tvId=${rr.id}">`;
                     if(posterPath!==''){
                         tvDetails+=`<img src="${posterPath}">`;
                     } else {
