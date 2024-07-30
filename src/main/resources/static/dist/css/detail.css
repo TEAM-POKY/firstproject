@@ -1,7 +1,8 @@
 .wrap{
-    width: 1900px;
+    width: 100%;
     height: 100vh;
     color: white;
+
 }
 
 .detailWrap{
@@ -12,21 +13,28 @@
     margin: auto;
 }
 
-.detail1{
-    width: 1300px;
-    height: 600px;
+.detail1 {
+    width: 100%;
+    height: 70%;
+    margin: auto;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    position: relative;
+    background-position-y: 60%;
+}
+
+.detail1Wrap{
+    width: 1300px;
+    height: 70%;
+    display: flex;
+    margin: auto;
+    align-items: flex-end;
 }
 
 .detailInfo{
     box-sizing: border-box;
     width: 500px;
-    position: absolute;
-    top: 20%;
-    left: 10%
+    padding-bottom: 10px;
 }
 
 .detailTitleli{
@@ -45,10 +53,12 @@
 }
 
 .detailStory{
-    height: 45px;
+    height: 140px;
+    color: black;
 }
 
 .detailText{
+    width: 750px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -71,9 +81,6 @@
 .mainposter{
     width: 300px;
     height: 400px;
-    position: absolute;
-    right: 5%;
-    top: 10%;
 }
 
 .detail1Top{
@@ -100,11 +107,18 @@
 .detail2{
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.detail2Wrap{
+    width: 1300px;
+    flex-direction: column;
 }
 
 .voteAverage{
-    width: 400px;
-    height: 300px;
+    width: 200px;
+    margin: 40px 0 40px 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -213,8 +227,15 @@
 
 .detail3{
     width: 1300px;
-    height: 800px;
+    height: 400px;
     color: black;
+}
+
+.detail4{
+    width: 1300px;
+    text-align: center;
+
+    color : black;
 }
 
 .detailCommentLi{
@@ -233,12 +254,9 @@
     background-color: purple;
 }
 
-
-
-
-
-
-
-
+.detailCommentSetting :hover{
+    cursor: pointer;
+    background-color: gray;
+}
 
 

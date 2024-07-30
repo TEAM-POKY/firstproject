@@ -1,48 +1,71 @@
 const urlParams = new URLSearchParams(window.location.search);
-const movieId = urlParams.get('movieId');
 const thumbnail = document.querySelector(".detail1");
 const mainposter = document.querySelector(".mainposter");
 const voteDiv = document.querySelector(".detailVote");
 const detailTitlediv = document.querySelector(".detailTitle");
 const detailCatediv = document.querySelector(".detailcate");
 const storyText = document.querySelector(".detailText");
-const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+const imageBaseUrl = 'https://image.tmdb.org/t/p/original';
+const imageBasicurl = '/dist/image/no_image.png';
+var mediaInfo = {
+    mediaId : "",
+    urlInfo : "",
+    type : ""
+};
 
-getDetail(movieId).then(result => {
-    const posterPath = result.poster_path ? `${imageBaseUrl}${result.poster_path}` : '';
-    const backdropPath = result.backdrop_path ? `${imageBaseUrl}${result.backdrop_path}` : '';
+if(urlParams.has("movieId")){
+    mediaInfo.mediaId = urlParams.get("movieId");
+    mediaInfo.urlInfo = "movie";
+    mediaInfo.type = "movie";
+}else if(urlParams.has("tvId")){
+    mediaInfo.mediaId = urlParams.get("tvId");
+    mediaInfo.urlInfo = "tv";
+    mediaInfo.type = "tv";
+}
+console.log(mediaInfo);
 
-    const backdropsrc = backdropPath;
-    const mainpostersrc = posterPath;
-    const voteNum = `⭐${result.vote_average} (${result.vote_count})`;
-    const detailTitle = result.title;
+// console.log(window.location.href.substring(window.location.href.indexOf("?")+1).includes("movieId"));
 
-    // 카테고리 목록 생성
-    const cateul = document.createElement('ul');
-    cateul.classList.add('detailCateUl'); // 스타일 적용
-    for (const category of result.genres) {
-        const cateLi = document.createElement('li');
-        const span = document.createElement('span');
-        span.classList.add(category.id);
-        span.textContent = `#${category.name}`;
-        cateLi.appendChild(span);
-        cateul.appendChild(cateLi);
-    }
-    detailCatediv.appendChild(cateul);
 
-    // 백그라운드 이미지 및 포스터 설정
-    thumbnail.style.backgroundImage = backdropPath ? `linear-gradient(to right, black,#000000e0, rgba(42,40,40,0.7)), url(${backdropsrc})` : `linear-gradient(to right, black,#000000e0, rgba(42,40,40,0.7))`;
-    mainposter.src = mainpostersrc ? mainpostersrc : '기본 포스터 URL';
-    voteDiv.innerText = voteNum;
-    detailTitlediv.innerText = detailTitle;
-    storyText.innerText = result.overview;
-}).catch(err => {
-    console.error('Error fetching movie details:', err);
-});
+console.log(urlParams.has("movieId"));
 
-getCommentList(movieId).then(result => {
-    const detailContainer = document.querySelector(".detail3");
-    console.log(result); // 데이터 확인용
+    getDetail(mediaInfo).then(result => {
+        console.log(result);
+        const posterPath = result.poster_path != null ? `${imageBaseUrl}${result.poster_path}` : `${imageBasicurl}`;
+        const backdropPath = result.backdrop_path != null ? `${imageBaseUrl}${result.backdrop_path}` : '';
+        const backdropsrc = backdropPath;
+        const mainpostersrc = posterPath;
+        const voteNum = `⭐${result.vote_average} (${result.vote_count})`;
+        const detailTitle = mediaInfo.type =="tv" ? result.name : result.title;
+        let overView = result.overview.length <= 0 ? document.querySelector(".detailStoryLi").style.display = "none" : result.overview ;
+
+        // 카테고리 목록 생성
+        const cateul = document.createElement('ul');
+        cateul.classList.add('detailCateUl'); // 스타일 적용
+        for (const category of result.genres) {
+            const cateLi = document.createElement('li');
+            const span = document.createElement('span');
+            span.classList.add(category.id);
+            span.textContent = `#${category.name}`;
+            cateLi.appendChild(span);
+            cateul.appendChild(cateLi);
+        }
+        detailCatediv.appendChild(cateul);
+
+        // 백그라운드 이미지 및 포스터 설정
+        thumbnail.style.backgroundImage = backdropPath ? `url(${backdropsrc})` : `linear-gradient(to right, black,#000000e0, rgba(42,40,40,0.7))`;
+        mainposter.src = mainpostersrc ? mainpostersrc : '기본 포스터 URL';
+        voteDiv.innerText = voteNum;
+        detailTitlediv.innerText = detailTitle;
+        storyText.innerText = overView;
+    }).catch(err => {
+        console.error('Error fetching movie details:', err);
+    });
+
+
+getCommentList(mediaInfo.mediaId).then(result => {
+    const detailContainer = document.querySelector(".detail4");
+    console.log(result.nickname); // 데이터 확인용
     const ul = document.createElement("ul");
     ul.classList.add("detailCommentUl");
     if (result.length == 0) {
@@ -52,10 +75,10 @@ getCommentList(movieId).then(result => {
     result.forEach(comment => {
         const li = document.createElement('li');
         li.innerHTML = `
-                    <div class="detailUserName">${comment.email}</div>
+                    <div class="detailUserName">${comment.nickname}</div>
                     <div class="detailRegDate">${elapsedTime(comment.regDate)}</div>`;
         if (comment.spoiler === 0) {
-            li.innerHTML += `<div class="detailContent">${comment.content}</div>`;
+            li.innerHTML += `<div class="detailContent" id="detail">${comment.content}</div>`;
         } else {
             li.innerHTML += `
                     <div class="detailspoiler">
@@ -64,17 +87,37 @@ getCommentList(movieId).then(result => {
                         <button type="button" onclick="toggleSpoiler(this)">보기</button>
                     </div>`;
         }
-        if (comment.email == userId) {
+        if (comment.email == user.innerText) {
             li.innerHTML += `<div class="detailCommentSetting">
+                                <div class="detailCommentCode" style="display: none">${comment.commentCode}</div>
                                 <div class="detailCommentUpdate">수정</div>
                                 <div class="detailCommentDelete">삭제</div>
-                             </div>`
+                             </div>`;
+            document.querySelector(".detail2").style.display= "none";
         }
         ul.appendChild(li);
     });
     detailContainer.appendChild(ul);
 
 });
+
+document.addEventListener("click",(e)=>{
+    const target = e.target;
+
+    let code = document.querySelector(".detailCommentCode").innerText;
+    if(target.classList.contains("detailCommentUpdate")){
+
+        console.log("수정");
+
+        console.log(code);
+
+    }
+    if(target.classList.contains("detailCommentDelete")){
+
+        console.log("삭제");
+
+    }
+})
 
 // 더보기/간략히 보기 버튼 처리
 document.querySelector('.detailStory').addEventListener('click', (event) => {
@@ -91,6 +134,9 @@ document.querySelector('.detailStory').addEventListener('click', (event) => {
     }
 });
 
+
+// function  deleteComment()
+
 // 스포일러 버튼
 function toggleSpoiler(button) {
     const detailContent = button.parentElement.querySelector('.detailContent');
@@ -99,9 +145,9 @@ function toggleSpoiler(button) {
     spoilerElements.forEach(el => el.style.display = 'none');
 }
 
-async function getDetail(movieId) {
+async function getDetail(mediaInfo) {
     try {
-        const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=ko-KR`, options);
+        const response = await fetch(`https://api.themoviedb.org/3/${mediaInfo.urlInfo}/${mediaInfo.mediaId}?language=ko-KR`, options);
         if (!response.ok) {
             throw new Error('Movie details not found');
         }
@@ -149,4 +195,6 @@ function elapsedTime(date) {
     }
     return '방금 전';
 }
+
+
 
