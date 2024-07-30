@@ -16,5 +16,6 @@ public class UserVO {
     private String provider;
     private String providerId;
     private String isDel;
+    private String delDate;
     private List<AuthVO> authList;//권한 목록
 }
