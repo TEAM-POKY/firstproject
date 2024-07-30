@@ -168,10 +168,10 @@
         const message = urlParams.get('message');
         if (message) {
             alert("허용되지 않은 닉네임입니다.\n닉네임을 변경해주세요. ");
-            window.location.href = "/user/myPage";
+            goToMyPage(currentId);
         }else if(userNickname.includes("_user")) {
             alert("허용되지 않은 닉네임입니다.\n닉네임을 변경해주세요. ");
-            window.location.href = "/user/myPage";
+            goToMyPage(currentId);
         }
     });
     function goToMyPage(currentId) {
