@@ -347,18 +347,31 @@ function showModal(posters) {
     const modal = document.getElementById('modal');
     const modalContent = document.getElementById('modalContent');
     modalContent.innerHTML = '';
+
+    // 포스터 크기 및 간격 설정
+    const posterWidth = 100;
+    const posterHeight = 150;
+    const posterMargin = 10;
+    const maxPostersPerRow = 5;
+
+    // 포스터 생성 및 추가
     posters.forEach(poster => {
         const posterImg = document.createElement('img');
         posterImg.src = `https://image.tmdb.org/t/p/w500${poster.posterPath}`;
-        posterImg.style.width = '100px';
-        posterImg.style.height = '150px';
+        posterImg.style.width = `${posterWidth}px`;
+        posterImg.style.height = `${posterHeight}px`;
+        posterImg.style.margin = `0 ${posterMargin / 2}px`;
         posterImg.dataset.mediaId = poster.mediaId;
         modalContent.appendChild(posterImg);
         posterImg.addEventListener('click', () => {
-            // 링크로 이동하는 로직 추가
             window.location.href = `https://www.themoviedb.org/movie/${poster.mediaId}`;
         });
     });
+
+    // 한 줄에 들어갈 포스터 수와 모달 너비 결정
+    const postersInRow = Math.min(posters.length, maxPostersPerRow);
+    const modalWidth = (postersInRow * (posterWidth + posterMargin)) - posterMargin;
+    modal.style.width = `${modalWidth}px`;
     modal.style.display = 'block';
 }
 
