@@ -22,7 +22,11 @@ import java.util.UUID;
 @Component
 public class FileHandler {
 
-    private final String UP_DIR = "C:\\image\\";
+    String os = System.getProperty("os.name").toLowerCase();
+    String UP_DIR;
+    if(os.contains("wins"))
+
+    UP_DIR = "C:\\image\\";
 
     public String uploadFile(MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
