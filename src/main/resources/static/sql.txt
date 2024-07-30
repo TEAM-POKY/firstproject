@@ -47,9 +47,9 @@ CREATE TABLE actor_follow (
     actor_id BIGINT NULL
 );
 
--- Table: director_follow
-CREATE TABLE director_follow (
-    director_id BIGINT NULL,
+-- Table: crew_follow
+CREATE TABLE crew_follow (
+    crew_id BIGINT NULL,
     email VARCHAR(200) NOT NULL
 );
 
@@ -88,7 +88,7 @@ ALTER TABLE comment ADD CONSTRAINT FK_user_TO_comment_1 FOREIGN KEY (email) REFE
 ALTER TABLE comment_like ADD CONSTRAINT FK_comment_TO_comment_like_1 FOREIGN KEY (comment_code) REFERENCES comment(comment_code);
 ALTER TABLE comment_like ADD CONSTRAINT FK_user_TO_comment_like_1 FOREIGN KEY (email) REFERENCES user(email);
 ALTER TABLE actor_follow ADD CONSTRAINT FK_user_TO_actor_follow_1 FOREIGN KEY (email) REFERENCES user(email);
-ALTER TABLE director_follow ADD CONSTRAINT FK_user_TO_director_follow_1 FOREIGN KEY (email) REFERENCES user(email);
+ALTER TABLE crew_follow ADD CONSTRAINT FK_user_TO_crew_follow_1 FOREIGN KEY (email) REFERENCES user(email);
 ALTER TABLE wish ADD CONSTRAINT FK_user_TO_wish_1 FOREIGN KEY (email) REFERENCES user(email);
 ALTER TABLE collection ADD CONSTRAINT FK_user_TO_collection_1 FOREIGN KEY (email) REFERENCES user(email);
 ALTER TABLE star ADD CONSTRAINT FK_user_TO_star_1 FOREIGN KEY (email) REFERENCES user(email);
