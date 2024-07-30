@@ -6,7 +6,7 @@ CREATE TABLE user (
     profile VARCHAR(500) NULL,
     provider VARCHAR(200) NULL,
     provider_id VARCHAR(200) NULL,
-    isDel TINYINT DEFAULT 0,
+    is_del TINYINT DEFAULT 0,
     PRIMARY KEY (email)
 );
 
@@ -20,13 +20,15 @@ CREATE TABLE user_follow (
 CREATE TABLE calender (
     media_id BIGINT NULL,
     email VARCHAR(200) NOT NULL,
-    date DATETIME DEFAULT CURRENT_TIMESTAMP
+    date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    media_type varchar(50)
 );
 
 -- Table: comment
 CREATE TABLE comment (
     comment_code BIGINT AUTO_INCREMENT PRIMARY KEY,
     media_id BIGINT NULL,
+    media_type varchar(50),
     content VARCHAR(150) NULL,
     spoiler TINYINT NULL DEFAULT 0,
     email VARCHAR(200) NOT NULL,
@@ -55,6 +57,7 @@ CREATE TABLE crew_follow (
 -- Table: wish
 CREATE TABLE wish (
     media_id BIGINT NULL,
+    media_type varchar(50),
     email VARCHAR(200) NOT NULL
 );
 
@@ -62,6 +65,7 @@ CREATE TABLE wish (
 CREATE TABLE collection (
     collection_name VARCHAR(500) NOT NULL,
     media_id BIGINT NULL,
+    media_type varchar(50),
     email VARCHAR(200) NOT NULL
 );
 
@@ -71,6 +75,7 @@ CREATE TABLE star (
     email VARCHAR(200) NOT NULL,
     rate FLOAT NULL,
     media_id BIGINT NULL,
+    media_type varchar(50),
     date DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
