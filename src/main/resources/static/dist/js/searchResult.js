@@ -1,7 +1,6 @@
 const UrlParams = new URLSearchParams(window.location.search);
 const keyword = UrlParams.get('keyword');
 const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
-const checkEng = /[a-zA-Z]/;
 
     searchMovieList(keyword).then(result => {
         console.log(result);
@@ -10,11 +9,9 @@ const checkEng = /[a-zA-Z]/;
             console.log("검색결과 없음");
         }
         for (let rr of result.results) {
-            //인물검색결과에 영어가 나와서 뽑을지말지 고민중
                 const posterPath = rr.poster_path ? `${imageBaseUrl}${rr.poster_path}` : '';
                 const profilePath = rr.profile_path ? `${imageBaseUrl}${rr.profile_path}` : '';
                 if (rr.media_type === "person") {
-                    if (!checkEng.test(rr.name)) {
                     document.querySelector('.personSpan').style.display = 'block';
                     const personDiv = document.createElement('div');
                     personDiv.classList.add('personResultDiv');
@@ -32,7 +29,6 @@ const checkEng = /[a-zA-Z]/;
                     }
                     personDiv.innerHTML = personDetails;
                     document.querySelector('.personResult').appendChild(personDiv);
-                    }
                 }
                 if (rr.media_type === "movie") {
                     document.querySelector('.movieSpan').style.display = 'block';

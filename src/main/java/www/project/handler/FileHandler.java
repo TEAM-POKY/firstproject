@@ -24,9 +24,8 @@ public class FileHandler {
 
     String os = System.getProperty("os.name").toLowerCase();
     String UP_DIR;
-    if(os.contains("wins"))
-
-    UP_DIR = "C:\\image\\";
+//    if(os.("wins"))
+//    UP_DIR = "C:\\image\\";
 
     public String uploadFile(MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
