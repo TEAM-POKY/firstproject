@@ -6,9 +6,9 @@ const rateWrap = document.querySelectorAll('.rating'),
 const user = document.getElementById("userId");
 const comment = document.getElementById("commentBtn");
 const spoilerCheckbox = document.getElementById('spoiler');
-const userInfo = {
+var userInfo = {
     email: user.innerText,
-    mediaId: movieId
+    mediaId: mediaInfo.mediaId
 };
 let rate = 0;
 
