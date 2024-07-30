@@ -45,7 +45,7 @@ getCommentList(movieId).then(result => {
     console.log(result); // 데이터 확인용
     const ul = document.createElement("ul");
     ul.classList.add("detailCommentUl");
-    if(result.length == 0){
+    if (result.length == 0) {
         detailContainer.innerHTML = `<div class="detailNoComment"><span>아직 댓글이 없습니다.</span></div>`;
         return;
     }
@@ -55,7 +55,7 @@ getCommentList(movieId).then(result => {
                     <div class="detailUserName">${comment.email}</div>
                     <div class="detailRegDate">${elapsedTime(comment.regDate)}</div>`;
         if (comment.spoiler === 0) {
-            li.innerHTML+= `<div class="detailContent">${comment.content}</div>`;
+            li.innerHTML += `<div class="detailContent">${comment.content}</div>`;
         } else {
             li.innerHTML += `
                     <div class="detailspoiler">
@@ -63,6 +63,12 @@ getCommentList(movieId).then(result => {
                         <span>스포일러입니다.</span>
                         <button type="button" onclick="toggleSpoiler(this)">보기</button>
                     </div>`;
+        }
+        if (comment.email == userId) {
+            li.innerHTML += `<div class="detailCommentSetting">
+                                <div class="detailCommentUpdate">수정</div>
+                                <div class="detailCommentDelete">삭제</div>
+                             </div>`
         }
         ul.appendChild(li);
     });
