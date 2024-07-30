@@ -20,7 +20,10 @@ personDetail(personId).then(result=>{
     structure += `
     <ul class="personUl"><li class="personName">${result.name}</li>
     <li class="personBirth">${result.birthday}</li>`;
-    // if
+    //사망인물 체크
+    if(result.deathday!==null){
+        structure+=`<li class="personDeath">사망 ${result.deathday}</li>`;
+    }
     if(result.known_for_department==="Directing"){
         structure+=`<li><button type="button" id="directorFollowBtn">팔로우 +</button></li>`;
     } else {
@@ -47,12 +50,11 @@ credits(personId).then(result=>{
         const uniqueMedia = result.cast.filter(
             (obj, idx) => {
                 return ( result.cast.findIndex((obj2) => {
-                        return obj.name === obj2.name }) === idx
+                        return obj.backdrop_path === obj2.backdrop_path }) === idx
                 )
             }
         )
         for(let castMedia of uniqueMedia){
-            console.log(castMedia);
             const posterPath = castMedia.poster_path ? `${imageBaseUrl}${castMedia.poster_path}` : '';
             if(castMedia.media_type==='movie'){
                 document.querySelector('.personMovieList').style.display='block';
@@ -96,17 +98,15 @@ credits(personId).then(result=>{
     }
     //crew(제작참여)
     if(result.crew.length>0){
-        console.log(result.crew)
         const uniqueMedia = result.crew.filter(
             (obj, idx) => {
                 return ( result.crew.findIndex((obj2) => {
-                        return obj.name === obj2.name }) === idx
+                        return obj.backdrop_path === obj2.backdrop_path }) === idx
                 )
             }
         )
         //중복제거한 후 출력
         for(let crewMedia of uniqueMedia){
-            console.log(crewMedia)
             const posterPath = crewMedia.poster_path ? `${imageBaseUrl}${crewMedia.poster_path}` : '';
             if(crewMedia.media_type==='movie'){
                 document.querySelector('.personMovieList').style.display='block';
