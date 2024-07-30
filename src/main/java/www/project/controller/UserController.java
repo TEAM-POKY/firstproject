@@ -48,11 +48,12 @@ public class UserController {
     private String uploadDir;
 
     @PostMapping("/mypage")
-    public String myPage(@RequestParam String email, Model model){
+    public String myPage(@RequestParam(value = "email") String email, Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         UserVO user = principalDetails.getUser();
-        Boolean isFollow = fsv.getFollowInfo(user.getEmail(), email);
+        String myEmail = user.getEmail();
+        Boolean isFollow = fsv.getFollowInfo(myEmail, email);
         model.addAttribute("userEmail", email);
         model.addAttribute("isFollow",isFollow);
         return "/user/mypage";

@@ -1,9 +1,10 @@
 package www.project.repository;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface FollowMapper {
 
-    int getFollowInfo(String myEmail, String email);
+    int getFollowInfo(@Param("myEmail") String myEmail, @Param("email") String email);
 }
