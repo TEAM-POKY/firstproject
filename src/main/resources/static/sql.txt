@@ -7,6 +7,7 @@ CREATE TABLE user (
     provider VARCHAR(200) NULL,
     provider_id VARCHAR(200) NULL,
     isDel TINYINT DEFAULT 0,
+    delDate DATETIME DEFAULT CURRENT_TIMESTAMP
     PRIMARY KEY (email)
 );
 
