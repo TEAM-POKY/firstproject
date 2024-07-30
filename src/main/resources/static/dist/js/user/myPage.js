@@ -38,14 +38,16 @@ function renderNickName() {
     str = `<span id="nickNameSpan">${nickName}</span>`;
     if(loginId != currentId){
         let isFollow = document.getElementById('isFollow').innerText;
-        console.log(isFollow);
         if(isFollow == "true"){
-            str += `<button id="followInfo">팔로우</button>`
+            str += `<button id="followBtn">언팔로우</button>`
         }else{
-            str += `<button id="followInfo">언팔로우</button>`
+            str += `<button id="followBtn">팔로우</button>`
         }
         document.getElementById('changeProfileImage').style.display = 'none';
         document.getElementById('nickName').innerHTML = str;
+        document.getElementById('followBtn').addEventListener('click', async ()=>{
+            await followStatus(currentId, loginId);
+        })
     }else{
         str += ` <img src="/dist/image/pencil.svg" alt="noPic" id="changeNickName">`
         str += `<button id="withdrawalBtn">회원탈퇴</button>`;
@@ -59,9 +61,39 @@ function renderNickName() {
     }
 }
 //팔로우 언팔로우 로직
-async function followStatus(){
-    console.log()
+async function followStatus(followEmail, email){
+    try {
+        let isFollow = document.getElementById('isFollow').innerText === 'true';
+        const url = '/user/following';
+        const method = isFollow ? 'DELETE' : 'PATCH';
+        const data = { followEmail, email };
+        const options = {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        };
+        const response = await fetch(url, options);
+        if (response.ok) {
+            const result = await response.json();
+            console.log(result.message);
+            isFollow ? alert(nickName + "님 팔로우 취소") : alert(nickName + "님 팔로우");
+            document.getElementById('isFollow').innerText = (!isFollow).toString();
+            document.getElementById('followBtn').innerText = isFollow ? '팔로우' : '언팔로우';
+            followInfo(currentId).then(result =>{
+                let follower = result.split("/")[0];
+                let following = result.split("/")[1];
+                document.getElementById('followInfo').innerText = `팔로워 ${follower}명 | 팔로잉 ${following}명`;
+            })
+        } else {
+            console.error('팔로우 상태 변경 실패:', response.status);
+        }
+    } catch (error) {
+        console.error('팔로우 상태 변경 중 오류 발생:', error);
+    }
 }
+//회원탈퇴처리함수
 async function withdrawalAccount(loginId){
     try {
         const response = await fetch(`/user/withdraw/${loginId}`, {
@@ -82,7 +114,6 @@ async function withdrawalAccount(loginId){
         alert('회원 탈퇴 요청 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
 }
-
 
 //input창 변경함수
 function changeToInput() {

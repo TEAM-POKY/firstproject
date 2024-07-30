@@ -16,4 +16,14 @@ public class FollowServiceImpl implements FollowService{
     public Boolean getFollowInfo(String myEmail, String email) {
         return followMapper.getFollowInfo(myEmail, email) > 0;
     }
+
+    @Override
+    public boolean followUser(String email, String followEmail) {
+        return followMapper.followUser(email, followEmail);
+    }
+
+    @Override
+    public boolean unfollowUser(String email, String followEmail) {
+        return followMapper.unfollowUser(email, followEmail);
+    }
 }
