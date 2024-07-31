@@ -7,4 +7,8 @@ import org.apache.ibatis.annotations.Param;
 public interface FollowMapper {
 
     int getFollowInfo(@Param("myEmail") String myEmail, @Param("email") String email);
+
+    boolean followUser(String email, String followEmail);
+
+    boolean unfollowUser(String email, String followEmail);
 }
