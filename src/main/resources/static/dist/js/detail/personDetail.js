@@ -19,10 +19,10 @@ personDetail(personId).then(result=>{
     }
     structure += `
     <ul class="personUl"><li class="personName">${result.name}</li>
-    <li class="personBirth">${result.birthday}</li>`;
+    <li class="personBirth">${result.birthday.replaceAll("-",".")}</li>`;
     //사망인물 체크
     if(result.deathday!==null){
-        structure+=`<li class="personDeath">사망 ${result.deathday}</li>`;
+        structure+=`<li class="personDeath">사망 ${result.deathday.replaceAll("-",".")}</li>`;
     }
     if(result.known_for_department==="Directing"){
         structure+=`<li><button type="button" id="directorFollowBtn">팔로우 +</button></li>`;
@@ -63,7 +63,8 @@ credits(personId).then(result=>{
                 let structure='';
                 structure=`<div class="mediaLeftInfo">
                             <div class="mlTitle">${castMedia.title}</div>
-                            <div class="mlData">${castMedia.release_date}</div>
+                            <div class="mDepart" data-id="${castMedia.id}"></div>
+                            <div class="mlData">${castMedia.release_date.replaceAll("-",".")}</div>
                         </div>
                         <div class="mediaRightInfo">
                             <a href="/movie/detail?movieId=${castMedia.id}">`;
@@ -82,7 +83,8 @@ credits(personId).then(result=>{
                 let structure='';
                 structure=`<div class="mediaLeftInfo">
                             <div class="mlTitle">${castMedia.name}</div>
-                            <div class="mlData">${castMedia.first_air_date}</div>
+                            <div class="mDepart" data-id="${castMedia.id}"></div>
+                            <div class="mlData">${castMedia.first_air_date.replaceAll("-",".")}</div>
                         </div>
                         <div class="mediaRightInfo">
                             <a href="#">`;
@@ -115,8 +117,8 @@ credits(personId).then(result=>{
                 let structure='';
                 structure=`<div class="mediaLeftInfo">
                             <div class="mlTitle">${crewMedia.title}</div>
-                            <div class="mDepart"></div>
-                            <div class="mlData">${crewMedia.release_date}</div>
+                            <div class="mDepart" data-id="${crewMedia.id}"></div>
+                            <div class="mlData">${crewMedia.release_date.replaceAll("-",".")}</div>
                         </div>
                         <div class="mediaRightInfo">
                             <a href="/movie/detail?movieId=${crewMedia.id}">`;
@@ -135,8 +137,8 @@ credits(personId).then(result=>{
                 let structure='';
                 structure=`<div class="mediaLeftInfo">
                             <div class="mlTitle">${crewMedia.name}</div>
-                            <div class="mDepart"></div>
-                            <div class="mlData">${crewMedia.first_air_date}</div>
+                            <div class="mDepart" data-id="${crewMedia.id}"></div>
+                            <div class="mlData">${crewMedia.first_air_date.replaceAll("-",".")}</div>
                         </div>
                         <div class="mediaRightInfo">
                             <a href="#">`;
@@ -145,20 +147,32 @@ credits(personId).then(result=>{
                 } else {
                     structure+=`<img src="/dist/image/no_image.png">`;
                 }
+                structure+=`</a></div>`;
                 mediaDiv.innerHTML=structure;
                 document.querySelector('.personTvInfo').appendChild(mediaDiv);
             }
         }
+        for(let cast of result.cast){
+            const character = `${cast.character}`;
+            if(character!==null) {
+                const mediaDepart = document.querySelector(`.mDepart[data-id="${cast.id}"]`);
+                if(mediaDepart){
+                    mediaDepart.innerHTML+=`<span>출연</span>`;
+                }
+            }
+
+        }
         for(let crew of result.crew){
-            const departSpan = document.createElement('span');
-            departSpan.classList.add('departSpan');
-            let structure='';
-            let job = `${crew.department}`;
-            if(job==='Writing'){structure+=`<span>각본</span>`;}
-            if(job==='Directing'){structure+=`<span>감독</span>`;}
-            if(job==='Producing'){structure+=`<span>제작</span>`;}
-            departSpan.innerHTML=structure;
-            // document.querySelector('.mDepartmDepart').appendChild(departSpan);
+            const job = `${crew.department}`;
+            let jobText = '';
+            if(job==='Writing') jobText='각본';
+            if(job==='Directing') jobText='감독';
+            if(job==='Creator') jobText='제작';
+
+            const mediaDepart = document.querySelector(`.mDepart[data-id="${crew.id}"]`);
+            if(mediaDepart){
+                mediaDepart.innerHTML+=`<span>${jobText}</span>`;
+            }
         }
     }
 })
