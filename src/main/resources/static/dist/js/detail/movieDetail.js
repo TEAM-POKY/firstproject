@@ -8,16 +8,16 @@ const storyText = document.querySelector(".detailText");
 const imageBaseUrl = 'https://image.tmdb.org/t/p/original';
 const imageBasicurl = '/dist/image/no_image.png';
 var mediaInfo = {
-    mediaId : "",
-    urlInfo : "",
-    type : ""
+    mediaId: "",
+    urlInfo: "",
+    type: ""
 };
 
-if(urlParams.has("movieId")){
+if (urlParams.has("movieId")) {
     mediaInfo.mediaId = urlParams.get("movieId");
     mediaInfo.urlInfo = "movie";
     mediaInfo.type = "movie";
-}else if(urlParams.has("tvId")){
+} else if (urlParams.has("tvId")) {
     mediaInfo.mediaId = urlParams.get("tvId");
     mediaInfo.urlInfo = "tv";
     mediaInfo.type = "tv";
@@ -29,38 +29,38 @@ console.log(mediaInfo);
 
 console.log(urlParams.has("movieId"));
 
-    getDetail(mediaInfo).then(result => {
-        console.log(result);
-        const posterPath = result.poster_path != null ? `${imageBaseUrl}${result.poster_path}` : `${imageBasicurl}`;
-        const backdropPath = result.backdrop_path != null ? `${imageBaseUrl}${result.backdrop_path}` : '';
-        const backdropsrc = backdropPath;
-        const mainpostersrc = posterPath;
-        const voteNum = `⭐${result.vote_average} (${result.vote_count})`;
-        const detailTitle = mediaInfo.type =="tv" ? result.name : result.title;
-        let overView = result.overview.length <= 0 ? document.querySelector(".detailStoryLi").style.display = "none" : result.overview ;
+getDetail(mediaInfo).then(result => {
+    console.log(result);
+    const posterPath = result.poster_path != null ? `${imageBaseUrl}${result.poster_path}` : `${imageBasicurl}`;
+    const backdropPath = result.backdrop_path != null ? `${imageBaseUrl}${result.backdrop_path}` : '';
+    const backdropsrc = backdropPath;
+    const mainpostersrc = posterPath;
+    const voteNum = `⭐${result.vote_average} (${result.vote_count})`;
+    const detailTitle = mediaInfo.type == "tv" ? result.name : result.title;
+    let overView = result.overview.length <= 0 ? document.querySelector(".detailStoryLi").style.display = "none" : result.overview;
 
-        // 카테고리 목록 생성
-        const cateul = document.createElement('ul');
-        cateul.classList.add('detailCateUl'); // 스타일 적용
-        for (const category of result.genres) {
-            const cateLi = document.createElement('li');
-            const span = document.createElement('span');
-            span.classList.add(category.id);
-            span.textContent = `#${category.name}`;
-            cateLi.appendChild(span);
-            cateul.appendChild(cateLi);
-        }
-        detailCatediv.appendChild(cateul);
+    // 카테고리 목록 생성
+    const cateul = document.createElement('ul');
+    cateul.classList.add('detailCateUl'); // 스타일 적용
+    for (const category of result.genres) {
+        const cateLi = document.createElement('li');
+        const span = document.createElement('span');
+        span.classList.add(category.id);
+        span.textContent = `#${category.name}`;
+        cateLi.appendChild(span);
+        cateul.appendChild(cateLi);
+    }
+    detailCatediv.appendChild(cateul);
 
-        // 백그라운드 이미지 및 포스터 설정
-        thumbnail.style.backgroundImage = backdropPath ? `url(${backdropsrc})` : `linear-gradient(to right, black,#000000e0, rgba(42,40,40,0.7))`;
-        mainposter.src = mainpostersrc ? mainpostersrc : '기본 포스터 URL';
-        voteDiv.innerText = voteNum;
-        detailTitlediv.innerText = detailTitle;
-        storyText.innerText = overView;
-    }).catch(err => {
-        console.error('Error fetching movie details:', err);
-    });
+    // 백그라운드 이미지 및 포스터 설정
+    thumbnail.style.backgroundImage = backdropPath ? `url(${backdropsrc})` : `linear-gradient(to right, black,#000000e0, rgba(42,40,40,0.7))`;
+    mainposter.src = mainpostersrc ? mainpostersrc : '기본 포스터 URL';
+    voteDiv.innerText = voteNum;
+    detailTitlediv.innerText = detailTitle;
+    storyText.innerText = overView;
+}).catch(err => {
+    console.error('Error fetching movie details:', err);
+});
 
 
 getCommentList(mediaInfo.mediaId).then(result => {
@@ -73,27 +73,31 @@ getCommentList(mediaInfo.mediaId).then(result => {
         return;
     }
     result.forEach(comment => {
+        if (comment.email == user.innerText) {
+            document.getElementById("commentText").innerText = `${comment.content}`;
+            document.getElementById("commentBtn").style.display = "none";
+            document.querySelector(".detailSubmitBtn").innerHTML =
+                `<div class="detailCommentCode" style="display: none">${comment.commentCode}</div>
+                    <button class="detailCommentUpdate">수정</button>
+                    <button class="detailCommentDelete">삭제</button>`;
+            if(comment.spoiler === 1) {
+                spoilerCheckbox.checked = 1;
+            }
+        }
         const li = document.createElement('li');
         li.innerHTML = `
                     <div class="detailUserName">${comment.nickname}</div>
                     <div class="detailRegDate">${elapsedTime(comment.regDate)}</div>`;
-        if (comment.spoiler === 0) {
-            li.innerHTML += `<div class="detailContent" id="detail">${comment.content}</div>`;
-        } else {
+        if (comment.spoiler == 1) {
+
             li.innerHTML += `
                     <div class="detailspoiler">
                         <div class="detailContent" style="display: none">${comment.content}</div>
                         <span>스포일러입니다.</span>
                         <button type="button" onclick="toggleSpoiler(this)">보기</button>
                     </div>`;
-        }
-        if (comment.email == user.innerText) {
-            li.innerHTML += `<div class="detailCommentSetting">
-                                <div class="detailCommentCode" style="display: none">${comment.commentCode}</div>
-                                <div class="detailCommentUpdate">수정</div>
-                                <div class="detailCommentDelete">삭제</div>
-                             </div>`;
-            document.querySelector(".detail2").style.display= "none";
+        } else {
+            li.innerHTML += `<div class="detailContent" id="detail">${comment.content}</div>`;
         }
         ul.appendChild(li);
     });
@@ -101,18 +105,16 @@ getCommentList(mediaInfo.mediaId).then(result => {
 
 });
 
-document.addEventListener("click",(e)=>{
+document.addEventListener("click", (e) => {
     const target = e.target;
-
     let code = document.querySelector(".detailCommentCode").innerText;
-    if(target.classList.contains("detailCommentUpdate")){
-
+    if (target.classList.contains("detailCommentUpdate")) {
         console.log("수정");
 
         console.log(code);
 
     }
-    if(target.classList.contains("detailCommentDelete")){
+    if (target.classList.contains("detailCommentDelete")) {
 
         console.log("삭제");
 
