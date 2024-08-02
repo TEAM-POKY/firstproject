@@ -3,6 +3,7 @@ package www.project.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,13 +17,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import www.project.config.oauth2.PrincipalDetails;
+import www.project.domain.StarFollowVO;
 import www.project.domain.StarVO;
 import www.project.domain.UserFollowVO;
 import www.project.handler.FileHandler;
-import www.project.service.FollowService;
-import www.project.service.MailService;
-import www.project.service.StarService;
-import www.project.service.UserService;
+import www.project.service.*;
 import www.project.domain.UserVO;
 
 import java.io.IOException;
@@ -45,6 +44,7 @@ public class UserController {
     private final MailService msv;
     private final StarService svc;
     private final FollowService fsv;
+    private final StarFollowService sfs;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -256,7 +256,6 @@ public class UserController {
 
     @DeleteMapping("/following")
     public ResponseEntity<Map<String, String>> unfollowUser(@RequestBody UserFollowVO request) {
-        log.info("들어오는언팔로우객체체크{}", request);
         boolean success = fsv.unfollowUser(request.getEmail(), request.getFollowEmail());
         Map<String, String> response = new HashMap<>();
         if (success) {
@@ -267,5 +266,50 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+
+    @PatchMapping("/followByType")
+    public ResponseEntity<Map<String, String>> followUser(@RequestParam("type") String type, @RequestBody String requestBody) {
+        JSONObject jsonObject = new JSONObject(requestBody);
+        String currentId = jsonObject.getString("currentId");
+        long personId = Long.parseLong(jsonObject.getString("personId"));
+        Map<String, String> response = new HashMap<>();
+        StarFollowVO sfvo = new StarFollowVO();
+        if ("crew".equals(type)) {
+            sfvo.setEmail(currentId);
+            sfvo.setCrewId(personId);
+            sfvo.setType(type);
+        } else if ("actor".equals(type)) {
+            sfvo.setEmail(currentId);
+            sfvo.setActorId(personId);
+            sfvo.setType(type);
+        }
+        int isOk = sfs.followStar(sfvo);
+        log.info("제대로{}",isOk);
+        if(isOk>0){
+            response.put("message","pass");
+            return ResponseEntity.ok(response);
+        }
+        response.put("message","fail");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+//    // DELETE 요청을 처리하는 메서드 예시
+//    @DeleteMapping("/followByType")
+//    public ResponseEntity<String> unfollowUser(
+//            @RequestParam("role") String role,
+//            @RequestBody FollowRequest followRequest) {
+//
+//        // role에 따라 다른 로직을 수행
+//        if ("director".equals(role)) {
+//            // 감독 관련 언팔로우 로직
+//            // 예: unfollowDirector(followRequest.getCurrentId(), followRequest.getEmail());
+//        } else if ("actor".equals(role)) {
+//            // 배우 관련 언팔로우 로직
+//            // 예: unfollowActor(followRequest.getCurrentId(), followRequest.getEmail());
+//        }
+//
+//        // 성공적으로 처리된 경우 응답 반환
+//        return ResponseEntity.ok("팔로우 상태가 성공적으로 변경되었습니다.");
+//    }
 
 }

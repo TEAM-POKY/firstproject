@@ -46,7 +46,7 @@ function renderNickName() {
         document.getElementById('changeProfileImage').style.display = 'none';
         document.getElementById('nickName').innerHTML = str;
         document.getElementById('followBtn').addEventListener('click', async ()=>{
-            await followStatus(currentId, loginId);
+            await userFollowStatus(currentId, loginId);
         })
     }else{
         str += ` <img src="/dist/image/pencil.svg" alt="noPic" id="changeNickName">`
@@ -61,7 +61,7 @@ function renderNickName() {
     }
 }
 //팔로우 언팔로우 로직
-async function followStatus(followEmail, email){
+async function userFollowStatus(followEmail, email){
     try {
         let isFollow = document.getElementById('isFollow').innerText === 'true';
         const url = '/user/following';
