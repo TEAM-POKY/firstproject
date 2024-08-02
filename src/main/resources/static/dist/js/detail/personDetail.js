@@ -25,10 +25,18 @@ personDetail(personId).then(async result => {
     if (result.deathday !== null) {
         structure += `<li class="personDeath">사망 ${result.deathday.replaceAll("-", ".")}</li>`;
     }
-    if (result.known_for_department === "Directing") {
-        structure += `<li><button type="button" id="directorFollowBtn">팔로우</button></li>`;
-    } else {
-        structure += `<li><button type="button" id="actorFollowBtn">팔로우</button></li>`;
+    if(typeof currentId !== 'undefined') {
+        getFollowInfo(personId).then(infoResult => {
+            console.log(infoResult);
+            if (infoResult == "true") {
+                if (result.known_for_department === "Directing") {
+                    structure += `<li><button type="button" id="directorFollowBtn">언팔로우</button></li>`;
+                } else {
+                    structure += `<li><button type="button" id="actorFollowBtn">언팔로우</button></li>`;
+                }
+            }
+        })
+
     }
     structure += `</ul>`;
     personInfo.innerHTML = structure;
@@ -245,8 +253,8 @@ async function followStatus(event,email,id) {
     }
 }
 document.addEventListener('click', function(event) {
+    let targetId = event.target.id;
     if (event.target && (event.target.id === 'directorFollowBtn' || event.target.id === 'actorFollowBtn')) {
-        let targetId = event.target.id;
         followStatus(event, currentId, personId).then(result => {
             if (result == "pass") {
                 alert("팔로우 성공");
@@ -262,6 +270,8 @@ document.addEventListener('click', function(event) {
 async function getFollowInfo(personId){
     try {
         const url = "/user/starFollow/"+currentId/+personId;
+        console.info(currentId);
+        console.info(personId);
         const config = {
             method: 'GET'
         };

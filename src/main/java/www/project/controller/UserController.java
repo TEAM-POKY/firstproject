@@ -266,6 +266,14 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+    @GetMapping("/starFollow/{currentId}/{personId}")
+    public String starFollow(@PathVariable String currentId, @PathVariable String personId) {
+        int count = sfs.getFollowInfo(currentId, personId);
+        if(count > 0){
+            return "true";
+        }
+        return "false";
+    }
 
     @PatchMapping("/followByType")
     public ResponseEntity<Map<String, String>> followUser(@RequestParam("type") String type, @RequestBody String requestBody) {
@@ -284,7 +292,6 @@ public class UserController {
             sfvo.setType(type);
         }
         int isOk = sfs.followStar(sfvo);
-        log.info("제대로{}",isOk);
         if(isOk>0){
             response.put("message","pass");
             return ResponseEntity.ok(response);
