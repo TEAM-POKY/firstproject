@@ -15,4 +15,6 @@ public interface MovieService {
     StarVO getIsRating(StarVO svo);
 
     List<CommentListDTO> getCommentList(long mediaId);
+
+    int deleteComment(String commentCode);
 }

@@ -60,7 +60,7 @@ comment.addEventListener('click', () => {
             document.getElementById("commentText").value = "";
         } else {
             const config = {
-                mediaId: movieId,
+                mediaId: userInfo.mediaId,
                 content: document.getElementById("commentText").value,
                 spoiler: spoilerCheckbox.value,
                 email: user.innerText

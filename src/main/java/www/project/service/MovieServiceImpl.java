@@ -51,4 +51,9 @@ public class MovieServiceImpl implements MovieService {
     public List<CommentListDTO> getCommentList(long mediaId) {
         return starMapper.getCommentList(mediaId);
     }
+
+    @Override
+    public int deleteComment(String commentCode) {
+        return starMapper.deleteComment(commentCode);
+    }
 }
