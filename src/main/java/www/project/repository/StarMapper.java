@@ -29,4 +29,6 @@ public interface StarMapper {
     int insertComment(CommentVO cvo);
 
     int updateComment(CommentVO cvo);
+
+    int deleteComment(String commentCode);
 }

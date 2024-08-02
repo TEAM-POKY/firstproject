@@ -41,6 +41,22 @@ public class MovieController {
     }
 
     @ResponseBody
+    @DeleteMapping("/deleteComment/{commentCode}")
+    public int deleteComment(@PathVariable String commentCode){
+        log.info("commentCode >>{} ",commentCode);
+        int isOk = movieService.deleteComment(commentCode);
+        return isOk;
+    }
+
+    @ResponseBody
+    @PutMapping
+    public int updateComment(@RequestBody CommentVO cvo){
+//        log.info("commentCode >>{} ",cvo.getCommentCode());
+//        int isOk = movieService.updateComment(cvo);
+        return 1;
+    }
+
+    @ResponseBody
     @PostMapping("/isRating")
     public StarVO isRating(@RequestBody StarVO svo){
         StarVO user = movieService.getIsRating(svo);

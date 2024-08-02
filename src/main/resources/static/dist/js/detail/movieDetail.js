@@ -78,30 +78,32 @@ getCommentList(mediaInfo.mediaId).then(result => {
             document.getElementById("commentBtn").style.display = "none";
             document.querySelector(".detailSubmitBtn").innerHTML =
                 `<div class="detailCommentCode" style="display: none">${comment.commentCode}</div>
-                    <button class="detailCommentUpdate">수정</button>
-                    <button class="detailCommentDelete">삭제</button>`;
-            if(comment.spoiler === 1) {
+                    <button type = "button" class="detailCommentUpdate">수정</button>
+                    <button type = "button" class="detailCommentDelete">삭제</button>`;
+            if (comment.spoiler === 1) {
                 spoilerCheckbox.checked = 1;
             }
-        }
-        const li = document.createElement('li');
-        li.innerHTML = `
+        } else {
+            const li = document.createElement('li');
+            li.innerHTML = `
                     <div class="detailUserName">${comment.nickname}</div>
                     <div class="detailRegDate">${elapsedTime(comment.regDate)}</div>`;
-        if (comment.spoiler == 1) {
+            if (comment.spoiler == 1) {
 
-            li.innerHTML += `
+                li.innerHTML += `
                     <div class="detailspoiler">
                         <div class="detailContent" style="display: none">${comment.content}</div>
                         <span>스포일러입니다.</span>
                         <button type="button" onclick="toggleSpoiler(this)">보기</button>
                     </div>`;
-        } else {
-            li.innerHTML += `<div class="detailContent" id="detail">${comment.content}</div>`;
+            } else {
+                li.innerHTML += `<div class="detailContent" id="detail">${comment.content}</div>`;
+            }
+            ul.appendChild(li);
         }
-        ul.appendChild(li);
     });
     detailContainer.appendChild(ul);
+
 
 });
 
@@ -109,15 +111,34 @@ document.addEventListener("click", (e) => {
     const target = e.target;
     let code = document.querySelector(".detailCommentCode").innerText;
     if (target.classList.contains("detailCommentUpdate")) {
+        if (confirm("댓글을 수정 하시겠습니까?")) {
+            updateComment(code).then(result => {
+                if (result == 1) {
+                    alert("댓글을 수정 하였습니다.");
+                } else {
+                    alert("댓글을 삭제 하였습니다.")
+                }
+            })
+        }
+
         console.log("수정");
 
         console.log(code);
 
     }
     if (target.classList.contains("detailCommentDelete")) {
-
-        console.log("삭제");
-
+        if (confirm("댓글을 삭제 하시겠습니까?")) {
+            deleteComment(code).then(result => {
+                if (result == 1) {
+                    alert("댓글이 삭제 되었습니다.");
+                    location.reload(true);
+                } else {
+                    alert("댓글 삭제 실패");
+                }
+            })
+        }else{
+            alert("삭제 취소하셨습니다.");
+        }
     }
 })
 
@@ -137,7 +158,33 @@ document.querySelector('.detailStory').addEventListener('click', (event) => {
 });
 
 
-// function  deleteComment()
+async function deleteComment(commentCode) {
+    try {
+        const url = "/movie/deleteComment/" + commentCode;
+        const config = {
+            method: "DELETE"
+        }
+        const resp = await fetch(url, config);
+        const result = resp.text();
+        return result;
+    } catch (err) {
+        console.log("deleteComment fail" + err);
+    }
+}
+
+async function updateComment(commentCode){
+    try{
+        const url = "/movie/updateComment" + commentCode;
+        const config ={
+            method: "PUT"
+        }
+        const resp = await fetch(url, config);
+        const result = resp.text();
+        return result;
+    }catch (err){
+        console.log("updateComment fail" + err);
+    }
+}
 
 // 스포일러 버튼
 function toggleSpoiler(button) {
