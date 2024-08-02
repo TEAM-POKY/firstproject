@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import www.project.domain.StarFollowVO;
 import www.project.repository.StarFollowMapper;
 
@@ -21,6 +22,15 @@ public class StarFollowServiceImpl implements StarFollowService {
         }else{
             isOk =  starFollowMapper.followActor(sfvo.getEmail(),sfvo.getActorId());
         }
+        return isOk;
+    }
+
+    @Transactional
+    @Override
+    public int getFollowInfo(String currentId, String personId) {
+        int isOk = 0;
+        isOk += starFollowMapper.getCrewFollowInfo(currentId, personId);
+        isOk += starFollowMapper.getActorFollowInfo(currentId, personId);
         return isOk;
     }
 }
