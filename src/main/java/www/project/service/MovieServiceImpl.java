@@ -56,4 +56,9 @@ public class MovieServiceImpl implements MovieService {
     public int deleteComment(String commentCode) {
         return starMapper.deleteComment(commentCode);
     }
+
+    @Override
+    public int updateComment(CommentVO cvo) {
+        return starMapper.updateComment(cvo);
+    }
 }

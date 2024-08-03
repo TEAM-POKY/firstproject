@@ -112,19 +112,23 @@ document.addEventListener("click", (e) => {
     let code = document.querySelector(".detailCommentCode").innerText;
     if (target.classList.contains("detailCommentUpdate")) {
         if (confirm("댓글을 수정 하시겠습니까?")) {
-            updateComment(code).then(result => {
+            const config = {
+                commentCode : code,
+                mediaId: userInfo.mediaId,
+                content: document.getElementById("commentText").value,
+                spoiler: spoilerCheckbox.value,
+
+            };
+            updateComment(config).then(result => {
                 if (result == 1) {
                     alert("댓글을 수정 하였습니다.");
                 } else {
-                    alert("댓글을 삭제 하였습니다.")
+                    alert("댓글을 수정 실패 하였습니다.")
                 }
             })
         }
-
         console.log("수정");
-
         console.log(code);
-
     }
     if (target.classList.contains("detailCommentDelete")) {
         if (confirm("댓글을 삭제 하시겠습니까?")) {
@@ -172,11 +176,15 @@ async function deleteComment(commentCode) {
     }
 }
 
-async function updateComment(commentCode){
+async function updateComment(commentConfig){
     try{
-        const url = "/movie/updateComment" + commentCode;
+        const url = "/movie/updateComment";
         const config ={
-            method: "PUT"
+            method: "PUT",
+            headers: {
+                'content-type': 'application/json; charset =utf-8'
+            },
+            body: JSON.stringify(commentConfig)
         }
         const resp = await fetch(url, config);
         const result = resp.text();
