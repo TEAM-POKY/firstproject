@@ -17,12 +17,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import www.project.config.oauth2.PrincipalDetails;
-import www.project.domain.StarFollowVO;
-import www.project.domain.StarVO;
-import www.project.domain.UserFollowVO;
+import www.project.domain.*;
 import www.project.handler.FileHandler;
 import www.project.service.*;
-import www.project.domain.UserVO;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -45,6 +42,7 @@ public class UserController {
     private final StarService svc;
     private final FollowService fsv;
     private final StarFollowService sfs;
+    private final wishService wsv;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -333,4 +331,20 @@ public class UserController {
         return sfvo;
     }
 
+    @PostMapping("/wish/{currentId}")
+    @ResponseBody
+    public String addWish(@PathVariable String currentId, @RequestBody WishVO wvo) {
+        wvo.setEmail(currentId);
+        int isSuccess = wsv.addWish(wvo);
+        if (isSuccess > 0) {
+            return "pass";
+        } else {
+            return "fail";
+        }
+    }
+    @GetMapping("/wish/{currentId}/{mediaId}")
+    @ResponseBody
+    public boolean wishInfo(@PathVariable String currentId, @PathVariable long mediaId) {
+        return wsv.checkWish(currentId, mediaId);
+    }
 }
