@@ -334,6 +334,8 @@ public class UserController {
     @PatchMapping("/wish/{currentId}")
     @ResponseBody
     public String addWish(@PathVariable String currentId, @RequestBody WishVO wvo) {
+
+        log.info("아이디{}", currentId);
         wvo.setEmail(currentId);
         int isSuccess = wsv.addWish(wvo);
         if (isSuccess > 0) {
@@ -345,6 +347,7 @@ public class UserController {
     @DeleteMapping("/wish/{currentId}")
     @ResponseBody
     public String deleteWish(@PathVariable String currentId, @RequestBody WishVO wvo) {
+        log.info("아이디{}", currentId);
         wvo.setEmail(currentId);
         int isDelSuccess = wsv.deleteWish(wvo);
         if (isDelSuccess > 0) {

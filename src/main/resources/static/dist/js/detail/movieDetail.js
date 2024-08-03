@@ -254,6 +254,7 @@ function elapsedTime(date) {
     return '방금 전';
 }
 
+
 async function getWishInfo(){
     try{
         const url = "/user/wish/"+currentId+"/"+mediaInfo.mediaId;
@@ -267,18 +268,7 @@ async function getWishInfo(){
     }
 }
 
-if (typeof currentId !== 'undefined') {
-    try {
-        getWishInfo().then(result =>{
-            if(result == true){
-                document.getElementById('detailWish').innerText = "좋아요취소"
-                isWish = true;
-            }
-        })
-    }catch (error){
-        console.log(error);
-    }
-}
+
 
 
 document.getElementById('detailWish').addEventListener('click', () => {
@@ -321,3 +311,17 @@ async function addWish(currentId, mediaInfo) {
 }
 
 
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof currentId !== 'undefined') {
+        try {
+            getWishInfo().then(result =>{
+                if(result == "true"){
+                    isWish = true;
+                    document.getElementById('detailWish').innerText = "좋아요취소"
+                }
+            })
+        }catch (error){
+            console.log(error);
+        }
+    }
+});
