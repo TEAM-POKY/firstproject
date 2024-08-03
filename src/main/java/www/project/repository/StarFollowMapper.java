@@ -9,7 +9,11 @@ public interface StarFollowMapper {
 
     int followActor(String email, long actorId);
 
-    int getCrewFollowInfo(String currentId, String personId);
+    int getCrewFollowInfo(String currentId, long personId);
 
-    int getActorFollowInfo(String currentId, String personId);
+    int getActorFollowInfo(String currentId, long personId);
+
+    int unFollowCrew(long crewId, String email);
+
+    int unFollowActor(String email, long actorId);
 }

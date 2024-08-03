@@ -1,6 +1,7 @@
 const urlParams = new URLSearchParams(window.location.search);
 const personId = urlParams.get('personId');
 const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+let isFollowed = false;
 
 personDetail(personId).then(async result => {
     console.log(result);
@@ -21,36 +22,53 @@ personDetail(personId).then(async result => {
     structure += `
     <ul class="personUl"><li class="personName">${result.name}</li>
     <li class="personBirth">${result.birthday.replaceAll("-", ".")}</li>`;
-    //사망인물 체크
+    // 사망 인물 체크
     if (result.deathday !== null) {
         structure += `<li class="personDeath">사망 ${result.deathday.replaceAll("-", ".")}</li>`;
     }
-    if(typeof currentId !== 'undefined') {
-        getFollowInfo(personId).then(infoResult => {
+
+    if (typeof currentId !== 'undefined') {
+        try {
+            const infoResult = await getFollowInfo(personId);
             console.log(infoResult);
-            if (infoResult == "true") {
+            if (infoResult === "true") {
+                isFollowed = true;
                 if (result.known_for_department === "Directing") {
                     structure += `<li><button type="button" id="directorFollowBtn">언팔로우</button></li>`;
                 } else {
                     structure += `<li><button type="button" id="actorFollowBtn">언팔로우</button></li>`;
                 }
+            } else if (infoResult === "false") {
+                isFollowed = false;
+                if (result.known_for_department === "Directing") {
+                    structure += `<li><button type="button" id="directorFollowBtn">팔로우</button></li>`;
+                } else {
+                    structure += `<li><button type="button" id="actorFollowBtn">팔로우</button></li>`;
+                }
             }
-        })
-
+        } catch (error) {
+            console.error("Error fetching follow info:", error);
+        }
     }
+
     structure += `</ul>`;
     personInfo.innerHTML = structure;
-    personSNS(personId).then(sns => {
-        console.log(sns);
+
+    // SNS 정보 추가
+    try {
+        const sns = await personSNS(personId);
         if (sns.instagram_id !== null) {
-            document.querySelector('.personUl').innerHTML += `<li class="instaId"><a href="https://www.instagram.com/${sns.instagram_id}/">인스타그램</a></li>`
+            personInfo.querySelector('.personUl').innerHTML += `<li class="instaId"><a href="https://www.instagram.com/${sns.instagram_id}/">인스타그램</a></li>`;
         }
         if (sns.twitter_id !== null) {
-            document.querySelector('.personUl').innerHTML += `<li class="twitterId"><a href="https://www.x.com/${sns.twitter_id}/">X</a></li>`
+            personInfo.querySelector('.personUl').innerHTML += `<li class="twitterId"><a href="https://www.x.com/${sns.twitter_id}/">X</a></li>`;
         }
-    })
+    } catch (error) {
+        console.error("Error fetching SNS info:", error);
+    }
+
     document.querySelector('.personInfo').appendChild(personInfo);
-})
+});
 credits(personId).then(result=>{
     console.log(result);
     //cast(배역)
@@ -215,7 +233,7 @@ async function personSNS(personId){
         console.log("person not find : "+err);
     }
 }
-let isFollowed = "";
+
 
 async function followStatus(event,email,id) {
     try {
@@ -226,8 +244,7 @@ async function followStatus(event,email,id) {
             type = 'actor';
         }
         const url = `/user/followByType?type=${type}`;
-        // const method = isFollowed ? 'DELETE' : 'PATCH';
-        const method = "PATCH";
+        const method = isFollowed ? 'DELETE' : 'PATCH';
         const data = { currentId: email, personId : id };
         const options = {
             method: method,
@@ -258,9 +275,16 @@ document.addEventListener('click', function(event) {
         followStatus(event, currentId, personId).then(result => {
             if (result == "pass") {
                 alert("팔로우 성공");
+                isFollowed = true;
                 document.getElementById(targetId).innerText = "언팔로우";
-            } else {
+            } else if(result == "fail"){
                 alert("팔로우 오류");
+            } else if(result == "unfollowPass"){
+                alert("언팔로우 성공");
+                isFollowed = false;
+                document.getElementById(targetId).innerText = "팔로우";
+            } else if(result == "unfollowFail"){
+                alert("언팔로우 오류")
             }
         });
         event.stopPropagation();
@@ -269,9 +293,8 @@ document.addEventListener('click', function(event) {
 
 async function getFollowInfo(personId){
     try {
-        const url = "/user/starFollow/"+currentId/+personId;
-        console.info(currentId);
-        console.info(personId);
+        const url = "/user/starFollow/"+currentId+"/"+personId;
+
         const config = {
             method: 'GET'
         };

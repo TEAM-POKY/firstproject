@@ -267,7 +267,8 @@ public class UserController {
         }
     }
     @GetMapping("/starFollow/{currentId}/{personId}")
-    public String starFollow(@PathVariable String currentId, @PathVariable String personId) {
+    @ResponseBody
+    public String starFollow(@PathVariable(value = "currentId") String currentId, @PathVariable(value = "personId") long personId) {
         int count = sfs.getFollowInfo(currentId, personId);
         if(count > 0){
             return "true";
@@ -276,7 +277,7 @@ public class UserController {
     }
 
     @PatchMapping("/followByType")
-    public ResponseEntity<Map<String, String>> followUser(@RequestParam("type") String type, @RequestBody String requestBody) {
+    public ResponseEntity<Map<String, String>> followStar(@RequestParam("type") String type, @RequestBody String requestBody) {
         JSONObject jsonObject = new JSONObject(requestBody);
         String currentId = jsonObject.getString("currentId");
         long personId = Long.parseLong(jsonObject.getString("personId"));
@@ -300,23 +301,29 @@ public class UserController {
         return ResponseEntity.badRequest().body(response);
     }
 
-//    // DELETE 요청을 처리하는 메서드 예시
-//    @DeleteMapping("/followByType")
-//    public ResponseEntity<String> unfollowUser(
-//            @RequestParam("role") String role,
-//            @RequestBody FollowRequest followRequest) {
-//
-//        // role에 따라 다른 로직을 수행
-//        if ("director".equals(role)) {
-//            // 감독 관련 언팔로우 로직
-//            // 예: unfollowDirector(followRequest.getCurrentId(), followRequest.getEmail());
-//        } else if ("actor".equals(role)) {
-//            // 배우 관련 언팔로우 로직
-//            // 예: unfollowActor(followRequest.getCurrentId(), followRequest.getEmail());
-//        }
-//
-//        // 성공적으로 처리된 경우 응답 반환
-//        return ResponseEntity.ok("팔로우 상태가 성공적으로 변경되었습니다.");
-//    }
+    @DeleteMapping("/followByType")
+    public ResponseEntity<Map<String, String>> unfollowStar(@RequestParam("type") String type, @RequestBody String requestBody) {
+        JSONObject jsonObject = new JSONObject(requestBody);
+        String currentId = jsonObject.getString("currentId");
+        long personId = Long.parseLong(jsonObject.getString("personId"));
+        Map<String, String> response = new HashMap<>();
+        StarFollowVO sfvo = new StarFollowVO();
+        if ("crew".equals(type)) {
+            sfvo.setEmail(currentId);
+            sfvo.setCrewId(personId);
+            sfvo.setType(type);
+        } else if ("actor".equals(type)) {
+            sfvo.setEmail(currentId);
+            sfvo.setActorId(personId);
+            sfvo.setType(type);
+        }
+        int isOk = sfs.unfollowStar(sfvo);
+        if(isOk>0){
+            response.put("message","unfollowPass");
+            return ResponseEntity.ok(response);
+        }
+        response.put("message","unfollowFail");
+        return ResponseEntity.badRequest().body(response);
+    }
 
 }
