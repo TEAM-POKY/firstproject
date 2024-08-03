@@ -10,9 +10,15 @@
         insert into actor_follow (email, actor_id) values (#{email}, #{actorId})
     </insert>
     <select id="getCrewFollowInfo" resultType="int">
-        select count(*) from crew_follow where email = #{email} and crew_id = #{personId}
+        select count(*) from crew_follow where email = #{currentId} and crew_id = #{personId}
     </select>
     <select id="getActorFollowInfo" resultType="int">
-        select count(*) from actor_follow where email = #{email} and actor_id = #{personId}
+        select count(*) from actor_follow where email = #{currentId} and actor_id = #{personId}
     </select>
+    <delete id="unFollowCrew">
+        delete from crew_follow where email = #{email} and crew_id = #{crewId}
+    </delete>
+    <delete id="unFollowActor">
+        delete from actor_follow where email = #{email} and actor_id = #{actorId}
+    </delete>
 </mapper>

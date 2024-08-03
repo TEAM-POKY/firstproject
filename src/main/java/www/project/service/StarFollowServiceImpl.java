@@ -27,10 +27,21 @@ public class StarFollowServiceImpl implements StarFollowService {
 
     @Transactional
     @Override
-    public int getFollowInfo(String currentId, String personId) {
+    public int getFollowInfo(String currentId, long personId) {
         int isOk = 0;
         isOk += starFollowMapper.getCrewFollowInfo(currentId, personId);
         isOk += starFollowMapper.getActorFollowInfo(currentId, personId);
+        return isOk;
+    }
+
+    @Override
+    public int unfollowStar(StarFollowVO sfvo) {
+        int isOk = -1;
+        if(sfvo.getType().equals("crew")){
+            isOk = starFollowMapper.unFollowCrew(sfvo.getCrewId(), sfvo.getEmail());
+        }else{
+            isOk =  starFollowMapper.unFollowActor(sfvo.getEmail(),sfvo.getActorId());
+        }
         return isOk;
     }
 }
