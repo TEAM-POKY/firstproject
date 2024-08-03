@@ -21,4 +21,14 @@
     <delete id="unFollowActor">
         delete from actor_follow where email = #{email} and actor_id = #{actorId}
     </delete>
+    <select id="getAllFollow" resultType="www.project.domain.StarFollowVO">
+        SELECT email, crew_id AS crewId, NULL AS actorId, 'crew' AS type
+        FROM crew_follow
+        WHERE email = #{email}
+        UNION
+        SELECT email, NULL AS crewId, actor_id AS actorId, 'actor' AS type
+        FROM actor_follow
+        WHERE email = #{email}
+    </select>
+
 </mapper>

@@ -1,6 +1,9 @@
 package www.project.repository;
 
 import org.apache.ibatis.annotations.Mapper;
+import www.project.domain.StarFollowVO;
+
+import java.util.List;
 
 @Mapper
 public interface StarFollowMapper {
@@ -16,4 +19,6 @@ public interface StarFollowMapper {
     int unFollowCrew(long crewId, String email);
 
     int unFollowActor(String email, long actorId);
+
+    List<StarFollowVO> getAllFollow(String currentId);
 }
