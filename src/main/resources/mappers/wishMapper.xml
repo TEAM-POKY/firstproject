@@ -12,4 +12,7 @@
         WHERE email = #{currentId}
         AND media_id = #{mediaId}
     </select>
+    <delete id="deleteWish">
+        delete from wish where email = #{currentId} and media_id = #{mediaId}
+    </delete>
 </mapper>

@@ -9,4 +9,6 @@ public interface wishMapper {
     int addWish(WishVO wvo);
 
     boolean checkWish(String currentId, long mediaId);
+
+    int deleteWish(WishVO wvo);
 }
