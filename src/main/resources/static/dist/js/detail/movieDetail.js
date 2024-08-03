@@ -7,7 +7,7 @@ const detailCatediv = document.querySelector(".detailcate");
 const storyText = document.querySelector(".detailText");
 const imageBaseUrl = 'https://image.tmdb.org/t/p/original';
 const imageBasicurl = '/dist/image/no_image.png';
-var mediaInfo = {
+let mediaInfo = {
     mediaId: "",
     urlInfo: "",
     type: ""
@@ -254,4 +254,58 @@ function elapsedTime(date) {
 }
 
 
+document.getElementById('detailWish').addEventListener('click', () => {
+    addWish(currentId, mediaInfo).then(result =>{
+        if(result == "pass"){
+            alert("좋아요 추가")
+            document.getElementById('detailWish').innerText = "좋아요취소";
+        }else{
+            alert("추가 실패")
+        }
+    })
+})
+async function addWish(currentId, mediaInfo) {
+    try {
+        const url = "/user/wish/" + currentId;
+        const data = {
+            mediaType: mediaInfo.type,
+            mediaId: mediaInfo.mediaId
+        };
+        const config = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        };
+        const resp = await fetch(url, config);
+        return await resp.text();
+    } catch (error) {
+        console.log(error);
+    }
+}
 
+async function getWishInfo(){
+    try{
+        const url = "/user/wish/"+currentId+"/"+mediaInfo.mediaId;
+        const config = {
+            method : "GET"
+        }
+        const resp = await fetch(url, config);
+        return await resp.text();
+    }catch(error){
+        console.log(error)
+    }
+}
+
+if (typeof currentId !== 'undefined') {
+    try {
+        getWishInfo().then(result =>{
+            if(result == true){
+                document.getElementById('detailWish').innerText = "좋아요취소"
+            }
+        })
+    }catch (error){
+        console.log(error);
+    }
+}
