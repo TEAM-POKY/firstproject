@@ -216,15 +216,32 @@ body {
 #withdrawalBtn{
     margin-left: 10px;
 }
-
-#actorContainer, #crewContainer{
+#crewContainer, #actorContainer{
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /*justify-content: center;*/
+    align-items: center;
+    align-content: center;
+    /*height: 300px;*/
 }
-.personOne{
-    width: 20%;
+.profileContainer{
+    width: 200px;
+    height: 280px;
+    line-height: 280px;
 }
 .personImg{
-    width: 148px;
-    height: 148px;
-    border-radius: 100px;
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+}
+.personName{
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+}
+.personLink{
+    margin-left: 50px;
+    margin-top: 30px;
 }

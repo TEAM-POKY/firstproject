@@ -6,7 +6,7 @@ const options = {
         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmRmZTQ3YTQ0NzU2ZTI5MDAyNTcxNWE2YjQyZDhkNSIsIm5iZiI6MTcyMTA3OTk3NS4wMjMyMTQsInN1YiI6IjY2MDNkNTE3NjA2MjBhMDE3YzMwMjY0OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Yepq4-FusJE30k6cCnybO96yFv6CgiDyauetmowyE-U'
     }
 };
-let nickName = '';//
+let nickName = '';
 
 //유저정보
 async function getUserInfo(currentId) {
@@ -482,7 +482,7 @@ async function fetchPersonData(personId) {
 // 요소렌더링
 function createProfileElement(person) {
     const profileDiv = document.createElement('div');
-    profileDiv.className = 'personOne';
+    profileDiv.className = 'profileContainer';
 
     const img = document.createElement('img');
     img.className = "personImg";
@@ -493,22 +493,22 @@ function createProfileElement(person) {
             : '/dist/image/default_profile_m.jpg');
 
     const name = document.createElement('div');
+    name.className = "personName"
     name.textContent = person.name;
 
     profileDiv.appendChild(img);
-    profileDiv.appendChild(name);
 
     const link = document.createElement('a');
     link.href = `/movie/person?personId=${person.id}`;
-    link.appendChild(profileDiv);
+    link.appendChild(img);
+    link.appendChild(name);
+    link.className = "personLink"
 
     return link;
 }
 
 // 이미지이름렌더링
 async function renderProfiles(profileData, container) {
-    container.innerHTML = '';
-
     for (const profile of profileData) {
         const personId = profile.actorId || profile.crewId;
         if (personId) {
