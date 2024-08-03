@@ -217,3 +217,14 @@ body {
     margin-left: 10px;
 }
 
+#actorContainer, #crewContainer{
+    display: flex;
+}
+.personOne{
+    width: 20%;
+}
+.personImg{
+    width: 148px;
+    height: 148px;
+    border-radius: 100px;
+}

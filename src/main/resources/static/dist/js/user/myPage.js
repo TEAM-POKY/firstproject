@@ -451,3 +451,79 @@ let donutChart = new Chart(ctx, {
 function calc(number, total){
     return (number/total * 100).toFixed(1);
 }
+
+//배우 감독 팔로우
+async function getStarFollowInfo(){
+    try {
+        const url = "/user/starFollow/"+currentId;
+        const config = {
+            method: 'GET'
+        };
+        const resp = await fetch(url, config);
+        return await resp.json();
+    }catch(error){
+        console.log(error);
+    }
+}
+
+// 인물데이터가져오기
+async function fetchPersonData(personId) {
+    try {
+        const response = await fetch(`https://api.themoviedb.org/3/person/${personId}?language=ko-KR'`, options);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Failed to fetch person data:', error);
+    }
+}
+
+// 요소렌더링
+function createProfileElement(person) {
+    const profileDiv = document.createElement('div');
+    profileDiv.className = 'personOne';
+
+    const img = document.createElement('img');
+    img.className = "personImg";
+    img.src = person.profile_path
+        ? `https://image.tmdb.org/t/p/w500${person.profile_path}`
+        : (person.gender === 1
+            ? '/dist/image/default_profile_w.jpg'
+            : '/dist/image/default_profile_m.jpg');
+
+    const name = document.createElement('div');
+    name.textContent = person.name;
+
+    profileDiv.appendChild(img);
+    profileDiv.appendChild(name);
+
+    const link = document.createElement('a');
+    link.href = `/movie/person?personId=${person.id}`;
+    link.appendChild(profileDiv);
+
+    return link;
+}
+
+// 이미지이름렌더링
+async function renderProfiles(profileData, container) {
+    container.innerHTML = '';
+
+    for (const profile of profileData) {
+        const personId = profile.actorId || profile.crewId;
+        if (personId) {
+            const personData = await fetchPersonData(personId);
+            if (personData) {
+                const profileElement = createProfileElement(personData);
+                container.appendChild(profileElement);
+            }
+        }
+    }
+}
+
+getStarFollowInfo().then(result => {
+    const actors = result.filter(item => item.type === 'actor');
+    const crew = result.filter(item => item.type === 'crew');
+    renderProfiles(actors, actorContainer);
+    renderProfiles(crew, crewContainer);
+});

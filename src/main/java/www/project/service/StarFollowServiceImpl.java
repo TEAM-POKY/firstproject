@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import www.project.domain.StarFollowVO;
 import www.project.repository.StarFollowMapper;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -43,5 +45,10 @@ public class StarFollowServiceImpl implements StarFollowService {
             isOk =  starFollowMapper.unFollowActor(sfvo.getEmail(),sfvo.getActorId());
         }
         return isOk;
+    }
+
+    @Override
+    public List<StarFollowVO> getAllFollow(String currentId) {
+        return starFollowMapper.getAllFollow(currentId);
     }
 }

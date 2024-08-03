@@ -164,6 +164,7 @@ public class UserController {
     public boolean checkNickname(@RequestParam String nickname) {
         return usv.isNicknameDuplicate(nickname);
     }
+
     @PutMapping("/updateNickname")
     @ResponseBody
     public ResponseEntity<String> updateNickname(@RequestBody Map<String, String> request) {
@@ -324,6 +325,12 @@ public class UserController {
         }
         response.put("message","unfollowFail");
         return ResponseEntity.badRequest().body(response);
+    }
+    @GetMapping("/starFollow/{currentId}")
+    @ResponseBody
+    public List<StarFollowVO> starFollowInfo(@PathVariable String currentId){
+        List<StarFollowVO> sfvo = sfs.getAllFollow(currentId);
+        return sfvo;
     }
 
 }
