@@ -331,7 +331,7 @@ public class UserController {
         return sfvo;
     }
 
-    @PostMapping("/wish/{currentId}")
+    @PatchMapping("/wish/{currentId}")
     @ResponseBody
     public String addWish(@PathVariable String currentId, @RequestBody WishVO wvo) {
         wvo.setEmail(currentId);
@@ -342,6 +342,18 @@ public class UserController {
             return "fail";
         }
     }
+    @DeleteMapping("/wish/{currentId}")
+    @ResponseBody
+    public String deleteWish(@PathVariable String currentId, @RequestBody WishVO wvo) {
+        wvo.setEmail(currentId);
+        int isDelSuccess = wsv.deleteWish(wvo);
+        if (isDelSuccess > 0) {
+            return "delPass";
+        } else {
+            return "delFail";
+        }
+    }
+
     @GetMapping("/wish/{currentId}/{mediaId}")
     @ResponseBody
     public boolean wishInfo(@PathVariable String currentId, @PathVariable long mediaId) {

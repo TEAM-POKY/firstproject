@@ -20,7 +20,13 @@ public class wishServiceImpl implements wishService{
     }
 
     @Override
+    public int deleteWish(WishVO wvo) {
+        return wishMapper.deleteWish(wvo);
+    }
+
+    @Override
     public boolean checkWish(String currentId, long mediaId) {
         return wishMapper.checkWish(currentId, mediaId);
     }
+
 }

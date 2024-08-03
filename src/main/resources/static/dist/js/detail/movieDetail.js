@@ -12,6 +12,7 @@ let mediaInfo = {
     urlInfo: "",
     type: ""
 };
+let isWish = false;
 
 if (urlParams.has("movieId")) {
     mediaInfo.mediaId = urlParams.get("movieId");
@@ -253,38 +254,6 @@ function elapsedTime(date) {
     return '방금 전';
 }
 
-
-document.getElementById('detailWish').addEventListener('click', () => {
-    addWish(currentId, mediaInfo).then(result =>{
-        if(result == "pass"){
-            alert("좋아요 추가")
-            document.getElementById('detailWish').innerText = "좋아요취소";
-        }else{
-            alert("추가 실패")
-        }
-    })
-})
-async function addWish(currentId, mediaInfo) {
-    try {
-        const url = "/user/wish/" + currentId;
-        const data = {
-            mediaType: mediaInfo.type,
-            mediaId: mediaInfo.mediaId
-        };
-        const config = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        };
-        const resp = await fetch(url, config);
-        return await resp.text();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 async function getWishInfo(){
     try{
         const url = "/user/wish/"+currentId+"/"+mediaInfo.mediaId;
@@ -303,9 +272,52 @@ if (typeof currentId !== 'undefined') {
         getWishInfo().then(result =>{
             if(result == true){
                 document.getElementById('detailWish').innerText = "좋아요취소"
+                isWish = true;
             }
         })
     }catch (error){
         console.log(error);
     }
 }
+
+
+document.getElementById('detailWish').addEventListener('click', () => {
+    addWish(currentId, mediaInfo).then(result =>{
+        if(result == "pass"){
+            alert("좋아요 추가")
+            document.getElementById('detailWish').innerText = "좋아요취소";
+            isWish = true;
+        }else if(result == "fail"){
+            alert("추가 실패");
+        }else if(result == "delPass") {
+            alert("좋아요 취소 성공");
+            document.getElementById('detailWish').innerText = "좋아요";
+            isWish = false;
+        }else if(result == "delFail"){
+            alert("좋아요 취소 실패")
+        }
+    })
+})
+
+async function addWish(currentId, mediaInfo) {
+    try {
+        const url = "/user/wish/" + currentId;
+        const data = {
+            mediaType: mediaInfo.type,
+            mediaId: mediaInfo.mediaId
+        };
+        const config = {
+            method: isWish? 'DELETE' : 'PATCH',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        };
+        const resp = await fetch(url, config);
+        return await resp.text();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
