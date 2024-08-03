@@ -41,7 +41,7 @@ document.addEventListener('click', (e) => {
         const ratingInfo = {
             email: user.innerText,
             rate: e.target.value,
-            mediaId: movieId
+            mediaId: userInfo.mediaId
         }
         ratingMovie(ratingInfo).then(result => {
             if (result == 1) {

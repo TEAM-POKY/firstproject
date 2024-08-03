@@ -51,9 +51,9 @@ public class MovieController {
     @ResponseBody
     @PutMapping
     public int updateComment(@RequestBody CommentVO cvo){
-//        log.info("commentCode >>{} ",cvo.getCommentCode());
-//        int isOk = movieService.updateComment(cvo);
-        return 1;
+        log.info("commentCode >>{} ",cvo.getCommentCode());
+        int isOk = movieService.updateComment(cvo);
+        return isOk;
     }
 
     @ResponseBody

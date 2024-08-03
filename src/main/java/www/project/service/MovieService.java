@@ -17,4 +17,6 @@ public interface MovieService {
     List<CommentListDTO> getCommentList(long mediaId);
 
     int deleteComment(String commentCode);
+
+    int updateComment(CommentVO cvo);
 }
