@@ -29,7 +29,7 @@
     </insert>
 
     <select id="getCommentList" resultType="www.project.domain.CommentListDTO">
-        SELECT c.*,u.nickname
+        SELECT c.*, u.is_del, nickname
         FROM comment  c
         JOIN user u ON u.email = c.email
         WHERE c.media_id = #{media_id};
