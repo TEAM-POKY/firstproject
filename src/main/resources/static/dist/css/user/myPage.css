@@ -5,6 +5,10 @@ body {
     display: flex;
     justify-content: center;
 }
+a{
+    text-decoration: none;
+    color: black;
+}
 .container {
     width: 1300px;
     margin: 30px 300px;
@@ -244,4 +248,9 @@ body {
 .personLink{
     margin-left: 50px;
     margin-top: 30px;
+}
+#goToHome{
+    position: absolute;
+    right: 320px;
+    top: 50px;
 }
