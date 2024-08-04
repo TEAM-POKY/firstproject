@@ -318,6 +318,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(result == "true"){
                     isWish = true;
                     document.getElementById('detailWish').innerText = "좋아요취소"
+                }else{
+                    document.getElementById('detailWish').innerText = "좋아요"
                 }
             })
         }catch (error){
