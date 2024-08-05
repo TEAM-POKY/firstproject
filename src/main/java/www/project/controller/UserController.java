@@ -135,9 +135,7 @@ public class UserController {
     @GetMapping("/star/{currentId}")
     @ResponseBody
     public List<StarVO> star(@PathVariable String currentId){
-        List<StarVO> starVOList = svc.getList(currentId);
-        log.info("이거어케나감{}",starVOList);
-        return starVOList;
+        return svc.getList(currentId);
     }
 
     @GetMapping("/info/{currentId}")
@@ -145,6 +143,7 @@ public class UserController {
     public UserVO info(@PathVariable String currentId){
         return usv.getInfo(currentId);
     }
+
     @GetMapping("/profile")
     public String profile(){
         return "/user/profile";
@@ -152,10 +151,13 @@ public class UserController {
 
     @GetMapping("/follow/{currentId}")
     @ResponseBody
-    public String followCount(@PathVariable String currentId){
-        int followerCount = usv.getFollower(currentId);
-        int followingCount = usv.getFollowing(currentId);
-        return followerCount+"/"+followingCount;
+    public List<UserFollowVO> followList(@PathVariable String currentId){
+        List<UserFollowVO> followerList = usv.getFollowerList(currentId);
+        List<UserFollowVO> followingList = usv.getFollowingList(currentId);
+        List<UserFollowVO> resultList = new ArrayList<>();
+        resultList.addAll(followerList);
+        resultList.addAll(followingList);
+        return resultList;
     }
     @GetMapping("/checkNickname")
     @ResponseBody
@@ -334,6 +336,8 @@ public class UserController {
     @PatchMapping("/wish/{currentId}")
     @ResponseBody
     public String addWish(@PathVariable String currentId, @RequestBody WishVO wvo) {
+
+        log.info("아이디{}", currentId);
         wvo.setEmail(currentId);
         int isSuccess = wsv.addWish(wvo);
         if (isSuccess > 0) {
@@ -345,6 +349,7 @@ public class UserController {
     @DeleteMapping("/wish/{currentId}")
     @ResponseBody
     public String deleteWish(@PathVariable String currentId, @RequestBody WishVO wvo) {
+        log.info("아이디{}", currentId);
         wvo.setEmail(currentId);
         int isDelSuccess = wsv.deleteWish(wvo);
         if (isDelSuccess > 0) {
@@ -359,4 +364,6 @@ public class UserController {
     public boolean wishInfo(@PathVariable String currentId, @PathVariable long mediaId) {
         return wsv.checkWish(currentId, mediaId);
     }
+
+
 }

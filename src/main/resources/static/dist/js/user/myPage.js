@@ -46,7 +46,7 @@ function renderNickName() {
         document.getElementById('changeProfileImage').style.display = 'none';
         document.getElementById('nickName').innerHTML = str;
         document.getElementById('followBtn').addEventListener('click', async ()=>{
-            await userFollowStatus(currentId, loginId);
+            await userFollowStatus(currentId, loginId, nickName);
         })
     }else{
         str += ` <img src="/dist/image/pencil.svg" alt="noPic" id="changeNickName">`
@@ -61,7 +61,7 @@ function renderNickName() {
     }
 }
 //팔로우 언팔로우 로직
-async function userFollowStatus(followEmail, email){
+async function userFollowStatus(followEmail, email, nickName) {
     try {
         let isFollow = document.getElementById('isFollow').innerText === 'true';
         const url = '/user/following';
@@ -78,14 +78,26 @@ async function userFollowStatus(followEmail, email){
         if (response.ok) {
             const result = await response.json();
             console.log(result.message);
-            isFollow ? alert(nickName + "님 팔로우 취소") : alert(nickName + "님 팔로우");
+            alert(isFollow ? `${nickName}님 팔로우 취소` : `${nickName}님 팔로우`);
             document.getElementById('isFollow').innerText = (!isFollow).toString();
             document.getElementById('followBtn').innerText = isFollow ? '팔로우' : '언팔로우';
-            followInfo(currentId).then(result =>{
-                let follower = result.split("/")[0];
-                let following = result.split("/")[1];
-                document.getElementById('followInfo').innerText = `팔로워 ${follower}명 | 팔로잉 ${following}명`;
-            })
+            await followInfo(currentId).then(result => {
+                let followerList = result.filter(user => user.email !== null);
+                let followingList = result.filter(user => user.followEmail !== null);
+                let followerCount = followerList.length;
+                let followingCount = followingList.length;
+                document.getElementById('followInfo').innerHTML = `
+                    <span id="followerCount">팔로워 ${followerCount}명</span> | 
+                    <span id="followingCount">팔로잉 ${followingCount}명</span>
+                `;
+                document.getElementById('followerCount').addEventListener('click', async () => {
+                    await showFollowModal(followerList, '팔로워 목록');
+                });
+                document.getElementById('followingCount').addEventListener('click', async () => {
+                    await showFollowModal(followingList, '팔로잉 목록');
+                });
+            });
+            document.getElementById('followModal').style.display = "none";
         } else {
             console.error('팔로우 상태 변경 실패:', response.status);
         }
@@ -93,6 +105,7 @@ async function userFollowStatus(followEmail, email){
         console.error('팔로우 상태 변경 중 오류 발생:', error);
     }
 }
+
 //회원탈퇴처리함수
 async function withdrawalAccount(loginId){
     try {
@@ -199,16 +212,76 @@ async function followInfo(currentId){
             method: 'GET'
         };
         const resp = await fetch(url, config);
-        return await resp.text();
+        return await resp.json();
     }catch (error) {
         console.log(error)
     }
 }
-followInfo(currentId).then(result =>{
-    let follower = result.split("/")[0];
-    let following = result.split("/")[1];
-    document.getElementById('followInfo').innerText = `팔로워 ${follower}명 | 팔로잉 ${following}명`;
-})
+followInfo(currentId).then(result => {
+    let followerList = result.filter(user => user.email !== null);
+    let followingList = result.filter(user => user.followEmail !== null);
+    let followerCount = followerList.length;
+    let followingCount = followingList.length;
+    document.getElementById('followInfo').innerHTML = `
+        <span id="followerCount">팔로워 ${followerCount}명</span> | 
+        <span id="followingCount">팔로잉 ${followingCount}명</span>
+    `;
+    document.getElementById('followerCount').addEventListener('click', async () => {
+        await showFollowModal(followerList, '팔로워 목록');
+    });
+    document.getElementById('followingCount').addEventListener('click', async () => {
+        await showFollowModal(followingList, '팔로잉 목록');
+    });
+});
+//팔로우 정보 관련 모달 출력함수
+async function showFollowModal(list, title) {
+    const modal = document.getElementById('followModal');
+    const modalContent = document.getElementById('followModalContent');
+    let userInfoPromises = list.map(user => getUserInfo(user.email || user.followEmail));
+    let userInfos = await Promise.all(userInfoPromises);
+    modalContent.innerHTML = `
+        <button id="followModalClose">X</button>
+        <h2>${title}</h2>
+        <ul>
+            ${userInfos.map(userInfo => `
+                <li>
+                    <span class="user-nickname" data-email="${userInfo.email}">${userInfo.nickname}</span>
+                </li>
+            `).join('')}
+        </ul>
+    `;
+    modal.style.display = "block";
+    document.querySelectorAll('.user-nickname').forEach(element => {
+        element.addEventListener('click', (event) => {
+            const email = event.target.getAttribute('data-email');
+            goToMyPage(email);
+        });
+    });
+    document.getElementById('followModalClose').addEventListener('click', () => {
+        modal.style.display = "none";
+    });
+}
+window.addEventListener('click', (event) => {
+    const modal = document.getElementById('followModal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+});
+//유저페이지 이동 함수
+function goToMyPage(currentId) {
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = '/user/mypage';
+
+    const hiddenField = document.createElement('input');
+    hiddenField.type = 'hidden';
+    hiddenField.name = 'email';
+    hiddenField.value = currentId;
+
+    form.appendChild(hiddenField);
+    document.body.appendChild(form);
+    form.submit();
+}
 //프로필변경
 function changeProfileImage() {
     let popupW = 500;
@@ -322,7 +395,7 @@ async function loadCalendar(date) {
                             posterContainer.appendChild(posterImg);
                             posterImg.addEventListener('click', () => {
                                 // 링크로 이동하는 로직 추가
-                                window.location.href = `https://www.themoviedb.org/movie/${poster.mediaId}`;
+                                window.location.href = `/movie/detail?movieId=${poster.mediaId}`;
                             });
                         });
                         if (posters.length > 1) {

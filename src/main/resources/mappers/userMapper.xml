@@ -60,12 +60,6 @@
         WHERE email = #{email}
     </update>
 
-    <select id="getFollower" resultType="int">
-        select count(*) from user_follow where follow_email = #{currentId}
-    </select>
-    <select id="getFollowing" resultType="int">
-        select count(*) from user_follow where email = #{currentId}
-    </select>
     <select id="isNicknameDuplicate" resultType="int">
         select count(nickname) from user where nickname = #{nickname}
     </select>
@@ -93,4 +87,10 @@
         set isDel = 1
         where email = #{loginId}
     </update>
+    <select id="getFollowerList" resultType="www.project.domain.UserFollowVO">
+        select email from user_follow where follow_email = #{currentId}
+    </select>
+    <select id="getFollowingList" resultType="www.project.domain.UserFollowVO">
+        select follow_email from user_follow where email = #{currentId}
+    </select>
 </mapper>
