@@ -145,6 +145,7 @@ public class UserController {
     public UserVO info(@PathVariable String currentId){
         return usv.getInfo(currentId);
     }
+
     @GetMapping("/profile")
     public String profile(){
         return "/user/profile";
