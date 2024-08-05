@@ -14,7 +14,7 @@ let rate = 0;
 
 israting(userInfo).then(result => {
     try {
-        const rate = result.rate ? result.rate : "";
+        const rate = result.rate;
         console.log(rate);
         if (rate >= 0) {
             console.log("if문 탐");
