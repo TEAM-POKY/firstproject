@@ -63,10 +63,16 @@ CREATE TABLE wish (
 
 -- Table: collection
 CREATE TABLE collection (
-    collection_name VARCHAR(500) NOT NULL,
-    media_id BIGINT NULL,
-    media_type varchar(50),
-    email VARCHAR(200) NOT NULL
+	cno	int	NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	collection_name	varchar(500) NOT NULL,
+	email varchar(200) NOT NULL
+);
+
+-- Table: collection_detail
+CREATE TABLE collection_detail (
+	cno	int	NOT NULL,
+	media_type varchar(50) NOT NULL,
+	media_id varchar(200) NOT NULL
 );
 
 -- Table: star
@@ -95,5 +101,6 @@ ALTER TABLE actor_follow ADD CONSTRAINT FK_user_TO_actor_follow_1 FOREIGN KEY (e
 ALTER TABLE crew_follow ADD CONSTRAINT FK_user_TO_crew_follow_1 FOREIGN KEY (email) REFERENCES user(email);
 ALTER TABLE wish ADD CONSTRAINT FK_user_TO_wish_1 FOREIGN KEY (email) REFERENCES user(email);
 ALTER TABLE collection ADD CONSTRAINT FK_user_TO_collection_1 FOREIGN KEY (email) REFERENCES user(email);
+ALTER TABLE collection_detail ADD CONSTRAINT FK_collection_TO_collection_detail_1 FOREIGN KEY(cno) REFERENCES collection(cno);
 ALTER TABLE star ADD CONSTRAINT FK_user_TO_star_1 FOREIGN KEY (email) REFERENCES user(email);
 ALTER TABLE auth ADD CONSTRAINT FK_user_TO_auth_1 FOREIGN KEY (email) REFERENCES user(email);

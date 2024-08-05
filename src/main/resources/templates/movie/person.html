@@ -6,9 +6,10 @@
     <th:block th:fragment="content">
         <div class="personDetail">
             <div class="personInfo"></div>
-            <div class="personMovieInfo"><div class="personMovieList personMediaList">참여한 영화</div></div>
-            <div class="personTvInfo"><div class="personTvList personMediaList">참여한 TV 프로그램</div></div>
+            <div class="personMovieInfo"><div class="personMovieList personMediaList">영화</div></div>
+            <div class="personTvInfo"><div class="personTvList personMediaList">TV 프로그램</div></div>
         </div>
+        <div th:text="${isFollowed}" style="display: none" id="isFollowed"></div>
     <script th:src="@{/dist/js/detail/personDetail.js}"></script>
     </th:block>
 </th:block>

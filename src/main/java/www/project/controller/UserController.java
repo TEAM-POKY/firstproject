@@ -3,6 +3,7 @@ package www.project.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,14 +17,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import www.project.config.oauth2.PrincipalDetails;
-import www.project.domain.StarVO;
-import www.project.domain.UserFollowVO;
+import www.project.domain.*;
 import www.project.handler.FileHandler;
-import www.project.service.FollowService;
-import www.project.service.MailService;
-import www.project.service.StarService;
-import www.project.service.UserService;
-import www.project.domain.UserVO;
+import www.project.service.*;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -45,6 +41,8 @@ public class UserController {
     private final MailService msv;
     private final StarService svc;
     private final FollowService fsv;
+    private final StarFollowService sfs;
+    private final wishService wsv;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -147,6 +145,7 @@ public class UserController {
     public UserVO info(@PathVariable String currentId){
         return usv.getInfo(currentId);
     }
+
     @GetMapping("/profile")
     public String profile(){
         return "/user/profile";
@@ -164,6 +163,7 @@ public class UserController {
     public boolean checkNickname(@RequestParam String nickname) {
         return usv.isNicknameDuplicate(nickname);
     }
+
     @PutMapping("/updateNickname")
     @ResponseBody
     public ResponseEntity<String> updateNickname(@RequestBody Map<String, String> request) {
@@ -256,7 +256,6 @@ public class UserController {
 
     @DeleteMapping("/following")
     public ResponseEntity<Map<String, String>> unfollowUser(@RequestBody UserFollowVO request) {
-        log.info("들어오는언팔로우객체체크{}", request);
         boolean success = fsv.unfollowUser(request.getEmail(), request.getFollowEmail());
         Map<String, String> response = new HashMap<>();
         if (success) {
@@ -267,5 +266,101 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+    @GetMapping("/starFollow/{currentId}/{personId}")
+    @ResponseBody
+    public String starFollow(@PathVariable(value = "currentId") String currentId, @PathVariable(value = "personId") long personId) {
+        int count = sfs.getFollowInfo(currentId, personId);
+        if(count > 0){
+            return "true";
+        }
+        return "false";
+    }
 
+    @PatchMapping("/followByType")
+    public ResponseEntity<Map<String, String>> followStar(@RequestParam("type") String type, @RequestBody String requestBody) {
+        JSONObject jsonObject = new JSONObject(requestBody);
+        String currentId = jsonObject.getString("currentId");
+        long personId = Long.parseLong(jsonObject.getString("personId"));
+        Map<String, String> response = new HashMap<>();
+        StarFollowVO sfvo = new StarFollowVO();
+        if ("crew".equals(type)) {
+            sfvo.setEmail(currentId);
+            sfvo.setCrewId(personId);
+            sfvo.setType(type);
+        } else if ("actor".equals(type)) {
+            sfvo.setEmail(currentId);
+            sfvo.setActorId(personId);
+            sfvo.setType(type);
+        }
+        int isOk = sfs.followStar(sfvo);
+        if(isOk>0){
+            response.put("message","pass");
+            return ResponseEntity.ok(response);
+        }
+        response.put("message","fail");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @DeleteMapping("/followByType")
+    public ResponseEntity<Map<String, String>> unfollowStar(@RequestParam("type") String type, @RequestBody String requestBody) {
+        JSONObject jsonObject = new JSONObject(requestBody);
+        String currentId = jsonObject.getString("currentId");
+        long personId = Long.parseLong(jsonObject.getString("personId"));
+        Map<String, String> response = new HashMap<>();
+        StarFollowVO sfvo = new StarFollowVO();
+        if ("crew".equals(type)) {
+            sfvo.setEmail(currentId);
+            sfvo.setCrewId(personId);
+            sfvo.setType(type);
+        } else if ("actor".equals(type)) {
+            sfvo.setEmail(currentId);
+            sfvo.setActorId(personId);
+            sfvo.setType(type);
+        }
+        int isOk = sfs.unfollowStar(sfvo);
+        if(isOk>0){
+            response.put("message","unfollowPass");
+            return ResponseEntity.ok(response);
+        }
+        response.put("message","unfollowFail");
+        return ResponseEntity.badRequest().body(response);
+    }
+    @GetMapping("/starFollow/{currentId}")
+    @ResponseBody
+    public List<StarFollowVO> starFollowInfo(@PathVariable String currentId){
+        List<StarFollowVO> sfvo = sfs.getAllFollow(currentId);
+        return sfvo;
+    }
+
+    @PatchMapping("/wish/{currentId}")
+    @ResponseBody
+    public String addWish(@PathVariable String currentId, @RequestBody WishVO wvo) {
+
+        log.info("아이디{}", currentId);
+        wvo.setEmail(currentId);
+        int isSuccess = wsv.addWish(wvo);
+        if (isSuccess > 0) {
+            return "pass";
+        } else {
+            return "fail";
+        }
+    }
+    @DeleteMapping("/wish/{currentId}")
+    @ResponseBody
+    public String deleteWish(@PathVariable String currentId, @RequestBody WishVO wvo) {
+        log.info("아이디{}", currentId);
+        wvo.setEmail(currentId);
+        int isDelSuccess = wsv.deleteWish(wvo);
+        if (isDelSuccess > 0) {
+            return "delPass";
+        } else {
+            return "delFail";
+        }
+    }
+
+    @GetMapping("/wish/{currentId}/{mediaId}")
+    @ResponseBody
+    public boolean wishInfo(@PathVariable String currentId, @PathVariable long mediaId) {
+        return wsv.checkWish(currentId, mediaId);
+    }
 }

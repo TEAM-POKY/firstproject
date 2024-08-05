@@ -28,16 +28,20 @@
         insert into comment(media_id,content,spoiler,email,reg_date) values(#{mediaId},#{content},#{spoiler},#{email},now())
     </insert>
 
-    <update id="updateComment">
-        update comment set content=#{content},spoiler=#{spoiler} where email=#{email} and media_id=#{mediaId}
-    </update>
-
     <select id="getCommentList" resultType="www.project.domain.CommentListDTO">
-        SELECT c.*,u.isDel,nickname
+        SELECT c.*, u.is_del, nickname
         FROM comment  c
         JOIN user u ON u.email = c.email
         WHERE c.media_id = #{media_id};
     </select>
+
+    <delete id="deleteComment">
+        delete from comment where comment_code = #{commentCode}
+    </delete>
+
+    <update id="updateComment">
+        update comment set content=#{content},spoiler=#{spoiler} where comment_code = #{commentCode}
+    </update>
 
 
 
