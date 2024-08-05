@@ -1,9 +1,11 @@
 package www.project.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import www.project.domain.UserFollowVO;
 import www.project.domain.UserVO;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public interface UserService {
@@ -21,10 +23,6 @@ public interface UserService {
 
     int updateProfile(UserVO userVO);
 
-    int getFollower(String currentId);
-
-    int getFollowing(String currentId);
-
     boolean isNicknameDuplicate(String nickname);
 
     int updateNickName(String oldNickname, String newNickname);
@@ -34,4 +32,8 @@ public interface UserService {
     int setDefaultImage(String currentId);
 
     int withdrawUser(String loginId);
+
+    List<UserFollowVO> getFollowerList(String currentId);
+
+    List<UserFollowVO> getFollowingList(String currentId);
 }
