@@ -3,6 +3,7 @@ package www.project.repository;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import www.project.domain.AuthVO;
+import www.project.domain.UserFollowVO;
 import www.project.domain.UserVO;
 
 import java.util.List;
@@ -36,10 +37,6 @@ public interface UserMapper {
 
     int updateProfile(UserVO user);
 
-    int getFollower(String currentId);
-
-    int getFollowing(String currentId);
-
     int isNicknameDuplicate(String nickname);
 
     int updateNickName(String oldNickname, String newNickname);
@@ -51,4 +48,8 @@ public interface UserMapper {
     int setDefaultImage(String currentId);
 
     int withdrawUser(String loginId);
+
+    List<UserFollowVO> getFollowerList(String currentId);
+
+    List<UserFollowVO> getFollowingList(String currentId);
 }

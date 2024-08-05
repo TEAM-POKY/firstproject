@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import www.project.domain.UserFollowVO;
 import www.project.domain.UserVO;
 import www.project.repository.UserMapper;
 
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -62,16 +64,6 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public int getFollower(String currentId) {
-        return usermapper.getFollower(currentId);
-    }
-
-    @Override
-    public int getFollowing(String currentId) {
-        return usermapper.getFollowing(currentId);
-    }
-
-    @Override
     public boolean isNicknameDuplicate(String nickname) {
         return usermapper.isNicknameDuplicate(nickname) > 0;
     }
@@ -94,5 +86,15 @@ public class UserServiceImpl implements UserService{
     @Override
     public int withdrawUser(String loginId) {
         return usermapper.withdrawUser(loginId);
+    }
+
+    @Override
+    public List<UserFollowVO> getFollowerList(String currentId) {
+        return usermapper.getFollowerList(currentId);
+    }
+
+    @Override
+    public List<UserFollowVO> getFollowingList(String currentId) {
+        return usermapper.getFollowingList(currentId);
     }
 }

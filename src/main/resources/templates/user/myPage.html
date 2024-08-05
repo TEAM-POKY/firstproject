@@ -82,6 +82,11 @@
         <button id="modalClose">X</button>
         <div class="modal-content" id="modalContent"></div>
     </div>
+    <div id="followModal" class="follow-modal">
+        <div class="follow-modal-content" id="followModalContent">
+            <button id="followModalClose">X</button>
+        </div>
+    </div>
 </div>
 <script sec:authorize="isAuthenticated()">
     let currentId = document.getElementById('userEmail').innerText;
