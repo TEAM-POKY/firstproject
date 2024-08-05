@@ -13,19 +13,28 @@ var userInfo = {
 let rate = 0;
 
 israting(userInfo).then(result => {
-    rate = result.rate;
-    console.log(rate);
-    if (rate >= 0) {
-        console.log("if문 탐");
-        const inputs = document.querySelectorAll(".rating__input");
-        inputs.forEach(input => {
-            const value = parseFloat(input.getAttribute('value'));
-            if (value <= rate) {
-                input.nextElementSibling.classList.add('filled');
-            }
-        });
+    try {
+        const rate = result.rate ? result.rate : "";
+        console.log(rate);
+        if (rate >= 0) {
+            console.log("if문 탐");
+            const inputs = document.querySelectorAll(".rating__input");
+            inputs.forEach(input => {
+                const value = parseFloat(input.getAttribute('value'));
+                if (value <= rate) {
+                    input.nextElementSibling.classList.add('filled');
+                }
+            });
+        }
+    } catch (err) {
+        // 메서드 자체 에러
+        // console.error(err);
     }
+}).catch(err => {
+    // 비동기 에러
+    // console.error(err);
 });
+
 
 spoilerCheckbox.addEventListener('change', function () {
     if (spoilerCheckbox.checked) {
@@ -199,7 +208,7 @@ async function israting(userInfo) {
         const result = await resp.json();
         return result;
     } catch (err) {
-        console.log(err);
+        // console.log(err);
     }
 }
 
