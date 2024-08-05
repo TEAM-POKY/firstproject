@@ -322,7 +322,7 @@ async function loadCalendar(date) {
                             posterContainer.appendChild(posterImg);
                             posterImg.addEventListener('click', () => {
                                 // 링크로 이동하는 로직 추가
-                                window.location.href = `https://www.themoviedb.org/movie/${poster.mediaId}`;
+                                window.location.href = `/movie/detail?movieId=${poster.mediaId}`;
                             });
                         });
                         if (posters.length > 1) {

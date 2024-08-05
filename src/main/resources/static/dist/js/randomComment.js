@@ -24,39 +24,66 @@ async function getDetail(movieId) {
     }
 }
 
-
 async function displayComments(comments) {
     const commentContainer = document.querySelector('.commentInBox');
     commentContainer.innerHTML = '';
-
     for (const comment of comments) {
         const commentDiv = document.createElement('div');
         commentDiv.classList.add('comment');
         const movieId = comment.mediaId;
-
-        try {
-            const result = await getDetail(movieId);
-            const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
-            const posterPath = result.poster_path ? `${imageBaseUrl}${result.poster_path}` : '기본 포스터 url';
-
-            const commentContent = `
+        getUserInfo(comment.email).then(async userInfo => {
+            try {
+                const result = await getDetail(movieId);
+                const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+                const posterPath = result.poster_path ? `${imageBaseUrl}${result.poster_path}` : '기본 포스터 url';
+                commentDiv.innerHTML = `
                 <img class="mainposter" src="${posterPath}" alt="포스터">
-                <small class="commentThing commentContents">${comment.content}</p>
+                <small class="commentThing commentContents">${comment.content}</small>
                 <hr>
-                <small class="commentThing commentWriter">${comment.email}</small>
-                <button type="button">+</button>
+                <small class="hiddenEmail" style="display: none">${comment.email}</small>
+                <small class="commentThing commentWriter goToUserPage">${userInfo.nickname}</small>
             `;
-            commentDiv.innerHTML = commentContent;
-            commentContainer.appendChild(commentDiv);
-        } catch (error) {
-            console.error('Error displaying comment details:', error);
-        }
+                commentContainer.appendChild(commentDiv);
+            } catch (error) {
+                console.error('Error displaying comment details:', error);
+            }
+        });
     }
-}
 
+    setTimeout(() => {
+        document.querySelectorAll('.goToUserPage').forEach(element => {
+            element.addEventListener('click', (event) => {
+                const email = event.target.closest('.comment').querySelector('.hiddenEmail').innerText;
+                const form = document.createElement('form');
+                form.method = 'post';
+                form.action = '/user/mypage';
+                const hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = 'email';
+                hiddenField.value = email;
+                form.appendChild(hiddenField);
+                document.body.appendChild(form);
+                form.submit();
+            });
+        });
+    }, 100);
+}
 window.onload = async () => {
     const comments = await fetchRandomComments();
     if (comments) {
         await displayComments(comments);
     }
 };
+
+async function getUserInfo(id) {
+    try {
+        const url = '/user/info/' + id;
+        const config = {
+            method: 'GET'
+        };
+        const resp = await fetch(url, config);
+        return await resp.json();
+    } catch (e) {
+        console.log(e);
+    }
+}
