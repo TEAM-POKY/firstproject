@@ -22,6 +22,7 @@
             <div style="font-size: 13px; color: #b1b1b1" id="email"></div>
             <div style="font-size: 15px;" id="followInfo"></div>
         </div>
+        <button id="goToHome"><a href="/">홈</a></button>
     </div>
     <div class="calendar">
         <div class="calendar-header">
@@ -80,6 +81,11 @@
     <div id="modal" class="modal">
         <button id="modalClose">X</button>
         <div class="modal-content" id="modalContent"></div>
+    </div>
+    <div id="followModal" class="follow-modal">
+        <div class="follow-modal-content" id="followModalContent">
+            <button id="followModalClose">X</button>
+        </div>
     </div>
 </div>
 <script sec:authorize="isAuthenticated()">

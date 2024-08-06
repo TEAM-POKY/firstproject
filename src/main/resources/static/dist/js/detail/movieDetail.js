@@ -81,7 +81,7 @@ getCommentList(mediaInfo.mediaId).then(result => {
                 `<div class="detailCommentCode" style="display: none">${comment.commentCode}</div>
                     <button type = "button" class="detailCommentUpdate">수정</button>
                     <button type = "button" class="detailCommentDelete">삭제</button>`;
-            if (comment.spoiler === 1) {
+            if (comment.spoiler == 1) {
                 spoilerCheckbox.checked = 1;
             }
         } else {
@@ -91,14 +91,20 @@ getCommentList(mediaInfo.mediaId).then(result => {
                     <div class="detailRegDate">${elapsedTime(comment.regDate)}</div>`;
             if (comment.spoiler == 1) {
 
-                li.innerHTML += `
+                li.innerHTML +=`
                     <div class="detailspoiler">
                         <div class="detailContent" style="display: none">${comment.content}</div>
+                        <button type="button" onclick="" style="display: none ">좋아요</button>
                         <span>스포일러입니다.</span>
-                        <button type="button" onclick="toggleSpoiler(this)">보기</button>
+                        <button type="button" class= "spoilerbtn"onclick="toggleSpoiler(this)">보기</button>
                     </div>`;
             } else {
-                li.innerHTML += `<div class="detailContent" id="detail">${comment.content}</div>`;
+                li.innerHTML += `
+                <div class ="detailnospoiler">
+                <div class="detailContent" id="detail">${comment.content}</div>
+                <button type="button" onclick="">좋아요</button>
+                </div>`;
+
             }
             ul.appendChild(li);
         }
@@ -198,10 +204,14 @@ async function updateComment(commentConfig){
 // 스포일러 버튼
 function toggleSpoiler(button) {
     const detailContent = button.parentElement.querySelector('.detailContent');
-    const spoilerElements = button.parentElement.querySelectorAll('span, button');
+    const spoilerElements = button.parentElement.querySelectorAll('span,.spoilerbtn');
     detailContent.style.display = 'block';
     spoilerElements.forEach(el => el.style.display = 'none');
 }
+
+// function likebutton(button){
+//     const detail
+// }
 
 async function getDetail(mediaInfo) {
     try {
@@ -318,6 +328,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(result == "true"){
                     isWish = true;
                     document.getElementById('detailWish').innerText = "좋아요취소"
+                }else{
+                    document.getElementById('detailWish').innerText = "좋아요"
                 }
             })
         }catch (error){
