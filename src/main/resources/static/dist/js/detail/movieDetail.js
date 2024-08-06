@@ -91,7 +91,7 @@ getCommentList(mediaInfo.mediaId).then(result => {
                     <div class="detailRegDate">${elapsedTime(comment.regDate)}</div>`;
             if (comment.spoiler == 1) {
 
-                li.innerHTML += `
+                li.innerHTML +=`
                     <div class="detailspoiler">
                         <div class="detailContent" style="display: none">${comment.content}</div>
                         <button type="button" onclick="" style="display: none ">좋아요</button>
@@ -99,8 +99,11 @@ getCommentList(mediaInfo.mediaId).then(result => {
                         <button type="button" class= "spoilerbtn"onclick="toggleSpoiler(this)">보기</button>
                     </div>`;
             } else {
-                li.innerHTML += `<div class="detailContent" id="detail">${comment.content}</div>
-                    <button type="button" onclick="">좋아요</button>`;
+                li.innerHTML += `
+                <div class ="detailnospoiler">
+                <div class="detailContent" id="detail">${comment.content}</div>
+                <button type="button" onclick="">좋아요</button>
+                </div>`;
 
             }
             ul.appendChild(li);
