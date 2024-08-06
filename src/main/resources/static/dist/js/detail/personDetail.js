@@ -71,137 +71,76 @@ personDetail(personId).then(async result => {
 });
 credits(personId).then(result=>{
     console.log(result);
-    //cast(배역)
-    if(result.cast.length>0){
-        console.log(result.cast);
-        const uniqueMedia = result.cast.filter(
-            (obj, idx) => {
-                return ( result.cast.findIndex((obj2) => {
-                        return obj.backdrop_path === obj2.backdrop_path }) === idx
-                )
-            }
-        )
-        for(let castMedia of uniqueMedia){
-            const posterPath = castMedia.poster_path ? `${imageBaseUrl}${castMedia.poster_path}` : '';
-            if(castMedia.media_type==='movie'){
-                document.querySelector('.personMovieList').style.display='block';
-                const mediaDiv = document.createElement('div');
-                mediaDiv.classList.add('personMovieOne');
-                let structure='';
-                structure=`<div class="mediaLeftInfo">
-                            <div class="mlTitle">${castMedia.title}</div>
-                            <div class="mDepart" data-id="${castMedia.id}"></div>
-                            <div class="mlData">${castMedia.release_date.replaceAll("-",".")}</div>
-                        </div>
-                        <div class="mediaRightInfo">
-                            <a href="/movie/detail?movieId=${castMedia.id}">`;
-                if(posterPath!==''){
-                    structure+=`<img src="${posterPath}">`;
-                } else {
-                    structure+=`<img src="/dist/image/no_image.png">`;
-                }
-                structure+=`</a></div>`;
-                mediaDiv.innerHTML=structure;
-                document.querySelector('.personMovieInfo').appendChild(mediaDiv);
+    const removeDuplicates = (array, key) => {
+        const seen = new Set();
+        return array.filter(item => {
+            const value = item[key];
+            if (seen.has(value)) {
+                return false;
             } else {
-                document.querySelector('.personTvList').style.display='block';
-                const mediaDiv = document.createElement('div');
-                mediaDiv.classList.add('personTvOne');
-                let structure='';
-                structure=`<div class="mediaLeftInfo">
-                            <div class="mlTitle">${castMedia.name}</div>
-                            <div class="mDepart" data-id="${castMedia.id}"></div>
-                            <div class="mlData">${castMedia.first_air_date.replaceAll("-",".")}</div>
-                        </div>
-                        <div class="mediaRightInfo">
-                            <a href="#">`;
-                if(posterPath!==''){
-                    structure+=`<img src="${posterPath}">`;
-                } else {
-                    structure+=`<img src="/dist/image/no_image.png">`;
-                }
-                mediaDiv.innerHTML=structure;
-                document.querySelector('.personTvInfo').appendChild(mediaDiv);
+                seen.add(value);
+                return true;
             }
-        }
-    }
-    //crew(제작참여)
-    if(result.crew.length>0){
-        const uniqueMedia = result.crew.filter(
-            (obj, idx) => {
-                return ( result.crew.findIndex((obj2) => {
-                        return obj.backdrop_path === obj2.backdrop_path }) === idx
-                )
-            }
-        )
-        //중복제거한 후 출력
-        for(let crewMedia of uniqueMedia){
-            const posterPath = crewMedia.poster_path ? `${imageBaseUrl}${crewMedia.poster_path}` : '';
-            if(crewMedia.media_type==='movie'){
-                document.querySelector('.personMovieList').style.display='block';
-                const mediaDiv = document.createElement('div');
-                mediaDiv.classList.add('personMovieOne');
-                let structure='';
-                structure=`<div class="mediaLeftInfo">
-                            <div class="mlTitle">${crewMedia.title}</div>
-                            <div class="mDepart" data-id="${crewMedia.id}"></div>
-                            <div class="mlData">${crewMedia.release_date.replaceAll("-",".")}</div>
-                        </div>
-                        <div class="mediaRightInfo">
-                            <a href="/movie/detail?movieId=${crewMedia.id}">`;
-                if(posterPath!==''){
-                    structure+=`<img src="${posterPath}">`;
-                } else {
-                    structure+=`<img src="/dist/image/no_image.png">`;
-                }
-                structure+=`</a></div>`;
-                mediaDiv.innerHTML=structure;
-                document.querySelector('.personMovieInfo').appendChild(mediaDiv);
-            } else {
-                document.querySelector('.personTvList').style.display='block';
-                const mediaDiv = document.createElement('div');
-                mediaDiv.classList.add('personTvOne');
-                let structure='';
-                structure=`<div class="mediaLeftInfo">
-                            <div class="mlTitle">${crewMedia.name}</div>
-                            <div class="mDepart" data-id="${crewMedia.id}"></div>
-                            <div class="mlData">${crewMedia.first_air_date.replaceAll("-",".")}</div>
-                        </div>
-                        <div class="mediaRightInfo">
-                            <a href="#">`;
-                if(posterPath!==''){
-                    structure+=`<img src="${posterPath}">`;
-                } else {
-                    structure+=`<img src="/dist/image/no_image.png">`;
-                }
-                structure+=`</a></div>`;
-                mediaDiv.innerHTML=structure;
-                document.querySelector('.personTvInfo').appendChild(mediaDiv);
-            }
-        }
-        for(let cast of result.cast){
-            const character = `${cast.character}`;
-            if(character!==null) {
-                const mediaDepart = document.querySelector(`.mDepart[data-id="${cast.id}"]`);
-                if(mediaDepart){
-                    mediaDepart.innerHTML+=`<span>출연</span>`;
-                }
-            }
+        });
+    };
 
-        }
-        for(let crew of result.crew){
-            const job = `${crew.department}`;
-            let jobText = '';
-            if(job==='Writing') jobText='각본';
-            if(job==='Directing') jobText='감독';
-            if(job==='Creator') jobText='제작';
+    // Cast와 Crew 데이터를 합친 후 중복 제거
+    const combinedMedia = [...result.cast, ...result.crew];
+    const uniqueMedia = removeDuplicates(combinedMedia, 'id');
 
-            const mediaDepart = document.querySelector(`.mDepart[data-id="${crew.id}"]`);
-            if(mediaDepart){
-                mediaDepart.innerHTML+=`<span>${jobText}</span>`;
-            }
+    // 중복이 제거된 데이터를 처리하여 화면에 표시
+    uniqueMedia.forEach(media => {
+        const posterPath = media.poster_path ? `${imageBaseUrl}${media.poster_path}` : '';
+        const isMovie = media.media_type === 'movie';
+        const mediaType = isMovie ? 'movie' : 'tv';
+        const mediaListClass = isMovie ? '.personMovieList' : '.personTvList';
+        const mediaInfoClass = isMovie ? '.personMovieInfo' : '.personTvInfo';
+        const mediaTitle = isMovie ? media.title : media.name;
+        const mediaDate = isMovie ? media.release_date : media.first_air_date;
+
+        document.querySelector(mediaListClass).style.display = 'block';
+        const mediaDiv = document.createElement('div');
+        mediaDiv.classList.add(`person${mediaType.charAt(0).toUpperCase() + mediaType.slice(1)}One`);
+        let structure = `
+            <div class="mediaLeftInfo">
+                <div class="mlTitle">${mediaTitle}</div>
+                <div class="mDepart" data-id="${media.id}"></div>
+                <div class="mlData">${mediaDate.replaceAll("-", ".")}</div>
+            </div>
+            <div class="mediaRightInfo">
+                <a href="/${mediaType}/detail?${mediaType}Id=${media.id}">`;
+        if (posterPath !== '') {
+            structure += `<img src="${posterPath}">`;
+        } else {
+            structure += `<img src="/dist/image/no_image.png">`;
         }
-    }
+        structure += `</a></div>`;
+        mediaDiv.innerHTML = structure;
+        document.querySelector(mediaInfoClass).appendChild(mediaDiv);
+    });
+    
+    // 직무 삽입
+    result.crew.forEach(crew => {
+        const job = crew.department;
+        let jobText = '';
+        if (job === 'Writing') jobText = '각본';
+        if (job === 'Directing') jobText = '감독';
+        if (job === 'Creator') jobText = '제작';
+
+        const mediaDepart = document.querySelector(`.mDepart[data-id="${crew.id}"]`);
+        if (mediaDepart) {
+            mediaDepart.innerHTML += `<span>${jobText}</span>`;
+        }
+    });
+
+    // 출연 정보 삽입
+    result.cast.forEach(cast => {
+        const mediaDepart = document.querySelector(`.mDepart[data-id="${cast.id}"]`);
+        if (mediaDepart) {
+            mediaDepart.innerHTML += `<span>출연</span>`;
+        }
+    });
+
 })
 
 async function personDetail(personId){

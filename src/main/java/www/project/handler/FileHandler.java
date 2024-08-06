@@ -22,10 +22,18 @@ import java.util.UUID;
 @Component
 public class FileHandler {
 
-    String os = System.getProperty("os.name").toLowerCase();
-    String UP_DIR;
-//    if(os.("wins"))
-//    UP_DIR = "C:\\image\\";
+    public String filePath(){
+        String os = System.getProperty("os.name").toLowerCase();
+        String UP_DIR = "";
+        if(os.contains("win")){
+            UP_DIR = "C:\\image\\";
+        } else if(os.contains("mac")){
+            UP_DIR = "/Users/Shared/image/";
+        } else if(os.contains("nix") || os.contains("nux") || os.contains("aix")){
+            UP_DIR = "/var/Shared/image/";
+        }
+        return UP_DIR;
+    }
 
     public String uploadFile(MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
@@ -40,7 +48,7 @@ public class FileHandler {
         String month = dateParts[1];
         String day = dateParts[2];
 
-        String directoryPath = UP_DIR + year + "/" + month + "/" + day + "/";
+        String directoryPath = filePath() + year + "/" + month + "/" + day + "/";
         File directory = new File(directoryPath);
         if (!directory.exists()) {
             directory.mkdirs();
@@ -66,7 +74,7 @@ public class FileHandler {
         String year = dateParts[0];
         String month = dateParts[1];
         String day = dateParts[2];
-        String directoryPath = UP_DIR + year + "/" + month + "/" + day + "/";
+        String directoryPath = filePath() + year + "/" + month + "/" + day + "/";
 
         URL url = new URL(profile);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
