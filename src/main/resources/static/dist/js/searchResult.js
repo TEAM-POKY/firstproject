@@ -5,7 +5,7 @@ const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 searchMovieList(keyword).then(result => {
     console.log(result);
     // 검색 결과가 없을 때
-    if(result.results.length < 1){
+    if (result.results.length < 1) {
         console.log("검색 결과 없음");
         return;
     }
@@ -37,38 +37,30 @@ searchMovieList(keyword).then(result => {
             document.querySelector('.personResult').appendChild(personDiv);
         }
 
-        if (rr.media_type === "movie") {
-            document.querySelector('.movieSpan').style.display = 'block';
-            const movieDiv = document.createElement('div');
-            movieDiv.classList.add('movieResultDiv');
-            let movieDetails = '';
-            movieDetails += `<div class="movieOne">
-                                <a href="/movie/detail?movieId=${rr.id}">`;
-            if (posterPath !== '') {
-                movieDetails += `<img src="${posterPath}">`;
-            } else {
-                movieDetails += `<img src="/dist/image/no_image.png">`;
-            }
-            movieDetails += `</a><div class="nameDiv">${rr.title}</div></div>`;
-            movieDiv.innerHTML = movieDetails;
-            document.querySelector('.movieResult').appendChild(movieDiv);
-        }
+        if (rr.media_type !== "person") {
+            const isMovie = rr.media_type === 'movie';
+            const mediaType = isMovie ? 'movie' : 'tv';
+            const mediaSpanClass = isMovie ? '.movieSpan' : '.tvSpan';
+            const mediaResultClass = isMovie ? 'movieResultDiv' : 'tvResultDiv';
+            const mediaResultDiv = isMovie ? '.movieResult' : '.tvResult';
+            const mediaOneDiv = isMovie ? 'movieOne' : 'tvOne';
+            const mediaTitle = isMovie ? rr.title : rr.name;
+            const locationHref = isMovie ? `movieId=${rr.id}` : `tvId=${rr.id}`;
 
-        if (rr.media_type === "tv") {
-            document.querySelector('.tvSpan').style.display = 'block';
-            const tvDiv = document.createElement('div');
-            tvDiv.classList.add('tvResultDiv');
-            let tvDetails = '';
-            tvDetails += `<div class="movieOne">
-                            <a href="/movie/detail?tvId=${rr.id}">`;
+            document.querySelector(mediaSpanClass).style.display = 'block';
+            const mediaDiv = document.createElement('div');
+            mediaDiv.classList.add(mediaResultClass);
+            let structure = `
+                <div class="${mediaOneDiv}">
+                    <a href="/movie/detail?${locationHref}">`;
             if (posterPath !== '') {
-                tvDetails += `<img src="${posterPath}">`;
+                structure += `<img src="${posterPath}">`;
             } else {
-                tvDetails += `<img src="/dist/image/no_image.png">`;
+                structure += `<img src="/dist/image/no_image.png">`;
             }
-            tvDetails += `</a><div class="nameDiv">${rr.name}</div></div>`;
-            tvDiv.innerHTML = tvDetails;
-            document.querySelector('.tvResult').appendChild(tvDiv);
+            structure += `</a><div class="nameDiv">${mediaTitle}</div></div>`;
+            mediaDiv.innerHTML = structure;
+            document.querySelector(mediaResultDiv).appendChild(mediaDiv);
         }
     }
 })
@@ -82,3 +74,4 @@ async function searchMovieList(keyword) {
         console.log("movie not found :" + err);
     }
 }
+
