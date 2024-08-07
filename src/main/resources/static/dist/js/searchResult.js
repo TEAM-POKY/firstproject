@@ -39,7 +39,6 @@ searchMovieList(keyword).then(result => {
 
         if (rr.media_type !== "person") {
             const isMovie = rr.media_type === 'movie';
-            const mediaType = isMovie ? 'movie' : 'tv';
             const mediaSpanClass = isMovie ? '.movieSpan' : '.tvSpan';
             const mediaResultClass = isMovie ? 'movieResultDiv' : 'tvResultDiv';
             const mediaResultDiv = isMovie ? '.movieResult' : '.tvResult';
