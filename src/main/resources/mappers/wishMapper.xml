@@ -15,4 +15,7 @@
     <delete id="deleteWish">
         delete from wish where email = #{email} and media_id = #{mediaId}
     </delete>
+    <select id="getList" resultType="www.project.domain.WishVO">
+        select * from wish where email = #{myEmail}
+    </select>
 </mapper>

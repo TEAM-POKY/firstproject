@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import www.project.domain.WishVO;
 import www.project.repository.wishMapper;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -22,6 +24,11 @@ public class wishServiceImpl implements wishService{
     @Override
     public int deleteWish(WishVO wvo) {
         return wishMapper.deleteWish(wvo);
+    }
+
+    @Override
+    public List<WishVO> getList(String myEmail) {
+        return wishMapper.getList(myEmail);
     }
 
     @Override
