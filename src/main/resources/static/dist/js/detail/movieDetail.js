@@ -87,22 +87,27 @@ getCommentList(mediaInfo.mediaId).then(result => {
         } else {
             const li = document.createElement('li');
             li.innerHTML = `
+                    <div class="detailCommentCode" style="display: none">${comment.commentCode}</div>
                     <div class="detailUserName">${comment.nickname}</div>
                     <div class="detailRegDate">${elapsedTime(comment.regDate)}</div>`;
             if (comment.spoiler == 1) {
-
-                li.innerHTML +=`
+                li.innerHTML += `
                     <div class="detailspoiler">
                         <div class="detailContent" style="display: none">${comment.content}</div>
-                        <button type="button" onclick="" style="display: none ">좋아요</button>
                         <span>스포일러입니다.</span>
                         <button type="button" class= "spoilerbtn"onclick="toggleSpoiler(this)">보기</button>
+                    </div>
+                    <div class="commentlikediv">
+                    <div class="commentlikeCount">${comment.count}</div>
+                    <button type="button" class="commentLikeBtn" onclick="addlikeBtn(this)" id="commentLikeBtn" disabled="disabled" >좋아요</button>
                     </div>`;
             } else {
                 li.innerHTML += `
                 <div class ="detailnospoiler">
                 <div class="detailContent" id="detail">${comment.content}</div>
-                <button type="button" onclick="">좋아요</button>
+                <div class="commnetlikediv">
+                <div class="commentlikeCount">${comment.count}</div>
+                <button type="button" class="commentLikeBtn" onclick="addlikeBtn(this)" id="commentLikeBtn">좋아요</button>
                 </div>`;
 
             }
@@ -110,48 +115,67 @@ getCommentList(mediaInfo.mediaId).then(result => {
         }
     });
     detailContainer.appendChild(ul);
-
-
 });
 
 document.addEventListener("click", (e) => {
-    const target = e.target;
-    let code = document.querySelector(".detailCommentCode").innerText;
-    if (target.classList.contains("detailCommentUpdate")) {
-        if (confirm("댓글을 수정 하시겠습니까?")) {
-            const config = {
-                commentCode : code,
-                mediaId: userInfo.mediaId,
-                content: document.getElementById("commentText").value,
-                spoiler: spoilerCheckbox.value,
+    try {
+        const target = e.target;
+        let code = document.querySelector(".detailCommentCode").innerText;
+        if (target.classList.contains("detailCommentUpdate")) {
+            if (confirm("댓글을 수정 하시겠습니까?")) {
+                const config = {
+                    commentCode: code,
+                    mediaId: userInfo.mediaId,
+                    content: document.getElementById("commentText").value,
+                    spoiler: spoilerCheckbox.value,
 
-            };
-            updateComment(config).then(result => {
-                if (result == 1) {
-                    alert("댓글을 수정 하였습니다.");
-                } else {
-                    alert("댓글을 수정 실패 하였습니다.")
-                }
-            })
+                };
+                updateComment(config).then(result => {
+                    if (result == 1) {
+                        alert("댓글을 수정 하였습니다.");
+                    } else {
+                        alert("댓글을 수정 실패 하였습니다.")
+                    }
+                })
+            }
+            console.log("수정");
+            console.log(code);
         }
-        console.log("수정");
-        console.log(code);
-    }
-    if (target.classList.contains("detailCommentDelete")) {
-        if (confirm("댓글을 삭제 하시겠습니까?")) {
-            deleteComment(code).then(result => {
-                if (result == 1) {
-                    alert("댓글이 삭제 되었습니다.");
-                    location.reload(true);
-                } else {
-                    alert("댓글 삭제 실패");
-                }
-            })
-        }else{
-            alert("삭제 취소하셨습니다.");
+        if (target.classList.contains("detailCommentDelete")) {
+            if (confirm("댓글을 삭제 하시겠습니까?")) {
+                deleteComment(code).then(result => {
+                    if (result == 1) {
+                        alert("댓글이 삭제 되었습니다.");
+                        location.reload(true);
+                    } else {
+                        alert("댓글 삭제 실패");
+                    }
+                })
+            } else {
+                alert("삭제 취소하셨습니다.");
+            }
         }
+    } catch (err) {
+
     }
 })
+
+function addlikeBtn(button) {
+    var code = button.parentElement.parentElement.querySelector(".detailCommentCode").innerText;
+    console.log(code);
+    const config = {
+        commentCode: code,
+        email: userInfo.email
+    }
+    addCommentLikeCount(config).then(result=>{
+        console.log(result);
+        if(result == 1){
+            alert ("댓글 좋아요");
+            window.location.reload(true);
+        }
+    })
+    console.log(config);
+}
 
 // 더보기/간략히 보기 버튼 처리
 document.querySelector('.detailStory').addEventListener('click', (event) => {
@@ -168,6 +192,26 @@ document.querySelector('.detailStory').addEventListener('click', (event) => {
     }
 });
 
+async function addCommentLikeCount(userInfo) {
+    try {
+        console.log(userInfo);
+        const url = "/movie/addCommentLike";
+        const config = {
+            method: "POST",
+            headers: {
+                'content-type': 'application/json; charset =utf-8'
+            },
+            body: JSON.stringify(userInfo)
+        }
+        const resp = await fetch(url, config);
+        const result = resp.text();
+        console.log(result);
+        return result;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 
 async function deleteComment(commentCode) {
     try {
@@ -183,10 +227,10 @@ async function deleteComment(commentCode) {
     }
 }
 
-async function updateComment(commentConfig){
-    try{
+async function updateComment(commentConfig) {
+    try {
         const url = "/movie/updateComment";
-        const config ={
+        const config = {
             method: "PUT",
             headers: {
                 'content-type': 'application/json; charset =utf-8'
@@ -196,22 +240,23 @@ async function updateComment(commentConfig){
         const resp = await fetch(url, config);
         const result = resp.text();
         return result;
-    }catch (err){
+    } catch (err) {
         console.log("updateComment fail" + err);
     }
 }
 
-// 스포일러 버튼
+// 스포일러 버튼 겸 좋아요 버튼 활성화 여부
 function toggleSpoiler(button) {
     const detailContent = button.parentElement.querySelector('.detailContent');
     const spoilerElements = button.parentElement.querySelectorAll('span,.spoilerbtn');
+    const siblingElement = button.parentElement.nextElementSibling;
+    const likeBtn = siblingElement.querySelector(".commentLikeBtn");
+    likeBtn.disabled = false;
     detailContent.style.display = 'block';
+
+
     spoilerElements.forEach(el => el.style.display = 'none');
 }
-
-// function likebutton(button){
-//     const detail
-// }
 
 async function getDetail(mediaInfo) {
     try {
@@ -265,35 +310,33 @@ function elapsedTime(date) {
 }
 
 
-async function getWishInfo(){
-    try{
-        const url = "/user/wish/"+currentId+"/"+mediaInfo.mediaId;
+async function getWishInfo() {
+    try {
+        const url = "/user/wish/" + currentId + "/" + mediaInfo.mediaId;
         const config = {
-            method : "GET"
+            method: "GET"
         }
         const resp = await fetch(url, config);
         return await resp.text();
-    }catch(error){
+    } catch (error) {
         console.log(error)
     }
 }
 
 
-
-
 document.getElementById('detailWish').addEventListener('click', () => {
-    addWish(currentId, mediaInfo).then(result =>{
-        if(result == "pass"){
+    addWish(currentId, mediaInfo).then(result => {
+        if (result == "pass") {
             alert("좋아요 추가")
             document.getElementById('detailWish').innerText = "좋아요취소";
             isWish = true;
-        }else if(result == "fail"){
+        } else if (result == "fail") {
             alert("추가 실패");
-        }else if(result == "delPass") {
+        } else if (result == "delPass") {
             alert("좋아요 취소 성공");
             document.getElementById('detailWish').innerText = "좋아요";
             isWish = false;
-        }else if(result == "delFail"){
+        } else if (result == "delFail") {
             alert("좋아요 취소 실패")
         }
     })
@@ -307,7 +350,7 @@ async function addWish(currentId, mediaInfo) {
             mediaId: mediaInfo.mediaId
         };
         const config = {
-            method: isWish? 'DELETE' : 'PATCH',
+            method: isWish ? 'DELETE' : 'PATCH',
             headers: {
                 "Content-Type": "application/json"
             },
@@ -324,15 +367,15 @@ async function addWish(currentId, mediaInfo) {
 document.addEventListener('DOMContentLoaded', () => {
     if (typeof currentId !== 'undefined') {
         try {
-            getWishInfo().then(result =>{
-                if(result == "true"){
+            getWishInfo().then(result => {
+                if (result == "true") {
                     isWish = true;
                     document.getElementById('detailWish').innerText = "좋아요취소"
-                }else{
+                } else {
                     document.getElementById('detailWish').innerText = "좋아요"
                 }
             })
-        }catch (error){
+        } catch (error) {
             console.log(error);
         }
     }

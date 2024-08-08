@@ -19,4 +19,6 @@ public interface MovieService {
     int deleteComment(String commentCode);
 
     int updateComment(CommentVO cvo);
+
+    int updateLike(CommentVO cvo);
 }

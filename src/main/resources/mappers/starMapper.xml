@@ -39,8 +39,21 @@
         delete from comment where comment_code = #{commentCode}
     </delete>
 
+    <insert id="insertLike" parameterType="www.project.domain.CommentVO">
+        insert into comment_like(comment_code,email) values(#{commentCode},#{email})
+    </insert>
+
     <update id="updateComment">
         update comment set content=#{content},spoiler=#{spoiler} where comment_code = #{commentCode}
+    </update>
+
+    <update id="updateCommentCount">
+        UPDATE comment
+        SET count = (
+        SELECT COUNT(comment_like.comment_code)
+        FROM comment_like
+        WHERE comment.comment_code = comment_like.comment_code
+        );
     </update>
 
 
