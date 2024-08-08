@@ -69,6 +69,7 @@ personDetail(personId).then(async result => {
 
     document.querySelector('.personInfo').appendChild(personInfo);
 });
+
 credits(personId).then(result=>{
     console.log(result);
     const removeDuplicates = (array, key) => {
@@ -87,6 +88,8 @@ credits(personId).then(result=>{
     // Cast와 Crew 데이터를 합친 후 중복 제거
     const combinedMedia = [...result.cast, ...result.crew];
     const uniqueMedia = removeDuplicates(combinedMedia, 'id');
+
+    uniqueMedia.sort((a,b)=>b.popularity-a.popularity);
 
     // 중복이 제거된 데이터를 처리하여 화면에 표시
     uniqueMedia.forEach(media => {
@@ -108,7 +111,7 @@ credits(personId).then(result=>{
                 <div class="mlData">${mediaDate.replaceAll("-", ".")}</div>
             </div>
             <div class="mediaRightInfo">
-                <a href="/${mediaType}/detail?${mediaType}Id=${media.id}">`;
+                <a href="/movie/detail?${mediaType}Id=${media.id}">`;
         if (posterPath !== '') {
             structure += `<img src="${posterPath}">`;
         } else {
