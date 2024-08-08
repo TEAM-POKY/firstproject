@@ -61,4 +61,14 @@ public class MovieServiceImpl implements MovieService {
     public int updateComment(CommentVO cvo) {
         return starMapper.updateComment(cvo);
     }
+
+    @Override
+    public int updateLike(CommentVO cvo) {
+        int isOk = starMapper.insertLike(cvo);
+        log.info("isOk >> {}",isOk);
+        if(isOk==1){
+          starMapper.updateCommentCount(cvo);
+            }
+        return isOk;
+    }
 }

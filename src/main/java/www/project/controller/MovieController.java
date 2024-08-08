@@ -41,6 +41,15 @@ public class MovieController {
     }
 
     @ResponseBody
+    @PostMapping("/addCommentLike")
+    public int addCommentLike(@RequestBody CommentVO cvo){
+        log.info("cvo이메일 >>{}",cvo.getEmail());
+        log.info("cvo코드 >>{}",cvo.getCommentCode());
+        int isOk = movieService.updateLike(cvo);
+        return  isOk;
+    }
+
+    @ResponseBody
     @DeleteMapping("/deleteComment/{commentCode}")
     public int deleteComment(@PathVariable String commentCode){
         log.info("commentCode >>{} ",commentCode);
