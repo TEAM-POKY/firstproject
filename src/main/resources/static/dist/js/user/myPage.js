@@ -501,6 +501,9 @@ getCountSection(currentId).then(result =>{
     document.getElementById('countComment').innerText = result.comment_count+"개";
 })
 
+//취향분석
+
+
 //도넛차트
 
 

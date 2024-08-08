@@ -43,12 +43,13 @@ public class UserController {
     private final FollowService fsv;
     private final StarFollowService sfs;
     private final wishService wsv;
+    private final AnalysisService asv;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
 
     @PostMapping("/mypage")
-    public String myPage(@RequestParam(value = "email") String email, Model model){
+    public String myPage(@RequestParam(value = "email") String email, Model model) throws IOException, InterruptedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         UserVO user = principalDetails.getUser();
@@ -56,6 +57,12 @@ public class UserController {
         Boolean isFollow = fsv.getFollowInfo(myEmail, email);
         model.addAttribute("userEmail", email);
         model.addAttribute("isFollow",isFollow);
+        List<StarVO> starList = svc.getList(myEmail);
+        List<WishVO> wishList = wsv.getList(myEmail);
+        log.info("starList {}",starList);
+        log.info("wishList {}",wishList);
+        List<String> genres = asv.getGenres(533535);
+        log.info("장르{}",genres);
         return "/user/mypage";
     }
 
