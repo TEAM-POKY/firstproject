@@ -27,7 +27,7 @@ public class AnalysisService  {
 
     public Map<String, Integer> getAllGenres() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.themoviedb.org/3/genre/movie/list?language=en"))
+                .uri(URI.create("https://api.themoviedb.org/3/genre/movie/list?language=ko"))
                 .header("accept", "application/json")
                 .header("Authorization", "Bearer " + tmdb_api_key)
                 .method("GET", HttpRequest.BodyPublishers.noBody())
@@ -46,7 +46,7 @@ public class AnalysisService  {
 
     public List<String> getGenres(long mediaId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.themoviedb.org/3/movie/" + mediaId + "?language=en-US"))
+                .uri(URI.create("https://api.themoviedb.org/3/movie/" + mediaId + "?language=ko-KR"))
                 .header("accept", "application/json")
                 .header("Authorization", "Bearer " + tmdb_api_key)
                 .method("GET", HttpRequest.BodyPublishers.noBody())
