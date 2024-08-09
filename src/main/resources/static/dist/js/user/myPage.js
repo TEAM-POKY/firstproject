@@ -355,7 +355,6 @@ async function loadCalendar(date) {
 
     try {
         const result = await getStar(currentId);
-        console.log(result);
         if (Array.isArray(result) && result.length > 0) {
             const mediaInfo = result.map(item => ({
                 mediaId: item.mediaId,
@@ -501,22 +500,32 @@ getCountSection(currentId).then(result =>{
     document.getElementById('countComment').innerText = result.comment_count+"개";
 })
 
-//취향분석
+//차트
+// 취향 분석 데이터 가져오기
+let topGenresElement = document.getElementById('topGenresData');
+let topGenresData = JSON.parse(topGenresElement.getAttribute('data-top-genres'));
 
+// 상위 10개 장르와 점수 추출
+let topGenres = topGenresData.slice(0, 10);
+let labels = topGenres.map(entry => Object.keys(entry)[0]);
+let data = topGenres.map(entry => Object.values(entry)[0]);
+let total = data.reduce((sum, value) => sum + value, 0);
 
-//도넛차트
+// 비율 계산 함수
+function calc(number, total) {
+    return (number / total * 100).toFixed(1);
+}
 
-
+// 도넛 차트 생성
 let ctx = document.getElementById('donutChart').getContext('2d');
-let total = 110;
 let donutChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-        labels: ['스릴러', '액션', '판타지', '연애', '코미디'],
+        labels: labels,
         datasets: [{
-            data: [calc(50, total), calc(20,total), calc(10,total), calc(20,total), calc(10,total)],
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#7b19cf'],
-            hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#7b19cf']
+            data: data.map(value => calc(value, total)),
+            backgroundColor: ['#FF6384', '#36A2EB', '#604500', '#4BC0C0', '#9966FF', '#FF9F40', '#FFCD56', '#C9CBCF', '#4D5360', '#B39DDB'],
+            hoverBackgroundColor: ['#FF6384', '#36A2EB', '#604500', '#4BC0C0', '#9966FF', '#FF9F40', '#FFCD56', '#C9CBCF', '#4D5360', '#B39DDB']
         }]
     },
     options: {
@@ -524,9 +533,30 @@ let donutChart = new Chart(ctx, {
         maintainAspectRatio: false,
     }
 });
-function calc(number, total){
-    return (number/total * 100).toFixed(1);
-}
+// 막대 차트 생성
+let ctxBar = document.getElementById('barChart').getContext('2d');
+let barChart = new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: '선호도 비율 (%)',
+            data: data.map(value => calc(value, total)),
+            backgroundColor: ['#FF6384', '#36A2EB', '#604500', '#4BC0C0', '#9966FF', '#FF9F40', '#FFCD56', '#C9CBCF', '#4D5360', '#B39DDB']
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        scales: {
+            x: {
+                beginAtZero: true,
+                max: 100
+            }
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+    }
+});
 
 //배우 감독 팔로우
 async function getStarFollowInfo(){

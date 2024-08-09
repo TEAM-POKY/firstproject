@@ -66,8 +66,11 @@
             <h2 id="userAnalysis"></h2>
             <div class="chart-container">
                 <canvas id="donutChart"></canvas>
+                <div id="topGenresData" th:data-top-genres='${topGenres}'></div>
             </div>
-            <button class="details-button">자세히보기</button>
+            <div class="bar-chart-container">
+                <canvas id="barChart"></canvas>
+            </div>
         </div>
     </div>
     <div class="followActor section">
@@ -87,6 +90,7 @@
             <button id="followModalClose">X</button>
         </div>
     </div>
+
 </div>
 <script sec:authorize="isAuthenticated()">
     let currentId = document.getElementById('userEmail').innerText;

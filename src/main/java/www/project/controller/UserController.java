@@ -1,6 +1,7 @@
 package www.project.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -60,8 +61,9 @@ public class UserController {
         List<StarVO> starList = svc.getList(myEmail);
         List<WishVO> wishList = wsv.getList(myEmail);
         List<Map.Entry<String, Integer>> topGenres = asv.analyzeUserPreferences(starList, wishList);
-        log.info("장르잘가져오냐{}",topGenres);
-        model.addAttribute("topGenres", topGenres);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String topGenresJson = objectMapper.writeValueAsString(topGenres);
+        model.addAttribute("topGenres", topGenresJson);
         return "/user/mypage";
     }
 
