@@ -10,6 +10,7 @@ import www.project.domain.StarVO;
 import www.project.service.MovieService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/movie/*")
@@ -25,6 +26,18 @@ public class MovieController {
 
     @GetMapping("/person")
     public void personDetail(){}
+
+
+    @ResponseBody
+    @GetMapping("/isLikeBtn/{email}")
+    public List<Integer> getCommentCode(@PathVariable String email){
+        List<CommentVO> code = movieService.getCode(email);
+        List<Integer> commentCodes = code.stream()
+                .map(CommentVO::getCommentCode)
+                .collect(Collectors.toList());
+        log.info("getCommentCode >> {}",commentCodes);
+        return commentCodes;
+    }
 
     @ResponseBody
     @PostMapping("/ratingMovie")
@@ -43,8 +56,8 @@ public class MovieController {
     @ResponseBody
     @PostMapping("/addCommentLike")
     public int addCommentLike(@RequestBody CommentVO cvo){
-        log.info("cvo이메일 >>{}",cvo.getEmail());
-        log.info("cvo코드 >>{}",cvo.getCommentCode());
+//        log.info("cvo이메일 >>{}",cvo.getEmail());
+//        log.info("cvo코드 >>{}",cvo.getCommentCode());
         int isOk = movieService.updateLike(cvo);
         return  isOk;
     }

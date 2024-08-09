@@ -71,4 +71,9 @@ public class MovieServiceImpl implements MovieService {
             }
         return isOk;
     }
+
+    @Override
+    public List<CommentVO> getCode(String email) {
+        return starMapper.getCode(email);
+    }
 }
