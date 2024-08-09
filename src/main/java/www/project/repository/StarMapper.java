@@ -35,4 +35,6 @@ public interface StarMapper {
     int insertLike(CommentVO cvo);
 
     int updateCommentCount(CommentVO cvo);
+
+    List<CommentVO> getCode(String email);
 }

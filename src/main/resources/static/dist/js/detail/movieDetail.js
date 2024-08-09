@@ -12,6 +12,7 @@ let mediaInfo = {
     urlInfo: "",
     type: ""
 };
+var mycode = {}
 let isWish = false;
 
 if (urlParams.has("movieId")) {
@@ -26,8 +27,6 @@ if (urlParams.has("movieId")) {
 console.log(mediaInfo);
 
 // console.log(window.location.href.substring(window.location.href.indexOf("?")+1).includes("movieId"));
-
-
 console.log(urlParams.has("movieId"));
 
 getDetail(mediaInfo).then(result => {
@@ -69,11 +68,13 @@ getCommentList(mediaInfo.mediaId).then(result => {
     console.log(result.nickname); // 데이터 확인용
     const ul = document.createElement("ul");
     ul.classList.add("detailCommentUl");
+    islikeBtn(userInfo.email).then(likeCodes =>{
     if (result.length == 0) {
         detailContainer.innerHTML = `<div class="detailNoComment"><span>아직 댓글이 없습니다.</span></div>`;
         return;
     }
     result.forEach(comment => {
+        var isLiked = likeCodes.some(code => code == comment.commentCode);
         if (comment.email == user.innerText) {
             document.getElementById("commentText").innerText = `${comment.content}`;
             document.getElementById("commentBtn").style.display = "none";
@@ -99,7 +100,8 @@ getCommentList(mediaInfo.mediaId).then(result => {
                     </div>
                     <div class="commentlikediv">
                     <div class="commentlikeCount">${comment.count}</div>
-                    <button type="button" class="commentLikeBtn" onclick="addlikeBtn(this)" id="commentLikeBtn" disabled="disabled" >좋아요</button>
+                    <button type="button" class="commentLikeBtn" onclick="addlikeBtn(this)" id="commentLikeBtn" disabled="disabled"
+                    style="background-color: ${isLiked ? 'red' : 'gray'}">좋아요</button>
                     </div>`;
             } else {
                 li.innerHTML += `
@@ -107,15 +109,20 @@ getCommentList(mediaInfo.mediaId).then(result => {
                 <div class="detailContent" id="detail">${comment.content}</div>
                 <div class="commnetlikediv">
                 <div class="commentlikeCount">${comment.count}</div>
-                <button type="button" class="commentLikeBtn" onclick="addlikeBtn(this)" id="commentLikeBtn">좋아요</button>
+                <button type="button" class="commentLikeBtn" onclick="addlikeBtn(this)" id="commentLikeBtn"
+                style="background-color: ${isLiked ? 'red' : 'gray'}">좋아요</button>
                 </div>`;
-
             }
             ul.appendChild(li);
         }
     });
+    }).catch(err=>{
+        console.error('Error fetching movie details:', err);
+    })
     detailContainer.appendChild(ul);
 });
+
+
 
 document.addEventListener("click", (e) => {
     try {
@@ -128,7 +135,6 @@ document.addEventListener("click", (e) => {
                     mediaId: userInfo.mediaId,
                     content: document.getElementById("commentText").value,
                     spoiler: spoilerCheckbox.value,
-
                 };
                 updateComment(config).then(result => {
                     if (result == 1) {
@@ -160,22 +166,7 @@ document.addEventListener("click", (e) => {
     }
 })
 
-function addlikeBtn(button) {
-    var code = button.parentElement.parentElement.querySelector(".detailCommentCode").innerText;
-    console.log(code);
-    const config = {
-        commentCode: code,
-        email: userInfo.email
-    }
-    addCommentLikeCount(config).then(result=>{
-        console.log(result);
-        if(result == 1){
-            alert ("댓글 좋아요");
-            window.location.reload(true);
-        }
-    })
-    console.log(config);
-}
+
 
 // 더보기/간략히 보기 버튼 처리
 document.querySelector('.detailStory').addEventListener('click', (event) => {
@@ -192,6 +183,7 @@ document.querySelector('.detailStory').addEventListener('click', (event) => {
     }
 });
 
+// 좋아요 버튼 count 넣기
 async function addCommentLikeCount(userInfo) {
     try {
         console.log(userInfo);
@@ -204,7 +196,7 @@ async function addCommentLikeCount(userInfo) {
             body: JSON.stringify(userInfo)
         }
         const resp = await fetch(url, config);
-        const result = resp.text();
+        const result = await resp.text();
         console.log(result);
         return result;
     } catch (err) {
@@ -212,7 +204,7 @@ async function addCommentLikeCount(userInfo) {
     }
 }
 
-
+// 댓글 삭제
 async function deleteComment(commentCode) {
     try {
         const url = "/movie/deleteComment/" + commentCode;
@@ -220,13 +212,14 @@ async function deleteComment(commentCode) {
             method: "DELETE"
         }
         const resp = await fetch(url, config);
-        const result = resp.text();
+        const result = await resp.text();
         return result;
     } catch (err) {
         console.log("deleteComment fail" + err);
     }
 }
 
+// 댓글 수정
 async function updateComment(commentConfig) {
     try {
         const url = "/movie/updateComment";
@@ -238,7 +231,7 @@ async function updateComment(commentConfig) {
             body: JSON.stringify(commentConfig)
         }
         const resp = await fetch(url, config);
-        const result = resp.text();
+        const result = await resp.text();
         return result;
     } catch (err) {
         console.log("updateComment fail" + err);
@@ -253,11 +246,38 @@ function toggleSpoiler(button) {
     const likeBtn = siblingElement.querySelector(".commentLikeBtn");
     likeBtn.disabled = false;
     detailContent.style.display = 'block';
-
-
     spoilerElements.forEach(el => el.style.display = 'none');
 }
 
+// 좋아요 버튼 기능
+function addlikeBtn(button) {
+    var code = button.parentElement.parentElement.querySelector(".detailCommentCode").innerText;
+    console.log(code);
+    const config = {
+        commentCode: code,
+        email: userInfo.email
+    }
+    addCommentLikeCount(config).then(result=>{
+        console.log(result);
+        if(result == 1){
+            alert ("댓글 좋아요");
+            location.reload(true);
+        }
+    })
+    console.log(config);
+}
+
+async function islikeBtn(user){
+    try{
+        const resp = await fetch("/movie/isLikeBtn/"+user);
+        const result = await resp.json();
+        return result;
+    }catch (err){
+        console.log(err);
+    }
+}
+
+// 디테일 가져오기
 async function getDetail(mediaInfo) {
     try {
         const response = await fetch(`https://api.themoviedb.org/3/${mediaInfo.urlInfo}/${mediaInfo.mediaId}?language=ko-KR`, options);
@@ -272,6 +292,7 @@ async function getDetail(mediaInfo) {
     }
 }
 
+// 댓글 리스트 가져오기
 async function getCommentList(movieId) {
     try {
         const response = await fetch(`/movie/getCommentList/${movieId}`);
