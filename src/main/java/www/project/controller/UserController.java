@@ -59,10 +59,9 @@ public class UserController {
         model.addAttribute("isFollow",isFollow);
         List<StarVO> starList = svc.getList(myEmail);
         List<WishVO> wishList = wsv.getList(myEmail);
-        log.info("starList {}",starList);
-        log.info("wishList {}",wishList);
-        List<String> genres = asv.getGenres(533535);
-        log.info("장르{}",genres);
+        List<Map.Entry<String, Integer>> topGenres = asv.analyzeUserPreferences(starList, wishList);
+        log.info("장르잘가져오냐{}",topGenres);
+        model.addAttribute("topGenres", topGenres);
         return "/user/mypage";
     }
 
